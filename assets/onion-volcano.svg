@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560">
+<style>
+.bg{fill:#070504}.gold{fill:#ffd779}.orange{fill:#ff9a1f}.red{fill:#e64125}.line{fill:none;stroke:#ffd779;stroke-width:10;stroke-linecap:round;opacity:.55}.steam{fill:none;stroke:#fff8ea;stroke-width:8;stroke-linecap:round;opacity:.32;animation:steam 3s ease-in-out infinite}.flame{transform-origin:450px 405px;animation:f .9s infinite alternate ease-in-out}.spark{fill:#ffd779;animation:s 1.8s infinite ease-in-out}@keyframes f{from{transform:scaleY(.9) rotate(-2deg);opacity:.84}to{transform:scaleY(1.08) rotate(3deg);opacity:1}}@keyframes s{0%{transform:translateY(0) scale(.5);opacity:0}40%{opacity:1}100%{transform:translateY(-120px) scale(0);opacity:0}}@keyframes steam{0%{transform:translateY(40px);opacity:0}35%{opacity:.45}100%{transform:translateY(-95px);opacity:0}}
+</style>
+<rect class="bg" width="900" height="560"/>
+<circle cx="450" cy="155" r="118" fill="#ffd779" opacity=".13"/>
+<ellipse cx="450" cy="405" rx="310" ry="82" fill="#18100b" stroke="#e3a72d" stroke-width="3"/><path class="line" stroke-width="22" d="M335 395 C355 310 410 265 450 250 C490 265 545 310 565 395"/><path class="line" stroke-width="22" d="M385 395 C398 335 430 305 450 295 C470 305 502 335 515 395"/><path class="flame red" d="M430 385 C365 300 445 240 455 155 C530 260 575 315 505 385 Z"/><path class="flame orange" d="M455 385 C410 315 460 270 465 205 C510 285 528 333 492 385 Z"/><path class="flame gold" d="M470 385 C445 335 474 305 475 255 C505 325 503 355 488 385 Z"/><path class="steam" d="M335 265 C290 205 370 175 335 125"/><path class="steam" style="animation-delay:.45s" d="M455 245 C405 185 500 158 452 95"/><path class="steam" style="animation-delay:.9s" d="M575 270 C525 210 605 175 575 125"/>
+<text x="450" y="506" text-anchor="middle" fill="#ffd779" font-family="Georgia,serif" font-size="38">Onion Volcano</text>
+</svg>

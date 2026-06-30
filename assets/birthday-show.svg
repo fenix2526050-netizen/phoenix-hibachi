@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560">
+<style>
+.bg{fill:#070504}.gold{fill:#ffd779}.orange{fill:#ff9a1f}.red{fill:#e64125}.line{fill:none;stroke:#ffd779;stroke-width:10;stroke-linecap:round;opacity:.55}.steam{fill:none;stroke:#fff8ea;stroke-width:8;stroke-linecap:round;opacity:.32;animation:steam 3s ease-in-out infinite}.flame{transform-origin:450px 405px;animation:f .9s infinite alternate ease-in-out}.spark{fill:#ffd779;animation:s 1.8s infinite ease-in-out}@keyframes f{from{transform:scaleY(.9) rotate(-2deg);opacity:.84}to{transform:scaleY(1.08) rotate(3deg);opacity:1}}@keyframes s{0%{transform:translateY(0) scale(.5);opacity:0}40%{opacity:1}100%{transform:translateY(-120px) scale(0);opacity:0}}@keyframes steam{0%{transform:translateY(40px);opacity:0}35%{opacity:.45}100%{transform:translateY(-95px);opacity:0}}
+</style>
+<rect class="bg" width="900" height="560"/>
+<circle cx="450" cy="155" r="118" fill="#ffd779" opacity=".13"/>
+<rect x="285" y="290" width="330" height="135" rx="30" fill="#fff8ea" opacity=".92"/><rect x="315" y="250" width="270" height="70" rx="24" fill="#e3a72d"/><rect x="340" y="215" width="24" height="55" rx="10" fill="#ef604f"/><rect x="438" y="205" width="24" height="65" rx="10" fill="#58d08b"/><rect x="536" y="215" width="24" height="55" rx="10" fill="#ef604f"/><path class="flame gold" d="M352 198 C333 178 357 160 352 135 C385 165 378 188 352 198Z"/><path class="flame gold" d="M450 188 C431 168 455 150 450 125 C483 155 476 178 450 188Z"/><path class="flame gold" d="M548 198 C529 178 553 160 548 135 C581 165 574 188 548 198Z"/><circle class="spark" cx="185" cy="120" r="10"/><rect class="spark red" style="animation-delay:.4s" x="680" y="95" width="20" height="20" rx="5"/><circle class="spark" style="animation-delay:.8s" cx="735" cy="170" r="9"/>
+<text x="450" y="506" text-anchor="middle" fill="#ffd779" font-family="Georgia,serif" font-size="38">Birthday Show Add-on</text>
+</svg>

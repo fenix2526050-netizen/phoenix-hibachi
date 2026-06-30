@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" role="img" aria-label="Phoenix Hibachi logo">
+  <defs>
+    <radialGradient id="g" cx="50%" cy="35%" r="70%">
+      <stop offset="0%" stop-color="#fff3b2"/>
+      <stop offset="45%" stop-color="#e3a72d"/>
+      <stop offset="75%" stop-color="#ff6b1f"/>
+      <stop offset="100%" stop-color="#b51f13"/>
+    </radialGradient>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <circle cx="120" cy="120" r="112" fill="#090605" stroke="#e3a72d" stroke-width="8"/>
+  <path filter="url(#glow)" fill="url(#g)" d="M122 26c-23 31-37 58-39 82-17-7-28-20-31-40-18 26-20 54-7 83 11 25 32 43 63 55-8-19-4-38 13-58 3 29 14 52 42 67 2-23-4-42-18-58 24 10 45 4 62-18-30-7-43-22-41-45 2-24-14-48-44-68z"/>
+  <path fill="#1b0b02" opacity=".88" d="M120 70c-10 17-15 33-14 47-11-5-17-12-19-23-10 17-11 34-3 51 7 15 20 25 39 32-4-14 1-28 12-41 2 18 10 32 25 41 2-17-2-29-11-40 14 3 27-2 38-15-22-6-30-18-26-35 3-14-13-28-41-17z"/>
+</svg>

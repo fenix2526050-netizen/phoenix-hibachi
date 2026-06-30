@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" role="img" aria-label="Feny Motion gold logo">
+  <defs>
+    <linearGradient id="gold" x1="32" y1="28" x2="205" y2="212" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fff3b2"/>
+      <stop offset="0.34" stop-color="#ffd779"/>
+      <stop offset="0.62" stop-color="#e3a72d"/>
+      <stop offset="1" stop-color="#9b5a08"/>
+    </linearGradient>
+    <radialGradient id="warm" cx="50%" cy="38%" r="64%">
+      <stop offset="0" stop-color="#ffe9a8" stop-opacity="0.42"/>
+      <stop offset="1" stop-color="#050302" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="glow" x="-35%" y="-35%" width="170%" height="170%">
+      <feGaussianBlur stdDeviation="3.8" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <circle cx="120" cy="120" r="112" fill="#050302" stroke="url(#gold)" stroke-width="8"/>
+  <circle cx="120" cy="120" r="98" fill="url(#warm)" opacity="0.9"/>
+  <path filter="url(#glow)" fill="url(#gold)" d="M120 33c-23 29-37 56-39 80-15-7-25-20-28-39-16 24-19 51-6 79 10 23 30 40 59 51-8-18-3-36 13-55 3 27 14 48 40 62 2-22-4-39-17-55 23 8 42 2 58-19-28-6-40-20-38-42 2-22-13-44-42-62Z"/>
+  <path fill="#050302" d="M102 70h64v21h-41v24h35v21h-35v46h-23V70Z" opacity="0.92"/>
+  <path fill="url(#gold)" d="M89 183c19-6 37-6 54 0 10 4 20 5 30 1-11 13-28 21-50 21-15 0-27-7-34-22Z" opacity="0.92"/>
+  <text x="120" y="224" text-anchor="middle" font-family="Georgia, serif" font-size="18" font-weight="700" letter-spacing="2.5" fill="#ffd779">FENY MOTION</text>
+</svg>
