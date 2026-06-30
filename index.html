@@ -1,0 +1,933 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Phoenix Hibachi V60 | Private Backyard Hibachi Catering</title>
+  <meta name="description" content="Phoenix Hibachi private backyard hibachi catering for NY, NJ, CT and Long Island. Live chef show, packages, add-ons, and booking flow." />
+  <meta property="og:title" content="Phoenix Hibachi" />
+  <meta property="og:description" content="Private backyard hibachi catering with fire, food, and showmanship." />
+  <meta property="og:type" content="website" />
+  <link rel="icon" href="assets/phoenix-logo-transparent-64.png" type="image/png">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="top-strip">
+    <span>Private Hibachi Chefs · NY · NJ · CT · Long Island</span>
+    <button class="strip-link link-button" data-open-booking>Book Your Event →</button>
+  </div>
+
+  <header class="site-header" id="header">
+    <a class="brand" href="#home" aria-label="Phoenix Hibachi home">
+      <span class="logo-badge"><img src="assets/phoenix-logo-transparent.png" alt="Phoenix Hibachi 3D phoenix logo" /></span>
+      <span class="brand-text"><strong>PHOENIX HIBACHI</strong><small>Private Backyard Catering</small></span>
+    </a>
+    <nav class="desktop-nav" aria-label="Primary navigation">
+      <a href="#calendar">Calendar</a>
+      <a href="#reviews">Reviews</a>
+      <a href="#performance">Show</a>
+      <a href="#packages">Packages</a>
+      <a href="#addons">Add-ons</a>
+      <a href="#platform">Hiring</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <div class="header-actions">
+      <button class="order-search-btn" type="button" data-open-order-lookup aria-label="Search order status" title="Search order status">⌕</button>
+      <button class="ghost-btn login-entry" data-open-login>Login</button>
+      <div class="portal-account" id="portalAccount" hidden>
+        <button type="button" class="account-chip" id="accountMenuBtn" aria-expanded="false" aria-haspopup="menu">
+          <span class="account-avatar" id="accountAvatar">👤</span>
+          <span class="account-label" id="accountLabel">Account</span>
+          <span class="account-caret">▾</span>
+        </button>
+        <div class="account-dropdown" id="accountDropdown" role="menu" hidden>
+          <button type="button" data-account-action="dashboard">Dashboard / Management</button>
+          <button type="button" data-account-action="profile">My Profile</button>
+          <button type="button" data-account-action="logout">Logout</button>
+        </div>
+      </div>
+      <button class="ghost-btn" data-open-booking>Text / Quote</button>
+      <button class="gold-btn small" data-open-booking>Book Now</button>
+      <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">☰</button>
+    </div>
+  </header>
+
+  <nav class="mobile-nav" id="mobileNav" aria-label="Mobile navigation">
+    <a href="#calendar">Calendar</a>
+    <a href="#reviews">Reviews</a>
+    <a href="#performance">Show</a>
+    <a href="#packages">Packages</a>
+    <a href="#addons">Add-ons</a>
+    <a href="#platform">Hiring</a>
+    <a href="#faq">FAQ</a>
+    <button type="button" data-open-order-lookup>Search Order</button>
+    <button class="mobile-login-entry" data-open-login>Login</button>
+    <button class="mobile-account-entry" id="mobilePortalEntry" hidden type="button">Account / Portal</button>
+    <button data-open-booking>Book Now</button>
+  </nav>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="hero-bg"><span class="ember e1"></span><span class="ember e2"></span><span class="ember e3"></span></div>
+      <div class="container hero-grid">
+        <div class="hero-copy reveal">
+          <p class="eyebrow"><span>◆</span> Private Hibachi Chefs · NY · NJ · CT · Long Island</p>
+          <h1>Bring Restaurant<br><span>Quality Hibachi</span><br>To Your Backyard.</h1>
+          <p class="hero-lead">An unforgettable dinner and live show — your private chef arrives with the grill, the flames, the knife tricks, and the full hibachi experience. You bring the guests.</p>
+          <div class="hero-actions">
+            <button class="gold-btn" data-open-booking>Book Your Event</button>
+            <a href="#packages" class="outline-btn">View Packages</a>
+          </div>
+          <div class="hero-stats">
+            <div><strong>5.0 ★</strong><span>Average Rating</span></div>
+            <div><strong>400+</strong><span>Events Served</span></div>
+            <div><strong>4 States</strong><span>NY · NJ · CT · LI</span></div>
+          </div>
+        </div>
+        <div class="hero-card reveal delay-1 hero-photo-card" aria-label="Private hibachi chef live fire show video">
+          <video class="hero-live-video" autoplay muted loop playsinline preload="metadata" poster="assets/hero-live-show-poster.webp" aria-label="Hibachi live show video">
+            <source src="assets/hero-live-show-video.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+          <div class="card-note"><strong>Hibachi Live Show</strong><span>Fire · Food · Performance · Backyard setup</span></div>
+        </div>
+      </div>
+      <a class="scroll-cue" href="#calendar">Choose Date</a>
+    </section>
+
+    <section class="occasion-strip" aria-label="Perfect for any occasion">
+      <div class="container occasion-inner">
+        <div class="occasion-title"><em>Perfect for</em><strong>ANY OCCASION</strong></div>
+        <div class="occasion-cards">
+          <a href="#calendar" class="occasion-card" style="--img:url('assets/occasion-birthday.webp')"><span>Birthday Parties</span></a>
+          <a href="#calendar" class="occasion-card" style="--img:url('assets/occasion-family.webp')"><span>Family Gatherings</span></a>
+          <a href="#calendar" class="occasion-card" style="--img:url('assets/occasion-backyard.webp')"><span>Backyard BBQs</span></a>
+          <a href="#calendar" class="occasion-card" style="--img:url('assets/occasion-corporate.webp')"><span>Corporate Events</span></a>
+          <a href="#calendar" class="occasion-card" style="--img:url('assets/occasion-anniversary.webp')"><span>Anniversaries</span></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section calendar priority-section" id="calendar">
+      <div class="container calendar-layout">
+        <div class="section-head calendar-head reveal clean-calendar-head">
+          <div>
+            <h2>Click a date and time <span>to make your reservation.</span></h2>
+          </div>
+        </div>
+
+        <div class="calendar-grid">
+          <div class="calendar-card reveal delay-1">
+            <div class="cal-top">
+              <button type="button" id="prevMonth" aria-label="Previous month">‹</button>
+              <strong id="currentMonthLabel">July 2026</strong>
+              <button type="button" id="nextMonth" aria-label="Next month">›</button>
+            </div>
+            <div class="weekdays"><span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span></div>
+            <div class="days" id="daysGrid"></div>
+            <div class="legend"><span><i class="open-dot"></i>Open</span><span><i class="limited-dot"></i>Limited</span><span><i class="full-dot"></i>Full</span><span><i class="off-dot"></i>Unavailable</span></div>
+          </div>
+
+          <aside class="time-panel reveal delay-2">
+            <h3>Selected Date</h3>
+            <p id="selectedDate">Choose a date</p>
+            <div class="slot-list" id="slotList"></div>
+            <div class="selected-time"><span>Preferred arrival window</span><strong id="selectedTime">No window selected</strong><small>Final chef arrival time will be confirmed within 24 hours before the event.</small></div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="section reviews trust" id="reviews">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">Guest Confidence</p>
+          <h2>What guests <span>love.</span></h2>
+          <div class="rating-pill"><strong>Premium</strong> booking-ready trust points</div>
+        </div>
+        <div class="review-grid trust-grid">
+          <article class="review-card reveal"><b>Live Show</b><p>Fire show, chef performance, fried rice tricks, shrimp toss, and a fun backyard dinner experience.</p><div><strong>Entertainment first</strong><span>Designed for birthdays, families and private parties</span></div></article>
+          <article class="review-card reveal"><b>Setup Ready</b><p>Booking collects address, parking, unload access, rain backup, allergies and guest count before confirmation.</p><div><strong>Less chaos on event day</strong><span>Better prep for chef, customer and manager</span></div></article>
+          <article class="review-card reveal"><b>Clear Policy</b><p>48-hour cancellation rules, reschedule policy, rain plan and late-arrival flexibility are shown before checkout.</p><div><strong>Cleaner expectations</strong><span>Fewer misunderstandings and refund disputes</span></div></article>
+          <article class="review-card reveal"><b>Dispatch Ready</b><p>The system is prepared for chef assignment, route planning, travel fee display and manager review.</p><div><strong>Built to scale</strong><span>Ready for Supabase backend connection</span></div></article>
+        </div>
+        <div class="google-review-panel reveal" id="googleReviewPanel">
+          <div>
+            <p class="eyebrow">Google Review Ready</p>
+            <h3>Turn happy guests into public reviews.</h3>
+            <p>After each event, the chef can show a Google review QR code. When your real Google Business Profile review link is ready, replace the placeholder URL in <code>script.js</code>.</p>
+            <div class="review-actions"><a class="gold-btn" id="googleReviewLink" href="#" target="_blank" rel="noreferrer">Open Google Review Link</a><button class="outline-btn" type="button" data-open-login>Manager Review Setup</button></div>
+          </div>
+          <div class="qr-placeholder" aria-label="Google review QR placeholder"><span>QR</span><small>Replace with real Google review QR</small></div>
+        </div>
+        <div class="review-highlights" id="reviewHighlights" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section class="section performance" id="performance">
+      <div class="container">
+        <div class="section-head narrow reveal">
+          <p class="eyebrow">Chef Performance Media</p>
+          <h2>Every table is a <span>live show.</span></h2>
+          <p>Fire, rhythm, and flair — signature hibachi moments that turn dinner into a show.</p>
+        </div>
+        <div class="media-grid">
+          <article class="media-card reveal"><img src="assets/media-fire-show.webp" alt="Hibachi fire show"><div><small>~3 min · Signature Move</small><h3>Fire Show Moment</h3><p>The iconic fire burst that opens every show. High-energy, high-drama — every guest gets pulled in.</p></div></article>
+          <article class="media-card reveal"><img src="assets/media-onion-volcano.webp" alt="Onion volcano"><div><small>Family Favorite</small><h3>Onion Volcano</h3><p>Stacked, flaming, and impossible to look away from. Kids beg to see it twice.</p></div></article>
+          <article class="media-card reveal"><img src="assets/media-knife-rhythm.webp" alt="Chef knife rhythm"><div><small>Showmanship</small><h3>Knife Rhythm</h3><p>Precision cuts and rhythmic tapping that create the heartbeat of the hibachi table.</p></div></article>
+          <article class="media-card reveal"><img src="assets/media-birthday-show.webp" alt="Birthday show"><div><small>Birthday Special</small><h3>Birthday Moment</h3><p>A dedicated performance moment personalized for the guest of honor — kids and adults love it equally.</p></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section packages" id="packages">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">Packages & Pricing</p>
+          <h2>Three packages. <span>Live pricing.</span></h2>
+          <p>All prices are per person. Kids under 12 are half price. Minimum charge for 10 guests regardless of headcount.</p>
+        </div>
+        <div class="package-grid">
+          <article class="package-card reveal package-classic"><div class="package-visual"><img src="assets/package-classic.webp" alt="Classic hibachi package with chicken, steak, shrimp and vegetables"></div><small>The essentials, perfected</small><h3>Classic</h3><div class="price">$55 <span>/ person</span></div><ul><li>Choose 2 proteins</li><li>10 guest minimum</li><li>Kids half price</li><li>Full hibachi performance</li><li>Fried rice & vegetables</li></ul><button data-package="Classic" data-open-booking class="outline-btn block">Book Classic</button></article>
+          <article class="package-card featured reveal package-premium"><div class="ribbon">✦ Most Popular</div><div class="package-visual"><img src="assets/package-premium.webp" alt="Premium hibachi package with steak, shrimp and fried rice"></div><small>Most booked · Best value</small><h3>Premium</h3><div class="price">$65 <span>/ person</span></div><ul><li>Choose 3 proteins</li><li>Gyoza or edamame starter</li><li>10 guest minimum</li><li>Kids half price</li><li>Full performance show</li></ul><button data-package="Premium" data-open-booking class="gold-btn block">Book Premium</button></article>
+          <article class="package-card reveal package-signature"><div class="package-visual"><img src="assets/package-signature.webp" alt="Signature hibachi package with lobster, steak and seafood"></div><small>The ultimate private experience</small><h3>Signature</h3><div class="price">$110 <span>/ person</span></div><ul><li>Choose 4 proteins</li><li>Gyoza + edamame included</li><li>10 guest minimum</li><li>Kids half price</li><li>Premium performance show</li></ul><button data-package="Signature" data-open-booking class="outline-btn block">Book Signature</button></article>
+        </div>
+        <p class="fine-print">Prices exclude travel fees, premium protein upgrades and coupon discounts — all calculated during booking.</p>
+      </div>
+    </section>
+
+    <section class="section addons" id="addons">
+      <div class="container">
+        <div class="split-head reveal"><div><p class="eyebrow">Add-on Trays</p><h2>Elevate every table.</h2></div><p>Sushi, gyoza, edamame, and noodle trays served alongside the hibachi show. All selectable inside the booking flow.</p></div>
+        <div class="addon-grid">
+          <article><b>Popular</b><img class="addon-photo" src="assets/addon-sushi.webp" alt="Sushi Roll Tray"><h3>Sushi Roll Tray</h3><p>California roll, spicy tuna, shrimp tempura, vegetable roll. Approx. 6–8 rolls / 48 pcs.</p></article>
+          <article><b>Premium</b><img class="addon-photo" src="assets/addon-premium-sushi.webp" alt="Premium Sushi Tray"><h3>Premium Sushi Tray</h3><p>Assorted hand-pressed sushi only: tuna, salmon, yellowtail, shrimp, eel, and chef-selected nigiri. No rolls, no sashimi. Approx. 32–40 pcs.</p></article>
+          <article><img class="addon-photo" src="assets/addon-sashimi.webp" alt="Sushi and sashimi combo"><h3>Sushi & Sashimi Combo</h3><p>Assorted sushi plus sashimi. Approx. 4–6 people / 32–40 pieces. Fish depends on availability.</p></article>
+          <article><img class="addon-photo" src="assets/addon-gyoza.webp" alt="Gyoza tray"><h3>Extra Gyoza Tray</h3><p>Pan-fried dumplings, approx. 24 pcs. Serves 6–8 people. Dipping sauce included.</p></article>
+          <article><img class="addon-photo" src="assets/addon-edamame.webp" alt="Edamame tray"><h3>Extra Edamame Tray</h3><p>Steamed edamame tray. Serves approx. 8–10 people. Garlic-style option can be requested.</p></article>
+          <article><b>Kids Fav</b><img class="addon-photo" src="assets/addon-noodle.webp" alt="Noodle yakisoba tray"><h3>Noodle / Yakisoba Tray</h3><p>Stir-fried noodles with vegetables. Serves approx. 6–8 people as a side.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section platform hiring enhanced-hiring" id="platform">
+      <div class="container">
+        <div class="hiring-hero reveal">
+          <div>
+            <p class="eyebrow">Chef Hiring</p>
+            <h2>Join the Phoenix Hibachi chef team.</h2>
+            <p>Phoenix Hibachi is building a reliable route-based chef network for backyard parties, birthdays, corporate events, and weekend bookings across NY, NJ, CT and Long Island.</p>
+            <div class="hiring-actions">
+              <button class="gold-btn" id="openChefApplyBtn" type="button" data-open-chef-apply>Submit Chef Resume</button>
+              <button class="outline-btn" data-open-login data-login-role="Chef">Chef Login</button>
+            </div>
+            <p class="tiny-note">Applicants can attach a resume, food safety certificate, photos, or a short grill performance video. Admin / Manager can review submissions in the dashboard demo.</p>
+          </div>
+          <div class="hiring-route-card" aria-label="Chef route work preview">
+            <div class="route-line"><i></i><i></i><i></i></div>
+            <strong>Weekend route preview</strong>
+            <span>Event time · guest count · parking · allergies · travel fee · chef notes</span>
+            <b>Dispatch-ready after backend setup</b>
+          </div>
+        </div>
+        <div class="portal-grid hiring-grid refined-hiring-grid">
+          <article><span>🔥</span><h3>Weekend Events</h3><p>Friday, Saturday and Sunday routes. Best for experienced chefs who want paid event work without running the sales side.</p></article>
+          <article><span>🗺️</span><h3>Smart Route Jobs</h3><p>Each job can include event time, address, route notes, parking, allergies, rain setup, and chef arrival window.</p></article>
+          <article><span>💵</span><h3>Strong Earning Potential</h3><p>Chef pay, tips, travel fee visibility, repeat-customer bonuses, and manager-reviewed dispatch routes.</p></article>
+          <article><span>✅</span><h3>Requirements</h3><p>Clean presentation, reliable transportation, hibachi skill, safe food handling, and respectful customer service.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section booking feedback" id="booking">
+      <div class="container booking-card reveal">
+        <div><p class="eyebrow">Guest Feedback</p><h2>Suggestions, compliments or complaints.</h2><p>Use this form for customer messages after an event or before booking. Serious allergy, safety, rain, timing, refund or chef-service issues should be reviewed by a manager quickly.</p></div>
+        <form class="quote-form feedback-form" id="quoteForm">
+          <input name="name" placeholder="Your name" required>
+          <input name="phone" placeholder="Phone or email" required>
+          <input name="eventDate" placeholder="Event date / city / zip code">
+          <select name="feedbackType"><option>General suggestion</option><option>Compliment for chef</option><option>Complaint / service issue</option><option>Allergy or food safety concern</option><option>Rain / delay / schedule issue</option><option>Refund or billing question</option></select>
+          <textarea name="message" class="wide" placeholder="Tell us what happened or what we can improve. Add order name, chef name, photos link, allergy concern, rain issue, late arrival details, or anything important." required></textarea>
+          <button class="gold-btn" type="submit">Submit Feedback</button>
+        </form>
+      </div>
+    </section>
+
+    <section class="section faq" id="faq">
+      <div class="container">
+        <div class="section-head reveal"><p class="eyebrow">Booking Rules & FAQ</p><h2>Before guests arrive.</h2></div>
+        <div class="faq-list">
+          <details open><summary>What do customers need to provide?</summary><p>A clean outdoor cooking area, enough seating, access to water/trash, parking or unloading access, and enough space for the chef and grill setup.</p></details>
+          <details><summary>Do you serve NY, NJ, CT, and Long Island?</summary><p>Yes. Travel fees may apply depending on route, parking, tolls, and chef availability.</p></details>
+          <details><summary>Are kids half price?</summary><p>Yes, kids under 12 are half price. The event still has a 10-person minimum charge.</p></details>
+          <details><summary>Can we add sushi or noodles?</summary><p>Yes. Sushi trays, sashimi combo, gyoza, edamame, and noodle trays can be added to the hibachi package.</p></details>
+          <details><summary>Can you handle allergies?</summary><p>Allergies must be disclosed before booking. High-risk allergies need manager confirmation before the order is accepted.</p></details>
+          <details><summary>What happens if it rains or the chef is delayed?</summary><p>The booking popup asks for rain backup and late-arrival flexibility. Outdoor cooking usually requires a safe covered area, and route/weather delays should be confirmed before the order is accepted.</p></details>
+          <details><summary>What is the 48-hour cancellation policy?</summary><p>Customers may cancel more than 48 hours before the event for manager review. Within 48 hours of the scheduled event, the deposit is non-refundable and the booking can only be rescheduled, subject to chef availability and route confirmation.</p></details>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div><a class="brand footer-brand" href="#home"><span class="logo-badge"><img src="assets/phoenix-logo-transparent.png" alt="Phoenix Hibachi 3D phoenix logo"></span><span class="brand-text"><strong>Phoenix Hibachi</strong><small>Private Backyard Catering</small></span></a><p>Private hibachi catering in NY, NJ, CT & Long Island. Fire, food, and showmanship — right in your backyard.</p><p class="muted">📍 Brooklyn, Queens, Long Island, NJ, CT<br>✉ phoenix4719190@gmail.com</p></div>
+      <div><h4>Service Areas</h4><p>Brooklyn & Queens<br>Long Island East & West<br>New Jersey<br>Connecticut</p></div>
+      <div><h4>Packages</h4><p>Classic — $55 / person<br>Premium — $65 / person<br>Signature — $110 / person</p></div>
+      <div><h4>Add-ons</h4><p>Sushi Roll Tray<br>Premium Sushi Tray<br>Gyoza & Edamame<br>Noodle / Yakisoba Tray</p></div>
+    </div>
+    <div class="container footer-bottom">© 2026 Phoenix Hibachi · Prototype rebuild · Replace placeholders before going live.</div>
+  </footer>
+
+  <button class="floating-book" data-open-contact>Contact</button>
+
+
+
+  <dialog class="contact-modal" id="contactModal">
+    <form method="dialog" class="modal-card contact-card">
+      <button type="button" class="modal-close" data-close-modal aria-label="Close">×</button>
+      <p class="eyebrow">Contact Us</p>
+      <h2>How can we help?</h2>
+      <p class="modal-help">For new events, booking questions, chef timing, rain plan, complaints, cancellation/reschedule requests, or allergy concerns, send us a message and a manager can review it.</p>
+      <div class="policy-alert compact"><strong>48-hour policy</strong><span>Over 48 hours: cancellation can be reviewed. Inside 48 hours: deposit is non-refundable; reschedule only.</span></div>
+      <div class="contact-options">
+        <a href="tel:+13474719190" id="contactCallCard"><strong>Call Phoenix Hibachi</strong><span id="contactPhoneText">347-471-9190</span></a>
+        <a href="sms:+13474719190" id="contactTextCard"><strong>Text Us</strong><span id="contactTextPhoneText">347-471-9190 · Fastest for same-week party questions</span></a>
+        <a href="mailto:phoenix4719190@gmail.com" id="contactEmailCard"><strong>Email Us</strong><span id="contactEmailText">phoenix4719190@gmail.com</span></a>
+        <button type="button" data-contact-feedback><strong>Guest Feedback</strong><span>Suggestions, compliments or complaints</span></button>
+      </div>
+      <div class="contact-actions">
+        <button type="button" class="gold-btn" data-contact-booking>Start Booking</button>
+        <button type="button" class="outline-btn" data-contact-ai>Ask Assistant</button>
+      </div>
+    </form>
+  </dialog>
+
+
+
+  <div class="theme-switcher" aria-label="Theme switcher">
+    <button class="theme-toggle-btn" id="themeToggleBtn" type="button" aria-label="Switch between dark and light theme">
+      <span class="theme-icon" id="themeIcon">☀</span>
+      <span class="theme-label" id="themeLabel">Light</span>
+    </button>
+  </div>
+
+  <div class="ai-assistant" id="aiAssistant" aria-live="polite">
+    <button class="ai-toggle" id="aiToggle" type="button" aria-label="Open Phoenix assistant">Assistant</button>
+    <div class="ai-panel" id="aiPanel" role="dialog" aria-label="Phoenix Assistant">
+      <div class="ai-head">
+        <div><strong>Phoenix Assistant</strong><small>Private hibachi booking helper</small></div>
+        <button type="button" id="aiClose" aria-label="Close assistant">×</button>
+      </div>
+      <div class="ai-messages" id="aiMessages">
+        <p class="bot">Hi! I can help with booking, package questions, allergies, rain plans, or existing booking support.</p>
+      </div>
+      <div class="ai-quick" id="aiQuick">
+        <button type="button" data-ai-question="I want to book a hibachi party">Book a party</button>
+        <button type="button" data-ai-question="Check date and availability">Check availability</button>
+        <button type="button" data-ai-question="Ask about packages or allergies">Packages / allergies</button>
+        <button type="button" data-ai-question="Existing booking support">Existing booking support</button>
+        <button type="button" data-ai-question="Feedback or complaint">Feedback / complaint</button>
+      </div>
+      <form class="ai-form" id="aiForm">
+        <input id="aiInput" placeholder="Type your question..." autocomplete="off">
+        <button type="submit">Send</button>
+      </form>
+      <small class="ai-note">This assistant is a Phoenix Hibachi front-end helper. Urgent same-day requests should call or text us.</small>
+    </div>
+  </div>
+
+  <dialog class="booking-modal" id="bookingModal">
+    <form method="dialog" class="modal-card full-booking" id="bookingPopupForm">
+      <button type="button" class="modal-close" data-close-modal aria-label="Close">×</button>
+      <div class="modal-title-row">
+        <div>
+          <p class="eyebrow">Full Booking</p>
+          <h2>Build your hibachi event.</h2>
+        </div>
+        <span class="modal-status">Demo only</span>
+      </div>
+      <p class="modal-help">This prototype includes customer cancellation rules, dispatch logic, chef route notes, and a demo dashboard. Real launch needs a backend database, payment system, and routing API connection.</p>
+      <div class="policy-alert">
+        <strong>Cancellation & deposit policy</strong>
+        <span>Customers may cancel more than 48 hours before the event. Inside 48 hours, deposits are non-refundable and the order can only be rescheduled with manager approval.</span>
+      </div>
+
+      <div class="booking-steps">
+        <section class="booking-step">
+          <h3>1. Contact & event address</h3>
+          <div class="form-grid two">
+            <label>Name<input name="name" placeholder="Customer name" required></label>
+            <label>Phone<input name="phone" placeholder="Phone number" required></label>
+            <label>Email<input name="email" type="email" placeholder="Email address"></label>
+            <label>Event type
+              <select name="eventType">
+                <option>Birthday party</option>
+                <option>Family party</option>
+                <option>Corporate event</option>
+                <option>Graduation / school party</option>
+                <option>Other private event</option>
+              </select>
+            </label>
+            <label class="wide address-field">Address
+              <input id="eventAddressInput" name="address" placeholder="Start typing street address, for example 585 6th Street" autocomplete="street-address" required>
+              <input id="eventAddressLat" name="addressLat" type="hidden">
+              <input id="eventAddressLon" name="addressLon" type="hidden">
+              <input id="eventAddressPlaceId" name="addressPlaceId" type="hidden">
+              <div class="address-suggest-box" id="addressSuggestBox" role="listbox" aria-label="Map address suggestions"></div>
+              <small class="field-help">Start typing only the street address. Choose the standard address from the dropdown; City, State, and ZIP will fill automatically.</small>
+              <input id="travelFeeInput" name="travelFee" type="hidden" value="0">
+              <div class="travel-estimate" id="travelEstimate">Travel fee estimate appears after choosing a standard map address.</div>
+            </label>
+            <label>City<input id="eventCityInput" name="city" placeholder="Brooklyn" autocomplete="address-level2"></label>
+            <label>State<input id="eventStateInput" name="state" placeholder="NY" autocomplete="address-level1"></label>
+            <label>ZIP code<input id="eventZipInput" name="zip" placeholder="11220" inputmode="numeric" autocomplete="postal-code"></label>
+          </div>
+        </section>
+
+        <section class="booking-step">
+          <h3>2. Choose your package</h3>
+          <p class="helper-line top-helper">Same packages as the pricing section. Customer can choose again here before sending the request.</p>
+          <div class="modal-package-grid" id="modalPackageGrid" role="radiogroup" aria-label="Choose hibachi package">
+            <label class="choice-card package-choice selected" data-package-card="Classic">
+              <input type="radio" name="package" value="Classic" checked>
+              <small>Classic</small>
+              <strong>$55 <span>/ person</span></strong>
+              <em>2 proteins · fried rice · vegetables · full show</em>
+            </label>
+            <label class="choice-card package-choice" data-package-card="Premium">
+              <input type="radio" name="package" value="Premium">
+              <small>Premium</small>
+              <strong>$65 <span>/ person</span></strong>
+              <em>3 proteins · gyoza or edamame starter</em>
+            </label>
+            <label class="choice-card package-choice" data-package-card="Signature">
+              <input type="radio" name="package" value="Signature">
+              <small>Signature</small>
+              <strong>$110 <span>/ person</span></strong>
+              <em>4 proteins · gyoza + edamame included</em>
+            </label>
+          </div>
+          <input id="modalPackage" name="bookingOverview" type="hidden" value="Classic · 10 guests · 4:00 PM - 6:00 PM">
+        </section>
+
+        <section class="booking-step protein-step">
+          <h3>3. Choose proteins</h3>
+          <p class="helper-line top-helper">Each package includes a fixed number of protein portions. Classic includes 2 protein portions per billable guest, Premium includes 3, and Signature includes 4. The system locks the selector after the included portions are used.</p>
+          <div class="protein-meter">
+            <div><strong id="proteinUsedCount">0</strong><span>/</span><strong id="proteinRequiredCount">20</strong><small> protein portions selected</small></div>
+            <b id="proteinUpgradeTotal">Premium upgrade: +$0</b>
+          </div>
+          <div class="protein-choice-grid" id="proteinChoiceGrid" aria-label="Protein selectors">
+            <div class="protein-row" data-protein="Chicken" data-premium="false"><div><b>Chicken</b><span>No extra charge</span></div><div class="protein-controls"><button type="button" data-protein-action="minus">−</button><input type="number" min="0" value="0" inputmode="numeric"><button type="button" data-protein-action="plus">+</button></div></div>
+            <div class="protein-row" data-protein="Steak" data-premium="false"><div><b>Steak</b><span>No extra charge</span></div><div class="protein-controls"><button type="button" data-protein-action="minus">−</button><input type="number" min="0" value="0" inputmode="numeric"><button type="button" data-protein-action="plus">+</button></div></div>
+            <div class="protein-row" data-protein="Shrimp" data-premium="false"><div><b>Shrimp</b><span>No extra charge</span></div><div class="protein-controls"><button type="button" data-protein-action="minus">−</button><input type="number" min="0" value="0" inputmode="numeric"><button type="button" data-protein-action="plus">+</button></div></div>
+            <div class="protein-row" data-protein="Salmon" data-premium="false"><div><b>Salmon</b><span>No extra charge</span></div><div class="protein-controls"><button type="button" data-protein-action="minus">−</button><input type="number" min="0" value="0" inputmode="numeric"><button type="button" data-protein-action="plus">+</button></div></div>
+            <div class="protein-row premium-protein" data-protein="Scallop" data-premium="true"><div><b>Scallop</b><span>Premium +$5 per portion</span></div><div class="protein-controls"><button type="button" data-protein-action="minus">−</button><input type="number" min="0" value="0" inputmode="numeric"><button type="button" data-protein-action="plus">+</button></div></div>
+            <div class="protein-row premium-protein" data-protein="Lobster" data-premium="true"><div><b>Lobster</b><span>Premium +$5 per portion</span></div><div class="protein-controls"><button type="button" data-protein-action="minus">−</button><input type="number" min="0" value="0" inputmode="numeric"><button type="button" data-protein-action="plus">+</button></div></div>
+            <div class="protein-row premium-protein" data-protein="Filet Mignon" data-premium="true"><div><b>Filet Mignon</b><span>Premium +$5 per portion</span></div><div class="protein-controls"><button type="button" data-protein-action="minus">−</button><input type="number" min="0" value="0" inputmode="numeric"><button type="button" data-protein-action="plus">+</button></div></div>
+          </div>
+          <input id="proteinSelectionsInput" name="proteinSelections" type="hidden" value="{}">
+          <input id="proteinSummaryInput" name="proteinSummary" type="hidden" value="">
+          <input id="proteinUpchargeInput" name="proteinUpcharge" type="hidden" value="0">
+          <p class="helper-line" id="proteinHelpText">Classic for 10 billable guests includes 20 protein portions. Premium proteins add $5 per selected portion.</p>
+        </section>
+
+        <section class="booking-step">
+          <h3>4. Choose add-ons</h3>
+          <p class="helper-line top-helper">These are the same add-on trays from the page. Customer can select multiple items.</p>
+          <div class="addon-choice-grid" id="addonChoiceGrid">
+            <label class="choice-card addon-choice"><input type="checkbox" name="addons" value="Sushi Roll Tray" data-price="85"><img class="addon-photo" src="assets/addon-sushi.webp" alt="Sushi Roll Tray"><strong>Sushi Roll Tray</strong><em>California, spicy tuna, shrimp tempura, vegetable roll. Approx. 6–8 rolls.</em><b>+$85</b></label>
+            <label class="choice-card addon-choice"><input type="checkbox" name="addons" value="Premium Sushi Tray" data-price="130"><img class="addon-photo" src="assets/addon-premium-sushi.webp" alt="Premium Sushi Tray"><strong>Premium Sushi Tray</strong><em>Assorted hand-pressed sushi only: tuna, salmon, yellowtail, shrimp, eel, and chef-selected nigiri. No rolls, no sashimi. Approx. 32–40 pieces / 4–6 people.</em><b>+$130</b></label>
+            <label class="choice-card addon-choice"><input type="checkbox" name="addons" value="Sushi & Sashimi Combo" data-price="160"><img class="addon-photo" src="assets/addon-sashimi.webp" alt="Sushi and sashimi combo"><strong>Sushi & Sashimi Combo</strong><em>Assorted sushi plus sashimi. Approx. 4–6 people / 32–40 pieces. Fish depends on availability.</em><b>+$160</b></label>
+            <label class="choice-card addon-choice"><input type="checkbox" name="addons" value="Extra Gyoza Tray" data-price="45"><img class="addon-photo" src="assets/addon-gyoza.webp" alt="Gyoza tray"><strong>Extra Gyoza Tray</strong><em>Pan-fried dumplings, approx. 24 pcs. Serves 6–8 people. Garlic ponzu available.</em><b>+$45</b></label>
+            <label class="choice-card addon-choice"><input type="checkbox" name="addons" value="Extra Edamame Tray" data-price="35"><img class="addon-photo" src="assets/addon-edamame.webp" alt="Edamame tray"><strong>Extra Edamame Tray</strong><em>Steamed edamame tray. Serves approx. 8–10 people. Garlic-style option available.</em><b>+$35</b></label>
+            <label class="choice-card addon-choice"><input type="checkbox" name="addons" value="Noodle / Yakisoba Tray" data-price="50"><img class="addon-photo" src="assets/addon-noodle.webp" alt="Noodle yakisoba tray"><strong>Noodle / Yakisoba Tray</strong><em>Stir-fried noodles with vegetables. Serves approx. 6–8 people as a side.</em><b>+$50</b></label>
+            <label class="choice-card addon-choice no-addon-choice"><input id="noAddonChoice" type="checkbox" name="noAddons" value="No thank you" data-price="0"><span class="addon-icon">—</span><strong>No thank you</strong><em>No add-ons needed for this party. Choose this if you want only the selected hibachi package.</em><b>$0</b></label>
+          </div>
+        </section>
+
+        <section class="booking-step">
+          <h3>5. Guest count</h3>
+          <div class="counter-grid" aria-label="Guest count selectors">
+            <div class="counter-card" data-counter="adults"><span>Adults</span><div class="counter-controls"><button type="button" data-count-action="minus">−</button><input id="adultsValue" name="adults" type="number" min="0" max="60" value="10"><button type="button" data-count-action="plus">+</button></div></div>
+            <div class="counter-card" data-counter="kids"><span>Kids under 12</span><div class="counter-controls"><button type="button" data-count-action="minus">−</button><input id="kidsValue" name="kids" type="number" min="0" max="40" value="0"><button type="button" data-count-action="plus">+</button></div></div>
+            <div class="counter-card locked" id="billableGuestCard"><span>Billable guests</span><strong id="totalValue">10</strong><small id="guestMinimumHelp">10 adult minimum · kids count as 0.5</small><input id="totalGuestsInput" name="totalGuests" type="hidden" value="10"><input id="billableGuestsInput" name="billableGuests" type="hidden" value="10"></div>
+          </div>
+          <p class="helper-line">Kids under 12 count as half a guest. Minimum charge equals 10 adults, or 20 kids, or any adult/kid mix that reaches 10 billable guests.</p>
+        </section>
+
+        <section class="booking-step">
+          <h3>6. Mini calendar date</h3>
+          <div class="mini-calendar-card">
+            <div class="cal-top mini-top">
+              <button type="button" id="miniPrevMonth" aria-label="Previous month">‹</button>
+              <strong id="miniMonthLabel">July 2026</strong>
+              <button type="button" id="miniNextMonth" aria-label="Next month">›</button>
+            </div>
+            <div class="weekdays mini-weekdays"><span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span></div>
+            <div class="mini-days" id="miniDaysGrid"></div>
+          </div>
+          <input id="selectedDateInput" name="eventDate" type="hidden" value="">
+        </section>
+
+        <section class="booking-step">
+          <h3>7. Preferred arrival window</h3>
+          <p class="helper-line top-helper">Choose a 2-hour window. The final chef arrival time is confirmed within 24 hours before your event after route and chef scheduling review.</p>
+          <div class="time-chip-grid time-window-grid" id="modalTimeChips">
+            <button type="button" data-time-chip="11:00 AM - 1:00 PM">11:00 AM - 1:00 PM</button>
+            <button type="button" data-time-chip="2:00 PM - 4:00 PM">2:00 PM - 4:00 PM</button>
+            <button type="button" data-time-chip="4:00 PM - 6:00 PM" class="selected">4:00 PM - 6:00 PM</button>
+            <button type="button" data-time-chip="7:00 PM - 9:00 PM">7:00 PM - 9:00 PM</button>
+          </div>
+          <div class="custom-time-box">
+            <label>Request another time
+              <input id="customTimeRequest" name="customTimeRequest" type="text" placeholder="Example: 5:30 PM, after 6 PM, or before noon">
+            </label>
+            <p class="helper-line">Custom requests are not guaranteed until Phoenix Hibachi confirms chef availability.</p>
+          </div>
+          <div class="time-select-row" aria-label="Exact time selectors">
+            <label>Hour<select id="hourSelect" name="eventHour"></select></label>
+            <label>Minute<select id="minuteSelect" name="eventMinute"></select></label>
+            <label>AM / PM<select id="ampmSelect" name="eventAmPm"><option>AM</option><option selected>PM</option></select></label>
+          </div>
+          <p class="helper-line">Use the exact-time selector only if the customer strongly prefers a specific time. It will be saved as a request, not a guaranteed arrival time.</p>
+          <input id="selectedTimeInput" name="eventTime" type="hidden" value="4:00 PM - 6:00 PM">
+        </section>
+
+        <section class="booking-step">
+          <h3>8. Allergies & food notes</h3>
+          <div class="allergy-box no-top-margin">
+            <p class="warning-title">Allergy warning — manager must confirm high-risk orders.</p>
+            <div class="check-grid allergy-grid">
+              <label><input type="checkbox" name="allergy" value="Gluten"> Gluten / gluten-free soy sauce</label>
+              <label><input type="checkbox" name="allergy" value="Shellfish"> Shellfish</label>
+              <label><input type="checkbox" name="allergy" value="Seafood"> Seafood</label>
+              <label><input type="checkbox" name="allergy" value="Peanut / Tree nut"> Peanut / Tree nut</label>
+              <label><input type="checkbox" name="allergy" value="Egg"> Egg</label>
+              <label><input type="checkbox" name="allergy" value="Dairy"> Dairy</label>
+              <label><input type="checkbox" name="allergy" value="Soy"> Soy</label>
+              <label><input type="checkbox" name="allergy" value="Sesame"> Sesame</label>
+            </div>
+            <textarea name="allergyNotes" placeholder="Allergy details, separate utensils request, gluten-free soy sauce, severe allergy notes..."></textarea>
+          </div>
+        </section>
+
+        <section class="booking-step">
+          <h3>9. Rain, delay & setup rules</h3>
+          <div class="policy-grid">
+            <label>Rain backup
+              <select name="rainPlan">
+                <option>Covered patio / tent available</option>
+                <option>Garage / indoor safe area available</option>
+                <option>Need reschedule if heavy rain</option>
+                <option>Not sure — manager please call</option>
+              </select>
+            </label>
+            <label>Can accept chef arrival window?
+              <select name="arrivalFlex">
+                <option>Yes, ±15 minutes is acceptable</option>
+                <option>Yes, ±30 minutes is acceptable</option>
+                <option>No, exact time required</option>
+              </select>
+            </label>
+            <label>Guest delay policy
+              <select name="guestDelay">
+                <option>Start on time even if some guests are late</option>
+                <option>Can wait up to 15 minutes</option>
+                <option>Can wait up to 30 minutes</option>
+              </select>
+            </label>
+            <label>Parking / unloading
+              <select name="parking">
+                <option>Driveway or parking spot available</option>
+                <option>Street parking usually available</option>
+                <option>Parking may be difficult — call first</option>
+              </select>
+            </label>
+          </div>
+          <div class="terms-checks single-terms">
+            <label><input id="bookingPolicyAgree" type="checkbox" required> I understand and agree: rain requires a safe covered cooking area or manager-approved reschedule; route, weather, parking, tolls and travel time may require a flexible arrival window and manager confirmation; allergy and special request details must be accurate; cancellations over 48 hours before the event can be reviewed; inside 48 hours the deposit is non-refundable and rescheduling is the available option.</label>
+          </div>
+          <textarea name="specialNotes" placeholder="Birthday name, surprise show, stairs, gate code, pets, parking instructions, rain concerns, lateness concerns..."></textarea>
+        </section>
+      </div>
+
+      <div class="booking-summary">
+        <div class="booking-summary-copy">
+          <span id="bookingSummaryText">Date not selected · 10 billable guests · 4:00 PM - 6:00 PM · Est. total $550</span>
+          <small id="bookingReadyHelp">Complete guest count, protein portions, add-on choice, and agreement to send.</small>
+        </div>
+        <button class="gold-btn" id="sendBookingRequestBtn" value="submit" disabled>Send Booking Request</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="login-modal" id="chefApplyModal">
+    <form method="dialog" class="modal-card login-card chef-apply-card" id="chefApplicationForm">
+      <button type="button" class="modal-close" data-close-modal aria-label="Close">×</button>
+      <p class="eyebrow">Chef Application</p>
+      <h2>Join the Phoenix Hibachi chef family.</h2>
+      <p class="modal-help">Welcome to the Phoenix Hibachi family. Submit your chef account application here. After staff review and admin approval, your chef login will become active and you can start receiving dispatch opportunities.</p>
+      <div class="chef-welcome-box">
+        <strong>Chef account approval required</strong>
+        <span>Your application will stay pending until an admin verifies your experience, availability, transportation, and service area. Once approved, you can log in to view assigned parties, route notes, customer details, payout, travel fee, and settlement info.</span>
+      </div>
+      <div class="form-grid two v60-chef-form-grid">
+        <label>Full name<input name="name" placeholder="Chef name" required></label>
+        <label>Phone<input name="phone" placeholder="Mobile number" required></label>
+        <label>Email / Login account<input name="email" type="email" placeholder="chef@example.com" required></label>
+        <label>Create password<input name="password" type="password" placeholder="Create chef portal password" required minlength="6"></label>
+        <label>Confirm password<input name="confirmPassword" type="password" placeholder="Confirm password" required minlength="6"></label>
+        <label>Recovery phone / email<input name="recoveryContact" placeholder="Backup phone or email for password recovery"></label>
+        <label>6-digit Recovery PIN<input name="recoveryPin" inputmode="numeric" maxlength="6" pattern="[0-9]{4,6}" placeholder="Optional 6-digit PIN"></label>
+        <label>Hibachi experience<select name="experience"><option>Less than 1 year</option><option>1–2 years</option><option>3–5 years</option><option>5+ years</option></select></label>
+        <label>Vehicle Type<select name="transportation"><option>Sedan</option><option>SUV</option><option>Van / Minivan</option><option>Truck</option><option>No car yet</option><option>Other</option></select></label>
+        <fieldset class="wide check-fieldset"><legend>Available Days</legend><div class="checkbox-grid day-checkbox-grid">
+          <label><input type="checkbox" name="availabilityDay" value="Monday"> Monday</label>
+          <label><input type="checkbox" name="availabilityDay" value="Tuesday"> Tuesday</label>
+          <label><input type="checkbox" name="availabilityDay" value="Wednesday"> Wednesday</label>
+          <label><input type="checkbox" name="availabilityDay" value="Thursday"> Thursday</label>
+          <label><input type="checkbox" name="availabilityDay" value="Friday"> Friday</label>
+          <label><input type="checkbox" name="availabilityDay" value="Saturday"> Saturday</label>
+          <label><input type="checkbox" name="availabilityDay" value="Sunday"> Sunday</label>
+          <label class="everyday-check"><input type="checkbox" id="chefEverydayCheck" name="everyday" value="Everyday"> Everyday</label>
+        </div><input type="hidden" name="availability"></fieldset>
+        <fieldset class="wide check-fieldset"><legend>Preferred Order Area / Preferred State</legend><div class="checkbox-grid area-checkbox-grid">
+          <label><input type="checkbox" name="preferredArea" value="NY"> NY</label>
+          <label><input type="checkbox" name="preferredArea" value="NJ"> NJ</label>
+          <label><input type="checkbox" name="preferredArea" value="CT"> CT</label>
+          <label><input type="checkbox" name="preferredArea" value="Long Island"> Long Island</label>
+          <label><input type="checkbox" name="preferredArea" value="Westchester"> Westchester</label>
+          <label><input type="checkbox" name="preferredArea" value="Staten Island"> Staten Island</label>
+          <label><input type="checkbox" name="preferredArea" value="Brooklyn / Queens"> Brooklyn / Queens</label>
+          <label><input type="checkbox" name="preferredArea" value="Other"> Other</label>
+        </div><input type="hidden" name="baseZip"></fieldset>
+        <fieldset class="wide address-fieldset"><legend>Chef Address / Home Address</legend><div class="form-grid two compact-address-grid">
+          <label>Street Address<input name="chefStreet" placeholder="Street address"></label>
+          <label>City<input name="chefCity" placeholder="Brooklyn"></label>
+          <label>State<input name="chefState" placeholder="NY"></label>
+          <label>ZIP Code<input name="chefZip" placeholder="11220" inputmode="numeric"></label>
+        </div><input type="hidden" name="serviceAreas"></fieldset>
+        <label class="wide">Upload Driver License Front & Back <small class="field-help">Optional, but recommended for faster approval.</small><input name="driverLicenseFiles" type="file" multiple accept="image/jpeg,image/png,image/webp"></label>
+        <label class="wide">Upload Hibachi Performance Video <small class="field-help">Optional, but recommended for faster approval.</small><input name="performanceVideoFiles" type="file" multiple accept="video/mp4,video/quicktime,image/jpeg,image/png,image/webp"></label>
+        <label class="wide">Self Introduction<textarea name="notes" placeholder="Tell us about your hibachi experience, cooking background, languages, weekend availability, and why you want to join Phoenix Hibachi."></textarea></label>
+      </div>
+      <div class="modal-actions"><button class="gold-btn" type="submit">Submit Application</button><button class="outline-btn" type="button" data-close-modal>Cancel</button></div>
+    </form>
+  </dialog>
+
+  <dialog class="login-modal" id="loginModal">
+    <form method="dialog" class="modal-card login-card" id="portalLoginForm">
+      <button type="button" class="modal-close" data-close-modal aria-label="Close">×</button>
+      <p class="eyebrow">Login</p>
+      <h2>Phoenix Portal</h2>
+      <p class="modal-help">Use your Phoenix Hibachi portal account. Email and password are required. After successful login, your dashboard opens in a new tab and stays signed in for 8 hours.</p>
+      <div class="login-tabs" role="tablist" aria-label="Login role">
+        <button type="button" class="active">Member</button>
+        <button type="button">Chef</button>
+        <button type="button">Customer Service</button>
+        <button type="button">Admin</button>
+      </div>
+      <label>Email<input type="email" placeholder="email@example.com" required></label>
+      <label>Password<input type="password" placeholder="Password" required></label>
+      <button class="gold-btn" value="submit">Login</button>
+      <button class="link-reset-btn" type="button" id="forgotPasswordBtn">Forgot password?</button>
+      <button class="outline-btn" type="button" id="loginApplyActionBtn" data-login-apply>Apply for Membership</button>
+    </form>
+  </dialog>
+
+
+  <dialog class="login-modal" id="forgotPasswordModal">
+    <form method="dialog" class="modal-card login-card" id="forgotPasswordForm">
+      <button type="button" class="modal-close" data-close-modal aria-label="Close">×</button>
+      <p class="eyebrow">Password Help</p>
+      <h2>Reset your password</h2>
+      <p class="modal-help">Enter your portal email. If the account exists, Phoenix Hibachi will send a password reset link.</p>
+      <label>Email<input type="email" name="email" placeholder="email@example.com" required></label>
+      <div class="modal-actions"><button class="gold-btn" type="submit">Send Reset Link</button><button class="outline-btn" type="button" data-close-modal>Cancel</button></div>
+    </form>
+  </dialog>
+
+  <dialog class="login-modal" id="changePasswordModal">
+    <form method="dialog" class="modal-card login-card" id="changePasswordForm">
+      <button type="button" class="modal-close" data-close-modal aria-label="Close">×</button>
+      <p class="eyebrow">My Profile</p>
+      <h2>Change Password</h2>
+      <p class="modal-help" id="profileInfoText">Update your own portal password. If you forgot the current password, use Forgot Password instead.</p>
+      <label>Current password<input type="password" name="currentPassword" placeholder="Current password"></label>
+      <label>New password<input type="password" name="newPassword" placeholder="New password" required minlength="6"></label>
+      <label>Confirm new password<input type="password" name="confirmNewPassword" placeholder="Confirm new password" required minlength="6"></label>
+      <div class="modal-actions"><button class="gold-btn" type="submit">Change Password</button><button class="outline-btn" type="button" id="profileForgotPasswordBtn">Forgot Password</button></div>
+    </form>
+  </dialog>
+
+  <dialog class="order-lookup-modal" id="orderLookupModal">
+    <form method="dialog" class="modal-card order-lookup-card" id="orderLookupForm">
+      <button type="button" class="modal-close" data-close-modal aria-label="Close">×</button>
+      <p class="eyebrow">Order Status</p>
+      <h2>Check your Phoenix Hibachi order</h2>
+      <p class="modal-help">Enter your order number to check whether the request was received, accepted, prep started, completed, and which chef is assigned. No automatic text message is sent from this screen.</p>
+      <label>Order number
+        <input id="orderLookupInput" name="orderNumber" placeholder="PHX-123456" autocomplete="off" required>
+      </label>
+      <div class="modal-actions">
+        <button class="gold-btn" type="submit">Search order</button>
+        <button class="outline-btn" type="button" data-close-modal>Close</button>
+      </div>
+      <div class="order-lookup-result" id="orderLookupResult" aria-live="polite"></div>
+    </form>
+  </dialog>
+
+    <dialog class="member-modal" id="memberSignupModal">
+    <form method="dialog" class="modal-card member-card" id="memberSignupForm">
+      <button type="button" class="modal-close" data-close-modal aria-label="Close">×</button>
+      <p class="eyebrow">Phoenix Membership</p>
+      <h2>Apply for Membership</h2>
+      <p class="modal-help">Create a Phoenix Hibachi member profile. Your email will be your login account, and the password you create here will be used for your future member portal after staff activation.</p>
+      <div class="member-benefit-box">
+        <strong>Phoenix Member Rewards</strong>
+        <span>Member credit special: add $1,000 Phoenix Party Credit and receive $100 bonus credit after staff activation.</span>
+        <span>First completed party over $600: receive $50 off. Coupons cannot be combined.</span>
+        <span>Birthday month: receive a $50 coupon for a party over $600.</span>
+        <span>Confirmed/completed-event social share: submit a TikTok, Facebook, Xiaohongshu, or X/Twitter link for a $50 next-party coupon after staff review.</span>
+        <small>Credits and coupons are not cash, cannot be used for travel fee or tips, and may require staff approval.</small>
+      </div>
+      <div class="form-grid two">
+        <label>Full name<input name="fullName" required placeholder="Full name"></label>
+        <label>Phone<input name="phone" required placeholder="Mobile number"></label>
+        <label>Email / Login account<input type="email" name="email" required placeholder="Email address used for login"></label>
+        <label class="date-field birthday-field">Birthday<span class="date-input-wrap"><input type="date" name="birthday" aria-label="Birthday"><span class="date-icon" aria-hidden="true">📅</span></span></label>
+        <label>Create password<input type="password" name="password" required minlength="6" placeholder="Create member password"></label>
+        <label>Confirm password<input type="password" name="confirmPassword" required minlength="6" placeholder="Confirm password"></label>
+        <label>Recovery phone / email<input name="recoveryContact" placeholder="Backup phone or email for password recovery"></label>
+        <label>6-digit Recovery PIN<input name="recoveryPin" inputmode="numeric" maxlength="6" pattern="[0-9]{4,6}" placeholder="Optional 6-digit PIN"></label>
+        <label class="wide address-field">Home address
+          <input id="memberAddressInput" name="address" required placeholder="Start typing street address, for example 546 57th Street" autocomplete="street-address">
+          <input id="memberAddressLat" name="addressLat" type="hidden">
+          <input id="memberAddressLon" name="addressLon" type="hidden">
+          <input id="memberAddressPlaceId" name="addressPlaceId" type="hidden">
+          <div class="address-suggest-box" id="memberAddressSuggestBox" role="listbox" aria-label="Member address suggestions"></div>
+          <small class="field-help">Start typing the street address. Pick the standard dropdown address and the City, State, and ZIP will fill automatically.</small>
+        </label>
+        <label>City<input id="memberCityInput" name="city" required placeholder="Brooklyn" autocomplete="address-level2"></label>
+        <label>State<input id="memberStateInput" name="state" required placeholder="NY" autocomplete="address-level1"></label>
+        <label>ZIP code<input id="memberZipInput" name="zip" required inputmode="numeric" placeholder="11220" autocomplete="postal-code"></label>
+        <label class="wide">Food allergies / notes<textarea name="notes" placeholder="Allergies, kids, parking, rain plan, preferred date range..."></textarea></label>
+      </div>
+      <div class="terms-checks">
+        <label><input type="checkbox" name="promoConsent"> I agree to receive Phoenix Hibachi member offers by SMS/email. Message/data rates may apply.</label>
+        <label><input type="checkbox" name="terms" required> I understand membership credits and coupons are subject to Phoenix Hibachi approval and cannot be exchanged for cash.</label>
+      </div>
+      <div class="modal-actions"><button class="gold-btn" type="submit">Submit Membership Application</button><button class="outline-btn" type="button" data-close-modal>Cancel</button></div>
+    </form>
+  </dialog>
+
+  <dialog class="success-modal" id="successModal">
+    <form method="dialog" class="modal-card success-card">
+      <button type="button" class="modal-close" data-close-modal aria-label="Close">×</button>
+      <p class="eyebrow">Request Received</p>
+      <h2>Thanks — your hibachi request is in.</h2>
+      <p class="modal-help">Your request is saved to the Phoenix Hibachi booking system. A manager still needs to review route timing, rain plan, allergies, travel fee, and payment before final confirmation.</p>
+      <div class="success-receipt" id="successReceipt"></div>
+      <div class="booking-offer-box" id="bookingOfferBox">
+        <strong>First-party reward reminder</strong>
+        <p>First completed party over $600 may receive $50 off after manager review. Coupons cannot be combined and cannot be used for travel fee or tips.</p>
+      </div>
+      <div class="payment-choice-box" id="paymentChoiceBox">
+        <strong>Choose how you want to hold this request</strong>
+        <p class="small-muted">No payment is collected on this screen. For now, Phoenix Hibachi accepts transfer/Zelle for deposit or full payment. Onsite cash/Zelle can be selected, but unpaid requests may be moved or cancelled if the route fills up.</p>
+        <label class="payment-choice"><input type="radio" name="paymentPreference" value="Deposit transfer / Zelle" checked><span><b>Pay deposit by transfer/Zelle</b><small>Minimum deposit: $200. This is the best way to hold your preferred date and time window.</small></span></label>
+        <label class="payment-choice"><input type="radio" name="paymentPreference" value="Full payment transfer / Zelle"><span><b>Pay full amount by transfer/Zelle</b><small>Manager will send final total and transfer instructions after review.</small></span></label>
+        <label class="payment-choice"><input type="radio" name="paymentPreference" value="Onsite cash / Zelle"><span><b>Pay onsite by cash/Zelle</b><small>Available by request, but without deposit your time may change or be cancelled. We will notify you at least 24 hours before the event.</small></span></label>
+        <button type="button" class="outline-btn" id="savePaymentPreferenceBtn">Save payment preference</button>
+      </div>
+      <div class="post-confirm-box">
+        <strong>Confirm your booking request</strong>
+        <p>Membership is optional. Your booking request can still be submitted and reviewed even if you do not register for a member account.</p>
+        <div class="inline-actions">
+          <button type="button" class="gold-btn" id="confirmBookingRequestBtn">Confirm booking request</button>
+          <button type="button" class="outline-btn" data-open-share-reward>View social coupon options</button>
+          <button type="button" class="outline-btn" data-open-login>Login</button>
+          <button type="button" class="outline-btn" data-open-member>Register / Apply for Membership</button>
+        </div>
+        <small class="small-muted">After staff accepts or completes the event, you can submit a TikTok, Facebook, Xiaohongshu, Instagram, or X/Twitter post link for a $50 next-party coupon after review.</small>
+      </div>
+      <div class="contact-actions">
+        <button type="button" class="outline-btn" data-close-modal>Close</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="social-reward-modal" id="socialRewardModal">
+    <div class="modal-card social-reward-card">
+      <button type="button" class="modal-close" data-close-modal aria-label="Close">×</button>
+      <p class="eyebrow">Social Coupon</p>
+      <h2>Share your confirmed Phoenix Hibachi party</h2>
+      <p class="modal-help">After your order is accepted or completed, submit your public post link for review. Eligible guests receive one $50 coupon for the next party over $600. Coupon cannot be used on the same booking or combined with other coupons.</p>
+      <form class="social-coupon-box" id="socialCouponForm">
+        <strong>Choose platform</strong>
+        <div class="form-grid two">
+          <label>Platform<select name="platform"><option>TikTok</option><option>Facebook</option><option>小红书 / Xiaohongshu</option><option>X / Twitter</option><option>Instagram</option><option>Other</option></select></label>
+          <label>Post link<input name="postLink" placeholder="https://..."></label>
+        </div>
+        <button class="gold-btn" type="submit">Submit Share Link</button>
+      </form>
+      <div class="inline-actions social-login-actions">
+        <button type="button" class="gold-btn" data-open-login>Login to save to my account</button>
+        <button type="button" class="outline-btn" data-open-member>Register / Apply for Membership</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog class="dashboard-modal" id="dashboardModal">
+    <div class="modal-card dashboard-card">
+      <button type="button" class="modal-close" data-close-modal aria-label="Close">×</button>
+      <div class="dashboard-head">
+        <div>
+          <p class="eyebrow">Phoenix Portal</p>
+          <h2 id="dashboardTitle">Dashboard</h2>
+          <p class="modal-help" id="dashboardHelp">Demo dashboard powered by browser storage.</p>
+        </div>
+        <div class="dashboard-actions">
+          <button type="button" class="outline-btn" id="autoDispatchBtn">Build Route Plan</button>
+          <button type="button" class="outline-btn" data-portal-logout>Logout</button>
+        </div>
+      </div>
+      <div class="dashboard-stats">
+        <div><strong id="statNew">0</strong><span>New orders</span></div>
+        <div><strong id="statPending">0</strong><span>Pending / assigned</span></div>
+        <div><strong id="statFeedback">0</strong><span>Support tickets</span></div>
+      </div>
+      <div class="dashboard-tabs" role="tablist" aria-label="Portal sections">
+        <button type="button" class="active" data-dashboard-tab="orders">Orders</button>
+        <button type="button" data-dashboard-tab="customers">Members / Customers</button>
+        <button type="button" data-dashboard-tab="people">People / Settings</button>
+        <button type="button" data-dashboard-tab="feedback">Complaints & Suggestions</button>
+        <button type="button" data-dashboard-tab="applications">Chef Applications</button>
+        <button type="button" data-dashboard-tab="dispatch">Chef Dispatch</button>
+      </div>
+      <div class="dashboard-pages">
+        <section class="dashboard-page active" data-dashboard-page="orders">
+          <div class="section-row"><div><h3 id="primaryDashboardHeading">Orders by calendar date</h3><p class="small-muted">Orders are grouped by event day so weekend routes are easier to review. Use Calendar Summary to filter by month or date and accept pending orders.</p></div><button type="button" class="outline-btn" id="calendarSummaryBtn">Calendar Summary</button></div>
+          <div class="calendar-summary-panel" id="calendarSummaryPanel" hidden>
+            <div class="calendar-summary-controls">
+              <label>View
+                <select id="calendarSummaryMode">
+                  <option value="month">By month</option>
+                  <option value="date">By date</option>
+                </select>
+              </label>
+              <label id="calendarSummaryMonthWrap">Month
+                <input type="month" id="calendarSummaryMonth">
+              </label>
+              <label id="calendarSummaryDateWrap" hidden>Date
+                <input type="date" id="calendarSummaryDate">
+              </label>
+              <button type="button" class="outline-btn" id="calendarSummaryClearBtn">Show all</button>
+            </div>
+            <div class="small-muted">Choose a month or a single date to review orders. Use <b>Accept order</b> to mark the booking as accepted so customers can see the updated status in their portal.</div>
+            <div class="calendar-summary-list" id="calendarSummaryList"></div>
+          </div>
+          <div class="route-planner-panel" id="routePlannerPanel">
+            <div class="route-planner-head">
+              <div>
+                <p class="eyebrow">Route Map</p>
+                <h3>Point-to-point dispatch plan</h3>
+                <p class="small-muted">Orders are labeled A, B, C by event time. Different route colors show different chef chains. This is a manager review tool before final confirmation.</p>
+              </div>
+              <label>Route date
+                <select id="routePlanDateSelect"></select>
+              </label>
+            </div>
+            <div id="routeMapBoard" class="route-map-board"></div>
+            <div id="routePlanSummary" class="route-plan-summary"></div>
+          </div>
+          <div class="calendar-order-list" id="orderList"></div>
+        </section>
+        <section class="dashboard-page" data-dashboard-page="customers">
+          <div class="section-row"><div><h3>Members / Customers</h3><p class="small-muted">Customer and member contacts are collected from booking history and membership applications for compliant follow-up ads, SMS, email campaigns, and birthday gift card reminders.</p></div><button type="button" class="outline-btn" id="copyCustomerContactsBtn">Copy contacts</button></div>
+          <div class="customer-table-wrap" id="customerList"></div>
+        </section>
+        <section class="dashboard-page" data-dashboard-page="people">
+          <div class="section-row"><div><h3>People management & order settings</h3><p class="small-muted">Admin can review member/customer accounts, approve or pause chef access, assign customer service accounts, and pause new booking requests when the schedule is full.</p></div></div>
+          <div class="people-settings-grid">
+            <article class="settings-card">
+              <h4>Pause booking requests by date</h4>
+              <p id="acceptingOrdersStatus" class="small-muted">Checking selected booking date...</p>
+              <div class="inline-admin-form date-pause-form">
+                <input type="date" id="bookingPauseDateInput" aria-label="Date to pause or resume">
+                <button type="button" class="outline-btn" id="pauseBookingDateBtn">Pause this date</button>
+                <button type="button" class="outline-btn" id="resumeBookingDateBtn">Resume this date</button>
+              </div>
+              <div id="pausedDatesList" class="small-muted paused-dates-list">No paused dates.</div>
+              <p class="small-muted">This blocks new booking requests only for the selected event date. Other dates stay open, and you can reopen the date anytime.</p>
+            </article>
+            <article class="settings-card">
+              <h4>Add staff/member record</h4>
+              <div class="inline-admin-form">
+                <input id="peopleNameInput" placeholder="Name">
+                <input id="peopleEmailInput" placeholder="Email login">
+                <input id="peopleTempPasswordInput" placeholder="Temporary password or leave blank">
+                <select id="peopleRoleSelect" aria-label="Staff/member role">
+                  <option value="customer_service">Customer Service / 客服</option>
+                  <option value="chef">Chef / 师傅</option>
+                  <option value="customer">Customer / 顾客</option>
+                  <option value="manager">Manager / 经理</option>
+                  <option value="admin">Admin / 管理员</option>
+                </select>
+                <button type="button" class="outline-btn" id="addPeopleRecordBtn">Add record</button>
+              </div>
+              <p class="small-muted">V60: this panel can track roles locally and send password reset links through Supabase when connected. True admin-created Auth users / temporary passwords require a secure Supabase Edge Function with service-role permission.</p>
+            </article>
+            <article class="settings-card contact-settings-card">
+              <h4>Contact Settings</h4>
+              <p class="small-muted">Update public contact information without editing the page code.</p>
+              <div class="inline-admin-form contact-settings-form">
+                <input id="sitePhoneInput" placeholder="Business phone">
+                <input id="siteTextPhoneInput" placeholder="Text phone">
+                <input id="siteBookingEmailInput" placeholder="Booking email">
+                <input id="siteSupportEmailInput" placeholder="Support email">
+                <textarea id="sitePolicyInput" placeholder="48-hour policy text"></textarea>
+                <button type="button" class="outline-btn" id="saveContactSettingsBtn">Save contact settings</button>
+              </div>
+            </article>
+          </div>
+          <div class="people-management-list" id="peopleManagementList"></div>
+        </section>
+        <section class="dashboard-page" data-dashboard-page="feedback">
+          <div class="section-row"><div><h3>Complaints & Suggestions</h3><p class="small-muted">Simple questions can use the AI thank-you/reply draft. Serious refund, allergy, food safety, or lateness issues still need manager review.</p></div></div>
+          <div class="order-list compact" id="feedbackList"></div>
+        </section>
+        <section class="dashboard-page" data-dashboard-page="applications">
+          <div class="section-row"><div><h3>Chef Applications</h3><p class="small-muted">Resume, certificates, photos, and videos show as attachment buttons when available.</p></div></div>
+          <div class="order-list compact" id="chefApplicationsList"></div>
+        </section>
+        <section class="dashboard-page" data-dashboard-page="dispatch">
+          <div class="section-row"><div><h3 id="dispatchDashboardHeading">Chef dispatch & routing</h3><p class="small-muted">Chef view uses the same customer information layout, plus map, route, travel time, and fee.</p></div></div>
+          <div class="chef-dispatch" id="chefDispatch"></div>
+        </section>
+      </div>
+    </div>
+  </dialog>
+
+
+
+  <dialog class="print-modal" id="printModal">
+    <div class="modal-card print-card">
+      <button type="button" class="modal-close" data-close-modal aria-label="Close">×</button>
+      <div class="print-modal-actions">
+        <button type="button" class="gold-btn" id="runPrintBtn">Print / Save PDF</button>
+        <button type="button" class="outline-btn" data-close-modal>Close</button>
+      </div>
+      <div id="printArea" class="invoice-paper"></div>
+    </div>
+  </dialog>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="script.js"></script>
+  <script type="module" src="src/app/main.js"></script>
+  <!-- v7 uses Geoapify Autocomplete directly in script.js.
+       Before launch, restrict the API key to your Replit preview domain and final website domain in Geoapify settings. -->
+</body>
+</html>
