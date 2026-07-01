@@ -2665,7 +2665,7 @@ function chefSettlementHtml(order) {
   return `<section class="chef-settlement-sheet">
     <div class="invoice-top-line"></div>
     <div class="invoice-ref">Backend Settlement #: ${printSafe(settlementId)}</div>
-    <div class="invoice-brand"><strong>PHOENIX HIBACHI</strong><span>Chef Settlement / 师傅结算单</span><span>${printSafe(order.id || '')}</span></div>
+    <div class="invoice-brand"><strong>PHOENIX HIBACHI</strong><span>Chef Settlement</span><span>${printSafe(order.id || '')}</span></div>
     <div class="settlement-grid">
       <div><b>Date / Time</b><span>${printSafe(invoiceDateLine(order))}</span></div>
       <div><b>Assigned Chef</b><span>${printSafe(order.assignedChef || 'Unassigned')}</span></div>
@@ -2951,7 +2951,9 @@ function renderCustomerManagement(orders) {
 }
 function feedbackCard(item) {
   const aiDraft = makeFeedbackReply(item);
-  return `<article class="feedback-card"><header><div><strong>${escapeHtml(item.id)}</strong><p>${escapeHtml(item.feedbackType || 'Feedback')} · ${escapeHtml(item.name || '')} · ${escapeHtml(item.phone || '')}</p></div><span class="tag">${escapeHtml(item.status || 'New')}</span></header><p>${escapeHtml(item.message || '')}</p><div class="reply-draft" id="reply-${escapeHtml(item.id)}" hidden>${escapeHtml(aiDraft)}</div><div class="order-actions"><button type="button" data-ai-feedback="${escapeHtml(item.id)}">AI reply draft</button><button type="button" data-thank-feedback="${escapeHtml(item.id)}">Thank-you reply</button><a href="sms:${encodeURIComponent(item.phone || '')}?&body=${encodeURIComponent(aiDraft)}">Text reply</a><a href="mailto:${encodeURIComponent(item.email || '')}?subject=${encodeURIComponent('Phoenix Hibachi support')}&body=${encodeURIComponent(aiDraft)}">Email reply</a></div></article>`;
+  const orderRef = item.orderNumber || item.orderRef || item.bookingId || '';
+  const orderLine = orderRef ? `<p class="feedback-order-ref-v136"><b>Order #:</b> ${escapeHtml(orderRef)}</p>` : '';
+  return `<article class="feedback-card"><header><div><strong>${escapeHtml(item.id)}</strong><p>${escapeHtml(item.feedbackType || 'Feedback')} · ${escapeHtml(item.name || '')} · ${escapeHtml(item.phone || '')}</p>${orderLine}</div><span class="tag">${escapeHtml(item.status || 'New')}</span></header><p>${escapeHtml(item.message || '')}</p><div class="reply-draft" id="reply-${escapeHtml(item.id)}" hidden>${escapeHtml(aiDraft)}</div><div class="order-actions"><button type="button" data-ai-feedback="${escapeHtml(item.id)}">AI reply draft</button><button type="button" data-thank-feedback="${escapeHtml(item.id)}">Thank-you reply</button>${orderRef ? `<button type="button" data-copy-text="${escapeHtml(orderRef)}">Copy order #</button>` : ''}<a href="sms:${encodeURIComponent(item.phone || '')}?&body=${encodeURIComponent(aiDraft)}">Text reply</a><a href="mailto:${encodeURIComponent(item.email || '')}?subject=${encodeURIComponent('Phoenix Hibachi support')}&body=${encodeURIComponent(aiDraft)}">Email reply</a></div></article>`;
 }
 function makeFeedbackReply(item) {
   const type = String(item.feedbackType || '').toLowerCase();
@@ -4903,6 +4905,8 @@ function ensureOrderDeleteButtonsV70(){
 }
 
 function ensureRoutePlannerGuideV70(){
+  // Disabled in 2.0 final: V122 dispatch calendar is the only visible route planning UI.
+  return;
   const panel = document.getElementById('routePlannerPanel');
   if (!panel || document.getElementById('routePlannerGuideV70')) return;
   const guide = document.createElement('div');
@@ -10279,7 +10283,7 @@ setTimeout(() => {
     const box = document.createElement('div');
     box.id = 'chefTeamRequestV117';
     box.className = 'chef-team-request-v117';
-    box.innerHTML = `<h4>Chef team / 师傅数量</h4><p class="helper-line">More than 25 billable guests normally requires 2 chefs. Extra chef pricing is confirmed by Phoenix before final acceptance.</p><div class="chef-team-grid-v117"><label>Requested chef count<select id="chefCountRequestedInput" name="chefCountRequested"><option value="auto">Auto / Phoenix recommends</option><option value="1">1 chef</option><option value="2">2 chefs</option><option value="3">3 chefs</option><option value="4">4 chefs</option></select></label><div><b class="chef-team-recommend-v117" id="chefTeamRecommendV117">Recommended: 1 chef</b><p class="helper-line" id="chefTeamWarnV117">Final chef team and extra chef fee are confirmed manually.</p></div></div><input type="hidden" id="chefTeamRequestNoteInput" name="chefTeamRequestNote" value="">`;
+    box.innerHTML = `<h4>Chef team</h4><p class="helper-line">More than 25 billable guests normally requires 2 chefs. Extra chef pricing is confirmed by Phoenix before final acceptance.</p><div class="chef-team-grid-v117"><label>Requested chef count<select id="chefCountRequestedInput" name="chefCountRequested"><option value="auto">Auto / Phoenix recommends</option><option value="1">1 chef</option><option value="2">2 chefs</option><option value="3">3 chefs</option><option value="4">4 chefs</option></select></label><div><b class="chef-team-recommend-v117" id="chefTeamRecommendV117">Recommended: 1 chef</b><p class="helper-line" id="chefTeamWarnV117">Final chef team and extra chef fee are confirmed manually.</p></div></div><input type="hidden" id="chefTeamRequestNoteInput" name="chefTeamRequestNote" value="">`;
     guestStep.appendChild(box);
     updateChefCountRecommendation();
   }
@@ -10323,7 +10327,7 @@ setTimeout(() => {
   function chefTeamAdminHtml(order){
     const id=idOf(order); const count=requestedChefCount(order); const ids=chefTeamIds(order); const rec=recommendedChefCountForOrder(order);
     const checks=(Array.isArray(CHEFS)?CHEFS:[]).map(c => `<label><input type="checkbox" data-v117-team-chef="${esc(id)}" value="${esc(c.id)}" ${ids.includes(c.id)?'checked':''}> ${esc(c.name)}</label>`).join('');
-    return `<section class="chef-team-admin-v117" data-v117-team-box="${esc(id)}"><h4>Chef team / 多师傅炒台</h4><div class="chef-team-admin-grid-v117"><label>Chef count<select data-v117-team-count="${esc(id)}"><option value="1" ${count===1?'selected':''}>1 chef</option><option value="2" ${count===2?'selected':''}>2 chefs</option><option value="3" ${count===3?'selected':''}>3 chefs</option><option value="4" ${count===4?'selected':''}>4 chefs</option></select></label><div class="chef-checks-v117">${checks}</div><button type="button" data-v117-save-team="${esc(id)}">Save team</button></div><p class="helper-line">Recommended for this order: ${rec} chef${rec>1?'s':''}. If 2+ chefs cook together, headcount payout, travel fee and tips should be split evenly unless manager overrides.</p></section>`;
+    return `<section class="chef-team-admin-v117" data-v117-team-box="${esc(id)}"><h4>Chef team</h4><div class="chef-team-admin-grid-v117"><label>Chef count<select data-v117-team-count="${esc(id)}"><option value="1" ${count===1?'selected':''}>1 chef</option><option value="2" ${count===2?'selected':''}>2 chefs</option><option value="3" ${count===3?'selected':''}>3 chefs</option><option value="4" ${count===4?'selected':''}>4 chefs</option></select></label><div class="chef-checks-v117">${checks}</div><button type="button" data-v117-save-team="${esc(id)}">Save team</button></div><p class="helper-line">Recommended for this order: ${rec} chef${rec>1?'s':''}. If 2+ chefs cook together, headcount payout, travel fee and tips should be split evenly unless manager overrides.</p></section>`;
   }
   function injectTeamControls(){
     document.querySelectorAll('.v102-order-panel').forEach(panel => {
@@ -10626,7 +10630,7 @@ setTimeout(() => {
     const weekTabs = sel.month ? `<div class="route-week-tabs-v118"><button type="button" class="route-week-tab-v118 ${state.mode==='month'?'active':''}" data-v118-month-overview="1">All month · ${sel.month.rows.length}</button>${sel.month.weeks.map((w, i) => `<button type="button" class="route-week-tab-v118 ${state.week===w.key && state.mode!=='month'?'active':''}" data-v118-week="${esc(w.key)}"><b>Week ${i+1}</b><span>${esc(w.label)} · ${w.rows.length}</span></button>`).join('')}</div>` : '';
     const week = sel.week || sel.month?.weeks[0];
     const dayTabs = week && state.mode !== 'month' ? `<div class="route-day-tabs-v118">${week.days.map(d => `<button type="button" class="route-day-tab-v118 ${state.date===d.key?'active':''}" data-v118-day="${esc(d.key)}"><b>${esc(d.label)}</b><span>${d.rows.length} order${d.rows.length>1?'s':''}</span></button>`).join('')}</div>` : '';
-    return `<section class="route-board-controls-v118"><div class="route-board-heading-v118"><div><b>Dispatch calendar / 派单日历</b><span>Pick month → week → day. Route map only uses the selected day.</span></div><div>${sel.month ? `${sel.month.rows.length} month orders` : 'No orders'}</div></div>${months}${weekTabs}${dayTabs}</section>`;
+    return `<section class="route-board-controls-v118"><div class="route-board-heading-v118"><div><b>Dispatch calendar</b><span>Pick month → week → day. Route map only uses the selected day.</span></div><div>${sel.month ? `${sel.month.rows.length} month orders` : 'No orders'}</div></div>${months}${weekTabs}${dayTabs}</section>`;
   }
 
   function renderMonthOverview(sel){
@@ -10961,7 +10965,7 @@ setTimeout(() => {
     const months = tree.map(m => `<button type="button" class="phx-v119-month ${m.key===state.month?'active':''}" data-v119-month="${esc(m.key)}"><b>${esc(m.label)}</b><span>${m.rows.length} orders</span></button>`).join('');
     const weeks = sel.month ? sel.month.weeks.map((w,i) => `<button type="button" class="phx-v119-week ${w.key===state.week?'active':''}" data-v119-week="${esc(w.key)}"><b>Week ${i+1}</b><span>${esc(w.label)} · ${w.rows.length}</span></button>`).join('') : '';
     const days = sel.week ? sel.week.days.map(d => `<button type="button" class="phx-v119-day ${d.key===state.day?'active':''}" data-v119-day="${esc(d.key)}"><b>${esc(d.label)}</b><span>${d.rows.length} orders</span></button>`).join('') : '';
-    return `<section class="phx-v119-controls"><header><div><b>Dispatch board / 派单工作台</b><span>Choose a month, then a week, then one date. Only the selected date is routed.</span></div><div class="phx-v119-mode">${esc(state.mode.toUpperCase())}</div></header><div class="phx-v119-row">${months}</div>${weeks ? `<div class="phx-v119-row week-row">${weeks}</div>` : ''}${days ? `<div class="phx-v119-row day-row">${days}</div>` : ''}</section>`;
+    return `<section class="phx-v119-controls"><header><div><b>Dispatch board</b><span>Choose a month, then a week, then one date. Only the selected date is routed.</span></div><div class="phx-v119-mode">${esc(state.mode.toUpperCase())}</div></header><div class="phx-v119-row">${months}</div>${weeks ? `<div class="phx-v119-row week-row">${weeks}</div>` : ''}${days ? `<div class="phx-v119-row day-row">${days}</div>` : ''}</section>`;
   }
   function renderMonthList(sel){
     if (!sel.month) return '';
@@ -11359,7 +11363,7 @@ setTimeout(() => {
       if (!id || card.querySelector('[data-v126-ticket-chef]')) return;
       const wrap = document.createElement('div');
       wrap.className = 'v126-ticket-assign';
-      wrap.innerHTML = `<label>Assign to chef / 指派投诉给师傅<select data-v126-ticket-chef="${esc(id)}">${chefOptionsHtml(assignments[id])}</select></label>`;
+      wrap.innerHTML = `<label>Assign to chef<select data-v126-ticket-chef="${esc(id)}">${chefOptionsHtml(assignments[id])}</select></label>`;
       card.appendChild(wrap);
     });
     list.dataset.v126TicketControls = '1';
@@ -11420,7 +11424,7 @@ setTimeout(() => {
     const rows = selectedChefOrders().sort((a,b) => parseDate(a) - parseDate(b));
     const todayCount = myOrders().filter(o => { const dt = parseDate(o); return dt && !isNaN(dt) && dateKey(dt) === dateKey(now); }).length;
     const selectedTotal = rows.reduce((sum,o)=>sum+orderTotal(o),0);
-    panel.innerHTML = `<div class="chef-orders-head-v126"><div><p class="eyebrow">Chef Orders</p><h3>My orders / 我的订单</h3><p class="small-muted">Manage your own assigned jobs by day, week, or month. Each task includes customer route details and chef task note.</p></div><div class="chef-orders-controls-v126"><label>View<select id="chefOrdersModeV126"><option value="date" ${modeVal==='date'?'selected':''}>By day</option><option value="week" ${modeVal==='week'?'selected':''}>By week</option><option value="month" ${modeVal==='month'?'selected':''}>By month</option></select></label><label>Date<input type="date" id="chefOrdersDateV126" value="${esc(dVal)}"></label><label>Week<input type="week" id="chefOrdersWeekV126" value="${esc(wVal)}"></label><label>Month<input type="month" id="chefOrdersMonthV126" value="${esc(mVal)}"></label></div></div><div class="chef-orders-stats-v126"><div><span>Today tasks</span><strong>${todayCount}</strong></div><div><span>Selected orders</span><strong>${rows.length}</strong></div><div><span>Selected order volume</span><strong>${money(selectedTotal)}</strong></div></div><div class="chef-orders-list-v126">${rows.length ? rows.map((o,i)=>`<article class="chef-order-card-v126"><header><div><strong>${i+1}. ${esc(idOf(o) || 'Order')}</strong><p>${esc((parseDate(o) && !isNaN(parseDate(o))) ? parseDate(o).toLocaleString() : (o.eventDate || 'Date pending'))}</p></div><span class="tag">${esc(o.status || 'Pending')}</span></header><p><b>Customer:</b> ${esc(o.name || 'Guest')} · ${esc(o.phone || o.email || '')}<br><b>Address:</b> ${esc(o.address || 'No address')}<br><b>Party:</b> ${esc(o.package || o.packageName || '-')} · ${esc(o.adults || o.adultCount || 0)} adults · ${esc(o.kids || o.kidCount || 0)} kids</p><div class="chef-task-note-v126"><b>Task note / 任务备注</b><br>${esc(taskNote(o))}</div><div class="order-actions"><a href="${typeof googleMapUrl === 'function' ? googleMapUrl(o.address || '') : '#'}" target="_blank" rel="noreferrer">Map</a><button type="button" data-copy-order="${esc(idOf(o))}">Copy task note</button><button type="button" data-print-chef="${esc(idOf(o))}">Chef settlement</button></div></article>`).join('') : '<div class="empty-state">No assigned orders found for this filter.</div>'}</div>`;
+    panel.innerHTML = `<div class="chef-orders-head-v126"><div><p class="eyebrow">Chef Orders</p><h3>My orders</h3><p class="small-muted">Manage your own assigned jobs by day, week, or month. Each task includes customer route details and chef task note.</p></div><div class="chef-orders-controls-v126"><label>View<select id="chefOrdersModeV126"><option value="date" ${modeVal==='date'?'selected':''}>By day</option><option value="week" ${modeVal==='week'?'selected':''}>By week</option><option value="month" ${modeVal==='month'?'selected':''}>By month</option></select></label><label>Date<input type="date" id="chefOrdersDateV126" value="${esc(dVal)}"></label><label>Week<input type="week" id="chefOrdersWeekV126" value="${esc(wVal)}"></label><label>Month<input type="month" id="chefOrdersMonthV126" value="${esc(mVal)}"></label></div></div><div class="chef-orders-stats-v126"><div><span>Today tasks</span><strong>${todayCount}</strong></div><div><span>Selected orders</span><strong>${rows.length}</strong></div><div><span>Selected order volume</span><strong>${money(selectedTotal)}</strong></div></div><div class="chef-orders-list-v126">${rows.length ? rows.map((o,i)=>`<article class="chef-order-card-v126"><header><div><strong>${i+1}. ${esc(idOf(o) || 'Order')}</strong><p>${esc((parseDate(o) && !isNaN(parseDate(o))) ? parseDate(o).toLocaleString() : (o.eventDate || 'Date pending'))}</p></div><span class="tag">${esc(o.status || 'Pending')}</span></header><p><b>Customer:</b> ${esc(o.name || 'Guest')} · ${esc(o.phone || o.email || '')}<br><b>Address:</b> ${esc(o.address || 'No address')}<br><b>Party:</b> ${esc(o.package || o.packageName || '-')} · ${esc(o.adults || o.adultCount || 0)} adults · ${esc(o.kids || o.kidCount || 0)} kids</p><div class="chef-task-note-v126"><b>Task note</b><br>${esc(taskNote(o))}</div><div class="order-actions"><a href="${typeof googleMapUrl === 'function' ? googleMapUrl(o.address || '') : '#'}" target="_blank" rel="noreferrer">Map</a><button type="button" data-copy-order="${esc(idOf(o))}">Copy task note</button><button type="button" data-print-chef="${esc(idOf(o))}">Chef settlement</button></div></article>`).join('') : '<div class="empty-state">No assigned orders found for this filter.</div>'}</div>`;
     ['chefOrdersModeV126','chefOrdersDateV126','chefOrdersWeekV126','chefOrdersMonthV126'].forEach(id => {
       const el = document.getElementById(id);
       if (el && !el.dataset.v126Bound) { el.dataset.v126Bound = '1'; el.addEventListener('change', renderChefOrdersPanel, true); }
@@ -11494,561 +11498,894 @@ setTimeout(() => {
   setTimeout(() => applyChefTabsAndPanels(typeof currentDashboardRole !== 'undefined' ? currentDashboardRole : ''), 600);
 })();
 
-/* ======================================================================
-   V127 CUSTOMER SERVICE CONTACT IMPORT + SUPPORT TICKET RESOLVE
-   - Customer Service Members/Customers can manually add customer contacts.
-   - Bulk import supports CSV/TXT offline and XLSX via SheetJS CDN when online.
-   - Manual customers merge with booking/membership customers by email/phone/name.
-   - Support tickets can be marked Resolved; resolved tickets disappear from active view.
-   - No Supabase SQL required; local until a customers/support_tickets table is added.
-   ====================================================================== */
-(function initPHXV127CustomerServiceContacts(){
-  if (window.__PHX_V127_CUSTOMER_IMPORT__) return;
-  window.__PHX_V127_CUSTOMER_IMPORT__ = true;
 
-  const MANUAL_CUSTOMERS_KEY = 'phoenixManualCustomersV127';
-  const FEEDBACK_STORAGE_KEY = 'phoenixHibachiFeedbackV12';
+// 2.0 final hotfix: remove/hide legacy Route Planner blocks so only V122 dispatch board remains visible.
+(function suppressLegacyRoutePlannerFinal(){
+  function apply(){
+    const guide = document.getElementById('routePlannerGuideV70');
+    if (guide) guide.remove();
+    const panel = document.getElementById('routePlannerPanel');
+    if (panel) {
+      panel.hidden = true;
+      panel.setAttribute('aria-hidden', 'true');
+      panel.classList.add('legacy-route-panel-hidden-final');
+    }
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply, { once: true });
+  else apply();
+  setTimeout(apply, 250);
+  setTimeout(apply, 1000);
+})();
+
+/* ======================================================================
+   V131 People/Chef de-duplication fix
+   Keeps one visible staff/member row per role + email/phone. Manual records
+   and chef applications are merged in the People panel so adding one chef
+   does not create duplicate-looking records.
+   ====================================================================== */
+(function installPeopleChefDedupV131(){
+  if (window.__PHX_PEOPLE_CHEF_DEDUP_V131__) return;
+  window.__PHX_PEOPLE_CHEF_DEDUP_V131__ = true;
+
+  const toast = (message, type = 'info', duration = 5200) => {
+    if (typeof window.phoenixToastV71 === 'function') window.phoenixToastV71(message, type, duration);
+    else alert(message);
+  };
+  const safeEscape = (value) => (typeof escapeHtml === 'function' ? escapeHtml(value) : String(value ?? '').replace(/[&<>"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch])));
+  const normEmail = (value) => String(value || '').trim().toLowerCase();
+  const normPhone = (value) => String(value || '').replace(/\D/g, '');
+  const normName = (value) => String(value || '').trim().toLowerCase().replace(/\s+/g, ' ');
+  const normRole = (role) => {
+    const r = String(role || '').trim().toLowerCase().replace(/[\s-]+/g, '_');
+    if (['member','customer','customers'].includes(r)) return 'customer';
+    if (['customer_service','customerservice','service'].includes(r)) return 'customer_service';
+    if (['admin','administrator'].includes(r)) return 'admin';
+    if (['manager','mgr'].includes(r)) return 'manager';
+    if (['chef','cook','hibachi_chef'].includes(r)) return 'chef';
+    return r || 'customer_service';
+  };
+  const roleText = (role) => (typeof roleLabel === 'function' ? roleLabel(role) : ({customer:'Member', chef:'Chef', customer_service:'Customer Service', manager:'Manager', admin:'Admin'}[normRole(role)] || role || '-'));
+  const personKey = (person) => {
+    const role = normRole(person?.role);
+    const email = normEmail(person?.email);
+    const phone = normPhone(person?.phone);
+    const name = normName(person?.name || person?.fullName);
+    if (email) return `${role}|email|${email}`;
+    if (phone) return `${role}|phone|${phone}`;
+    if (name) return `${role}|name|${name}`;
+    return `${role}|id|${String(person?.id || '')}`;
+  };
+  const statusRank = (status) => {
+    const s = String(status || '').toLowerCase();
+    if (['active','approved'].includes(s)) return 5;
+    if (['paused','suspended'].includes(s)) return 4;
+    if (['pending','review'].includes(s)) return 3;
+    if (['deleted','removed'].includes(s)) return 0;
+    return 2;
+  };
+  const sourceRank = (person) => {
+    const source = String(person?.source || '').toLowerCase();
+    const sourceType = String(person?.sourceType || '').toLowerCase();
+    if (sourceType === 'profile' || source.includes('current login')) return 100;
+    if (source.includes('manual')) return 80;
+    if (source.includes('application')) return 50;
+    return 40;
+  };
+  const choosePreferred = (a, b) => {
+    const aScore = sourceRank(a) * 10 + statusRank(a.status);
+    const bScore = sourceRank(b) * 10 + statusRank(b.status);
+    return bScore >= aScore ? b : a;
+  };
+  function mergePersonGroup(a, b) {
+    const preferred = choosePreferred(a, b);
+    const other = preferred === a ? b : a;
+    const sources = new Set(String(a.source || 'Manual').split(' + ').concat(String(b.source || 'Manual').split(' + ')).map(s => s.trim()).filter(Boolean));
+    const sourceTypes = new Set([a.sourceType, b.sourceType].filter(Boolean));
+    const status = statusRank(preferred.status) >= statusRank(other.status) ? preferred.status : other.status;
+    return {
+      ...other,
+      ...preferred,
+      id: preferred.id || other.id,
+      name: preferred.name || other.name || preferred.fullName || other.fullName || preferred.email || other.email || '-',
+      email: preferred.email || other.email || '',
+      phone: preferred.phone || other.phone || '',
+      role: normRole(preferred.role || other.role),
+      status: status || preferred.status || other.status || 'active',
+      source: [...sources].join(' + '),
+      sourceType: sourceTypes.has('profile') ? 'profile' : (sourceTypes.has('manual') ? 'manual' : [...sourceTypes][0] || preferred.sourceType || other.sourceType || '') ,
+      duplicateCount: (Number(a.duplicateCount || 1) + Number(b.duplicateCount || 1))
+    };
+  }
+  function dedupePeopleList(records) {
+    const hidden = new Set((typeof getHiddenPeopleIds === 'function' ? getHiddenPeopleIds() : []).map(String));
+    const map = new Map();
+    (records || []).forEach(raw => {
+      if (!raw || hidden.has(String(raw.id))) return;
+      const role = normRole(raw.role);
+      const rec = {...raw, role};
+      const status = String(rec.status || '').toLowerCase();
+      if (['deleted','removed'].includes(status)) return;
+      const key = personKey(rec);
+      if (!map.has(key)) map.set(key, rec);
+      else map.set(key, mergePersonGroup(map.get(key), rec));
+    });
+    return [...map.values()].sort((a, b) => {
+      const ar = normRole(a.role), br = normRole(b.role);
+      if (ar !== br) return ar.localeCompare(br);
+      return String(a.name || a.email || '').localeCompare(String(b.name || b.email || ''));
+    });
+  }
+  function cleanupManualPeopleDuplicatesV131() {
+    if (typeof getPeopleRecords !== 'function' || typeof savePeopleRecords !== 'function') return;
+    const list = getPeopleRecords() || [];
+    const map = new Map();
+    let changed = false;
+    list.forEach(raw => {
+      if (!raw) return;
+      const key = personKey(raw);
+      if (!map.has(key)) map.set(key, raw);
+      else { map.set(key, mergePersonGroup(map.get(key), raw)); changed = true; }
+    });
+    if (changed) savePeopleRecords([...map.values()]);
+  }
+  function updateMatchingApplicationV131(role, email, updates) {
+    const normalizedRole = normRole(role);
+    if (normalizedRole === 'chef' && typeof getStoredChefApplications === 'function' && typeof saveStoredChefApplications === 'function') {
+      let changed = false;
+      const list = (getStoredChefApplications() || []).map(app => {
+        if (normEmail(app.email) === email) { changed = true; return {...app, ...updates}; }
+        return app;
+      });
+      if (changed) saveStoredChefApplications(list);
+      return changed;
+    }
+    if (normalizedRole === 'customer' && typeof getMembershipApplications === 'function' && typeof saveMembershipApplications === 'function') {
+      let changed = false;
+      const list = (getMembershipApplications() || []).map(mem => {
+        if (normEmail(mem.email) === email) { changed = true; return {...mem, ...updates}; }
+        return mem;
+      });
+      if (changed) saveMembershipApplications(list);
+      return changed;
+    }
+    return false;
+  }
+
+  window.PHX_DEDUPE_PEOPLE_V131 = { dedupePeopleList, cleanupManualPeopleDuplicatesV131, personKey, normRole };
+
+  // Replace the people renderer with a deduped version. This is intentionally
+  // late in the file so it wins over older V60/V68/V71 People renderers.
+  try {
+    renderPeopleManagement = function renderPeopleManagementDedupedV131(role = (typeof currentDashboardRole !== 'undefined' ? currentDashboardRole : 'Admin')) {
+      try { if (typeof renderBookingAcceptanceState === 'function') renderBookingAcceptanceState(); } catch {}
+      cleanupManualPeopleDuplicatesV131();
+      const target = document.getElementById('peopleManagementList');
+      if (!target) return;
+      if (role !== 'Admin') {
+        target.innerHTML = '<div class="empty-state">Only Admin can add, delete, pause, or change member levels. Customer Service can view customer/chef information in their own tabs but cannot manage permissions.</div>';
+        return;
+      }
+      const base = typeof basePeopleRecords === 'function' ? basePeopleRecords() : [];
+      const manual = typeof getPeopleRecords === 'function' ? getPeopleRecords() : [];
+      const people = dedupePeopleList([...base, ...manual]);
+      if (!people.length) {
+        target.innerHTML = '<div class="empty-state">No people records yet. Create Supabase Auth users first, then add role/status records here or approve applications.</div>';
+        return;
+      }
+      const rows = people.map(person => {
+        const roleKey = normRole(person.role || '');
+        const isChef = roleKey === 'chef';
+        const isCustomer = roleKey === 'customer';
+        const isCurrentLogin = person.sourceType === 'profile' || String(person.source || '').includes('Current login');
+        const status = person.status || 'active';
+        const mergedBadge = Number(person.duplicateCount || 1) > 1 ? '<small class="status-ok">Merged duplicate sources</small>' : '';
+        let actions = '';
+        if (isChef) {
+          actions = `<button type="button" data-person-activate="${safeEscape(person.id)}">Approve / Activate</button><button type="button" data-person-pause="${safeEscape(person.id)}">Pause chef</button><button type="button" data-person-delete="${safeEscape(person.id)}" onclick="return window.PHX_DELETE_PERSON_V78 ? window.PHX_DELETE_PERSON_V78(event,this) : true">Delete</button>`;
+        } else if (isCustomer) {
+          actions = `<button type="button" data-person-delete="${safeEscape(person.id)}" onclick="return window.PHX_DELETE_PERSON_V78 ? window.PHX_DELETE_PERSON_V78(event,this) : true">Delete record</button>`;
+        } else if (!isCurrentLogin) {
+          actions = `<button type="button" data-person-activate="${safeEscape(person.id)}">Activate</button><button type="button" data-person-pause="${safeEscape(person.id)}">Pause</button><button type="button" data-person-delete="${safeEscape(person.id)}" onclick="return window.PHX_DELETE_PERSON_V78 ? window.PHX_DELETE_PERSON_V78(event,this) : true">Delete</button>`;
+        } else {
+          actions = '<small>Current login</small>';
+        }
+        return `<div class="customer-row"><span><b>${safeEscape(person.name || '-')}</b><small>${safeEscape(person.id || '')}</small>${mergedBadge}</span><span>${safeEscape(roleText(person.role))}</span><span>${safeEscape(status)}</span><span>${safeEscape(person.phone || '')}<br><small>${safeEscape(person.email || '-')}</small></span><span>${safeEscape(person.source || 'Manual')}</span><span class="mini-actions">${actions}</span></div>`;
+      }).join('');
+      target.innerHTML = `<div class="customer-table people-table"><div class="customer-row customer-head"><span>Name</span><span>Role / level</span><span>Status</span><span>Contact</span><span>Source</span><span>Actions</span></div>${rows}</div>`;
+    };
+  } catch (error) {
+    console.warn('V131 people renderer install skipped:', error);
+  }
+
+  // Add button hard guard. Registered on window capture so it runs before older
+  // document-level handlers and prevents double-add.
+  window.addEventListener('click', function addPeopleRecordDedupCaptureV131(event) {
+    const btn = event.target?.closest?.('#addPeopleRecordBtn');
+    if (!btn) return;
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation?.();
+
+    if (typeof currentDashboardRole !== 'undefined' && currentDashboardRole !== 'Admin') {
+      toast('Only Admin can add staff/member records.', 'info');
+      return;
+    }
+
+    const nameInput = document.getElementById('peopleNameInput');
+    const emailInput = document.getElementById('peopleEmailInput');
+    const passInput = document.getElementById('peopleTempPasswordInput');
+    const roleSelect = document.getElementById('peopleRoleSelect');
+    const name = nameInput?.value?.trim() || '';
+    const email = normEmail(emailInput?.value || '');
+    const tempPassword = passInput?.value?.trim() || '';
+    const role = normRole(roleSelect?.value || 'customer_service');
+    if (!email) { toast('Enter the login email first.', 'info'); emailInput?.focus(); return; }
+
+    cleanupManualPeopleDuplicatesV131();
+    const list = typeof getPeopleRecords === 'function' ? getPeopleRecords() : [];
+    const newRecord = {
+      id: (typeof generateOrderId === 'function' ? generateOrderId('USR') : `USR-${Date.now()}`),
+      name: name || email,
+      email,
+      phone: '',
+      role,
+      status: role === 'chef' ? 'pending' : 'active',
+      source: 'Manual admin record',
+      sourceType: 'manual',
+      tempPassword,
+      createdAt: new Date().toISOString()
+    };
+    const key = personKey(newRecord);
+    const manualIndex = list.findIndex(p => personKey(p) === key && !['deleted','removed'].includes(String(p.status || '').toLowerCase()));
+    if (manualIndex >= 0) {
+      list[manualIndex] = mergePersonGroup(list[manualIndex], newRecord);
+      if (tempPassword) list[manualIndex].tempPassword = tempPassword;
+      if (name) list[manualIndex].name = name;
+      if (typeof savePeopleRecords === 'function') savePeopleRecords(list);
+      toast(`${roleText(role)} record already exists. Updated the existing record instead of adding a duplicate.`, 'success');
+    } else {
+      const base = typeof basePeopleRecords === 'function' ? basePeopleRecords() : [];
+      const baseDuplicate = base.find(p => personKey(p) === key);
+      if (baseDuplicate) {
+        const updated = updateMatchingApplicationV131(role, email, { name: name || baseDuplicate.name, accountStatus: baseDuplicate.status || newRecord.status, status: baseDuplicate.status || newRecord.status, tempPassword });
+        if (!updated) {
+          list.unshift(newRecord);
+          if (typeof savePeopleRecords === 'function') savePeopleRecords(list);
+        }
+        toast(`${roleText(role)} already exists from ${baseDuplicate.source || 'application/profile'}. Merged it into one visible record.`, 'success');
+      } else {
+        list.unshift(newRecord);
+        if (typeof savePeopleRecords === 'function') savePeopleRecords(list);
+        toast(`${roleText(role)} record added.`, 'success');
+      }
+    }
+    nameInput && (nameInput.value = '');
+    emailInput && (emailInput.value = '');
+    passInput && (passInput.value = '');
+    try { renderPeopleManagement(typeof currentDashboardRole !== 'undefined' ? currentDashboardRole : 'Admin'); } catch {}
+  }, true);
+
+  document.addEventListener('DOMContentLoaded', () => {
+    try { cleanupManualPeopleDuplicatesV131(); } catch {}
+  });
+})();
+
+/* ======================================================================
+   Phoenix Hibachi V133 — Member Profile Button + Avatar Upload
+   - Adds a visible Profile button inside Member Dashboard actions.
+   - Adds avatar upload / preview / remove to Profile & Member Wallet.
+   - Stores avatar locally for now; Supabase avatar_url can be connected later.
+   ====================================================================== */
+(function initPhoenixV133MemberProfileAvatar(){
+  if (window.__PHX_V133_MEMBER_PROFILE_AVATAR__) return;
+  window.__PHX_V133_MEMBER_PROFILE_AVATAR__ = true;
+
+  const AVATAR_PREFIX = 'phoenix_member_avatar_v133_';
+
+  function cleanRole(role){
+    const raw = String(role || window.currentDashboardRole || '').trim().toLowerCase().replace(/[\s-]+/g, '_');
+    if (raw.includes('admin')) return 'Admin';
+    if (raw.includes('manager')) return 'Manager';
+    if (raw.includes('customer_service')) return 'Customer Service';
+    if (raw.includes('chef')) return 'Chef';
+    if (raw.includes('member') || raw.includes('customer')) return 'Member';
+    return String(role || window.currentDashboardRole || '');
+  }
+
+  function isMember(){
+    return cleanRole(window.currentDashboardRole) === 'Member';
+  }
+
+  function getEmail(){
+    try {
+      return String(
+        window.supabaseSession?.user?.email ||
+        window.supabaseProfile?.email ||
+        (typeof getPortalSessionMeta === 'function' ? getPortalSessionMeta()?.email : '') ||
+        localStorage.getItem('phoenix_portal_email') ||
+        'local-member'
+      ).trim().toLowerCase();
+    } catch { return 'local-member'; }
+  }
+
+  function avatarKey(){ return AVATAR_PREFIX + (getEmail() || 'local-member'); }
+  function loadAvatar(){ try { return localStorage.getItem(avatarKey()) || ''; } catch { return ''; } }
+  function saveAvatar(dataUrl){ try { localStorage.setItem(avatarKey(), dataUrl || ''); } catch (error) { console.warn('Avatar save failed:', error); } }
+  function removeAvatar(){ try { localStorage.removeItem(avatarKey()); } catch {} }
+
+  function initials(){
+    try {
+      const formName = document.querySelector('#changePasswordForm [name="fullName"]')?.value || '';
+      const email = getEmail();
+      const name = formName || window.supabaseProfile?.full_name || email || 'Member';
+      return String(name).trim().charAt(0).toUpperCase() || 'M';
+    } catch { return 'M'; }
+  }
+
+  function resizeImage(file, maxSize = 360){
+    return new Promise((resolve, reject) => {
+      if (!file || !file.type?.startsWith('image/')) { reject(new Error('Please choose an image file.')); return; }
+      const reader = new FileReader();
+      reader.onerror = () => reject(new Error('Could not read image.'));
+      reader.onload = () => {
+        const img = new Image();
+        img.onerror = () => reject(new Error('Could not load image.'));
+        img.onload = () => {
+          const scale = Math.min(1, maxSize / Math.max(img.width, img.height));
+          const w = Math.max(1, Math.round(img.width * scale));
+          const h = Math.max(1, Math.round(img.height * scale));
+          const canvas = document.createElement('canvas');
+          canvas.width = w; canvas.height = h;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, w, h);
+          resolve(canvas.toDataURL('image/jpeg', 0.82));
+        };
+        img.src = String(reader.result || '');
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  function avatarHtml(){
+    const avatar = loadAvatar();
+    return `<div class="member-avatar-v133" data-member-avatar-block-v133>
+      <div class="member-avatar-preview-v133" data-member-avatar-preview-v133>${avatar ? `<img src="${avatar}" alt="Member avatar">` : `<span>${initials()}</span>`}</div>
+      <div class="member-avatar-copy-v133">
+        <strong>Profile photo</strong>
+        <small>Optional. Add a photo so Phoenix support can recognize your account faster.</small>
+        <div class="member-avatar-actions-v133">
+          <label class="outline-btn member-avatar-upload-v133">Upload photo<input type="file" accept="image/*" data-member-avatar-input-v133 hidden></label>
+          <button type="button" class="outline-btn" data-member-avatar-remove-v133>Remove</button>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  function refreshAvatarPreview(){
+    const preview = document.querySelector('[data-member-avatar-preview-v133]');
+    if (preview) {
+      const avatar = loadAvatar();
+      preview.innerHTML = avatar ? `<img src="${avatar}" alt="Member avatar">` : `<span>${initials()}</span>`;
+    }
+    document.querySelectorAll('[data-member-profile-avatar-v133]').forEach(target => {
+      const avatar = loadAvatar();
+      target.innerHTML = avatar ? `<img src="${avatar}" alt="">` : `<span>${initials()}</span>`;
+    });
+  }
+
+  function ensureProfileAvatarBlock(){
+    const form = document.getElementById('changePasswordForm');
+    if (!form) return;
+    const title = form.querySelector('h2');
+    const looksLikeProfile = /Profile|Member Wallet|My Profile/i.test(form.textContent || '');
+    if (!looksLikeProfile) return;
+    if (!form.querySelector('[data-member-avatar-block-v133]')) {
+      const help = form.querySelector('#profileInfoText') || title;
+      if (help) help.insertAdjacentHTML('afterend', avatarHtml());
+      else form.insertAdjacentHTML('afterbegin', avatarHtml());
+    }
+    const emailInput = form.querySelector('[name="email"]');
+    if (emailInput && !emailInput.placeholder) emailInput.placeholder = 'Email / login';
+    refreshAvatarPreview();
+  }
+
+  function openMemberProfile(){
+    const modal = document.getElementById('changePasswordModal');
+    const form = document.getElementById('changePasswordForm');
+    if (!modal || !form) return;
+    // Let existing V96/V129 profile builder run first when available, then add avatar.
+    setTimeout(ensureProfileAvatarBlock, 0);
+    setTimeout(ensureProfileAvatarBlock, 120);
+    try { if (typeof modal.showModal === 'function' && !modal.open) modal.showModal(); }
+    catch { modal.setAttribute('open', ''); }
+  }
+
+  function ensureMemberDashboardProfileButton(){
+    const actions = document.querySelector('#dashboardModal .dashboard-actions');
+    if (!actions) return;
+    let btn = document.getElementById('memberProfileBtnV133');
+    if (!isMember()) {
+      if (btn) btn.remove();
+      return;
+    }
+    if (!btn) {
+      btn = document.createElement('button');
+      btn.type = 'button';
+      btn.id = 'memberProfileBtnV133';
+      btn.className = 'outline-btn member-profile-btn-v133';
+      btn.innerHTML = `<span class="member-profile-avatar-mini-v133" data-member-profile-avatar-v133><span>M</span></span><span>Profile</span>`;
+      const assistant = document.getElementById('dashAssistantBtn');
+      actions.insertBefore(btn, assistant || actions.firstChild);
+      btn.addEventListener('click', (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        openMemberProfile();
+      });
+    }
+    refreshAvatarPreview();
+  }
+
+  document.addEventListener('change', async (event) => {
+    const input = event.target?.closest?.('[data-member-avatar-input-v133]');
+    if (!input) return;
+    const file = input.files?.[0];
+    if (!file) return;
+    try {
+      const dataUrl = await resizeImage(file);
+      saveAvatar(dataUrl);
+      refreshAvatarPreview();
+    } catch (error) {
+      alert(error.message || 'Could not upload this profile photo.');
+    } finally {
+      input.value = '';
+    }
+  }, true);
+
+  document.addEventListener('click', (event) => {
+    if (event.target?.closest?.('[data-member-avatar-remove-v133]')) {
+      event.preventDefault();
+      removeAvatar();
+      refreshAvatarPreview();
+      return;
+    }
+    const accountProfile = event.target?.closest?.('[data-account-action="profile"]');
+    if (accountProfile && isMember()) {
+      setTimeout(ensureProfileAvatarBlock, 80);
+      setTimeout(refreshAvatarPreview, 140);
+    }
+  }, true);
+
+  const previousRender = typeof window.renderDashboard === 'function' ? window.renderDashboard : null;
+  if (previousRender && !window.__PHX_V133_RENDER_WRAPPED__) {
+    window.__PHX_V133_RENDER_WRAPPED__ = true;
+    window.renderDashboard = function(role){
+      const out = previousRender.apply(this, arguments);
+      setTimeout(ensureMemberDashboardProfileButton, 0);
+      setTimeout(ensureMemberDashboardProfileButton, 180);
+      setTimeout(ensureProfileAvatarBlock, 220);
+      return out;
+    };
+  }
+
+  const tick = () => {
+    ensureMemberDashboardProfileButton();
+    if (document.getElementById('changePasswordModal')?.open) ensureProfileAvatarBlock();
+  };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', tick);
+  else setTimeout(tick, 0);
+  setInterval(tick, 1500);
+})();
+
+/* ======================================================================
+   Phoenix Hibachi V134 — Portal Profile Buttons + Support Ticket Resolve
+   - Adds Profile button to Member, Chef and Customer Service dashboard header.
+   - Keeps Customer Service complaint records visible after processing.
+   - Support ticket counter counts unresolved tickets only.
+   ====================================================================== */
+(function initPhoenixV134PortalProfileAndTickets(){
+  if (window.__PHX_V134_PROFILE_TICKET_FIX__) return;
+  window.__PHX_V134_PROFILE_TICKET_FIX__ = true;
+
+  const FEEDBACK_STORAGE_KEY_V134 = 'phoenixHibachiFeedbackV12';
+  const RESOLVED_TICKETS_KEY_V134 = 'phoenix_resolved_support_ticket_ids_v134';
 
   function esc(value){
     try { return typeof escapeHtml === 'function' ? escapeHtml(value) : String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch])); }
     catch { return String(value ?? ''); }
   }
-  function clean(value){ return String(value ?? '').trim(); }
-  function norm(value){ return clean(value).toLowerCase().replace(/[^a-z0-9@.]+/g,''); }
-  function contactKey(c){ return norm(c.email) || norm(c.phone) || norm(c.name); }
-  function moneySafe(n){ try { return typeof money === 'function' ? money(n) : '$' + Number(n || 0).toFixed(2); } catch { return '$0.00'; } }
-
-  function loadManualCustomers(){
-    try { return JSON.parse(localStorage.getItem(MANUAL_CUSTOMERS_KEY) || '[]') || []; } catch { return []; }
+  function cleanRole(role){
+    const raw = String(role || (typeof currentDashboardRole !== 'undefined' ? currentDashboardRole : '') || '').trim().toLowerCase().replace(/[\s-]+/g, '_');
+    if (raw.includes('customer_service') || raw.includes('customerservice') || raw === 'service' || raw.includes('客服')) return 'Customer Service';
+    if (raw.includes('chef') || raw.includes('师傅')) return 'Chef';
+    if (raw.includes('member') || raw === 'customer' || raw.includes('顾客')) return 'Member';
+    if (raw.includes('admin')) return 'Admin';
+    if (raw.includes('manager')) return 'Manager';
+    return String(role || (typeof currentDashboardRole !== 'undefined' ? currentDashboardRole : '') || '');
   }
-  function saveManualCustomers(list){
-    try { localStorage.setItem(MANUAL_CUSTOMERS_KEY, JSON.stringify(list || [])); } catch {}
+  function getMeta(){
+    try { return typeof getPortalSessionMeta === 'function' ? (getPortalSessionMeta() || {}) : {}; }
+    catch { return {}; }
   }
-  function upsertManualCustomers(items){
-    const existing = loadManualCustomers();
-    const map = new Map();
-    existing.forEach(c => { const k = contactKey(c) || c.id; if (k) map.set(k, c); });
-    let added = 0, updated = 0;
-    items.forEach(raw => {
-      const item = normalizeCustomerRecord(raw);
-      const k = contactKey(item);
-      if (!k) return;
-      const prev = map.get(k);
-      if (prev) { map.set(k, {...prev, ...item, id: prev.id || item.id, updatedAt: new Date().toISOString()}); updated++; }
-      else { map.set(k, item); added++; }
-    });
-    const list = [...map.values()].sort((a,b)=>String(a.name||'').localeCompare(String(b.name||'')));
-    saveManualCustomers(list);
-    return {added, updated, total:list.length};
-  }
-  function normalizeCustomerRecord(raw){
-    const name = clean(raw.name || raw.fullName || raw.customer || raw.customerName || raw['Customer Name'] || raw['Name'] || raw[0]);
-    const phone = clean(raw.phone || raw.mobile || raw.cell || raw.tel || raw['Phone'] || raw['Phone Number'] || raw[1]);
-    const email = clean(raw.email || raw.mail || raw['Email'] || raw[2]);
-    const address = clean(raw.address || raw.street || raw['Address'] || raw[3]);
-    const zip = clean(raw.zip || raw.zipcode || raw['Zip'] || raw['ZIP'] || raw[4]);
-    const birthday = clean(raw.birthday || raw.birthdate || raw.dob || raw['Birthday'] || raw[5]);
-    const notes = clean(raw.notes || raw.note || raw.memo || raw['Notes'] || raw[6]);
-    return {
-      id: raw.id || 'MANUAL-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2,7).toUpperCase(),
-      name: name || phone || email || 'Customer',
-      phone, email, address, zip, birthday, notes,
-      source: raw.source || 'Manual / Customer Service',
-      orders: Number(raw.orders || 0),
-      guests: Number(raw.guests || 0),
-      packages: raw.packages || raw.package || 'Manual contact',
-      lastDate: raw.lastDate || raw.last_date || '',
-      importedAt: raw.importedAt || new Date().toISOString()
-    };
-  }
-  function mergedCustomerRows(orders){
-    let base = [];
-    try { base = typeof buildCustomerRows === 'function' ? buildCustomerRows(orders || []) : []; } catch { base = []; }
-    const map = new Map();
-    base.forEach(c => { const k = contactKey(c) || c.name; if (k) map.set(k, {...c, source: c.source || 'Booking / Member'}); });
-    loadManualCustomers().forEach(c => {
-      const k = contactKey(c) || c.id;
-      if (!k) return;
-      const prev = map.get(k);
-      if (prev) {
-        map.set(k, {
-          ...prev,
-          name: prev.name || c.name,
-          phone: prev.phone || c.phone,
-          email: prev.email || c.email,
-          address: prev.address || c.address,
-          zip: prev.zip || c.zip,
-          birthday: prev.birthday || c.birthday,
-          notes: [prev.notes, c.notes].filter(Boolean).join(' · '),
-          source: `${prev.source || 'Booking'} + Manual`,
-          memberOffer: prev.memberOffer || c.notes || '',
-        });
-      } else {
-        map.set(k, {...c, manualOnly:true});
-      }
-    });
-    return [...map.values()].sort((a,b)=>String(a.name||'').localeCompare(String(b.name||'')));
-  }
-
-  function customerToolbarHtml(){
-    return `<section class="customer-import-panel-v127">
-      <div class="section-row customer-import-head-v127">
-        <div>
-          <p class="eyebrow">Customer Service Tool</p>
-          <h3>Add / import customer contacts</h3>
-          <p class="small-muted">Add one customer or import a list. Duplicate email/phone will update the existing row instead of creating repeats.</p>
-        </div>
-        <div class="mini-actions">
-          <button type="button" data-v127-download-template>Download CSV template</button>
-        </div>
-      </div>
-      <form class="customer-add-form-v127" data-v127-add-customer-form>
-        <label>Name<input name="name" placeholder="Customer name"></label>
-        <label>Phone<input name="phone" placeholder="347-000-0000"></label>
-        <label>Email<input name="email" type="email" placeholder="customer@email.com"></label>
-        <label>Address<input name="address" placeholder="Street, city, state"></label>
-        <label>ZIP<input name="zip" placeholder="11228"></label>
-        <label>Birthday<input name="birthday" placeholder="MM/DD or YYYY-MM-DD"></label>
-        <label class="wide"><span>Notes</span><textarea name="notes" rows="2" placeholder="Preference, coupon note, VIP, allergy reminder, etc."></textarea></label>
-        <div class="customer-form-actions-v127"><button type="submit">Add customer</button><button type="reset">Clear</button></div>
-      </form>
-      <div class="customer-import-row-v127">
-        <label class="file-import-v127">Upload CSV / Excel
-          <input type="file" data-v127-customer-file accept=".csv,.txt,.tsv,.xlsx,.xls,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/csv">
-        </label>
-        <p class="small-muted">CSV works offline. XLSX uses a browser Excel parser when internet is available. Columns: name, phone, email, address, zip, birthday, notes.</p>
-      </div>
-      <div class="customer-import-result-v127" data-v127-import-result hidden></div>
-    </section>`;
-  }
-
-  const previousRenderCustomerManagement = typeof renderCustomerManagement === 'function' ? renderCustomerManagement : null;
-  window.renderCustomerManagement = renderCustomerManagement = function patchedRenderCustomerManagementV127(orders){
-    const rows = mergedCustomerRows(orders || []);
-    const table = rows.length ? `<div class="customer-table"><div class="customer-row customer-head"><span>Name</span><span>Phone</span><span>Email</span><span>Address / Birthday</span><span>Orders / Member</span><span>Actions</span></div>${rows.map(c => `<div class="customer-row ${c.manualOnly ? 'manual-customer-v127' : ''}"><span><b>${esc(c.name)}</b><small>${esc(c.packages || c.source || 'Member / no package yet')}</small></span><span>${esc(c.phone || '-')}</span><span>${esc(c.email || '-')}</span><span>${esc(c.address || '-')}<br><small>ZIP: ${esc(c.zip || '-')} · Birthday: ${esc(c.birthday || '-')}</small>${c.notes ? `<br><small>Note: ${esc(c.notes)}</small>` : ''}</span><span>${Number(c.orders || 0)} · ${Number(c.guests || 0)} guests<br><small>${esc(c.lastDate || c.accountStatus || c.memberOffer || c.source || '')}</small></span><span class="mini-actions"><a href="sms:${encodeURIComponent(c.phone || '')}">SMS</a><a href="mailto:${encodeURIComponent(c.email || '')}">Email</a><button type="button" data-copy-customer="${esc(c.phone || c.email || c.name)}">Copy</button>${c.manualOnly ? `<button type="button" data-v127-delete-customer="${esc(c.id)}">Delete</button>` : ''}</span></div>`).join('')}</div>` : '<div class="empty-state">No customers yet. Add a customer manually, import CSV/Excel, or wait for bookings to be submitted.</div>';
-    return customerToolbarHtml() + table;
-  };
-
-  function parseCsvLine(line){
-    const out = []; let cur = ''; let quoted = false;
-    for (let i=0; i<line.length; i++) {
-      const ch = line[i];
-      if (ch === '"') { if (quoted && line[i+1] === '"') { cur += '"'; i++; } else quoted = !quoted; }
-      else if ((ch === ',' || ch === '\t' || ch === ';') && !quoted) { out.push(cur); cur = ''; }
-      else cur += ch;
-    }
-    out.push(cur);
-    return out.map(clean);
-  }
-  function rowsFromDelimited(text){
-    const lines = String(text || '').replace(/^\uFEFF/,'').split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
-    if (!lines.length) return [];
-    const first = parseCsvLine(lines[0]);
-    const headerLike = first.some(h => /name|phone|email|address|zip|birthday|note/i.test(h));
-    const headers = headerLike ? first.map(h => h.toLowerCase().replace(/\s+/g,'')) : ['name','phone','email','address','zip','birthday','notes'];
-    const dataLines = headerLike ? lines.slice(1) : lines;
-    return dataLines.map(line => {
-      const cells = parseCsvLine(line);
-      const obj = {};
-      headers.forEach((h,i)=>{
-        if (/fullname|customername|name/.test(h)) obj.name = cells[i];
-        else if (/phone|mobile|cell|tel/.test(h)) obj.phone = cells[i];
-        else if (/email|mail/.test(h)) obj.email = cells[i];
-        else if (/address|street/.test(h)) obj.address = cells[i];
-        else if (/zip|zipcode|postal/.test(h)) obj.zip = cells[i];
-        else if (/birthday|birthdate|dob/.test(h)) obj.birthday = cells[i];
-        else if (/note|memo|comment/.test(h)) obj.notes = cells[i];
-        else obj[h] = cells[i];
-      });
-      return obj;
-    }).filter(r => r.name || r.phone || r.email);
-  }
-  function loadScript(src){
-    return new Promise((resolve,reject)=>{
-      if (document.querySelector(`script[src="${src}"]`)) { resolve(); return; }
-      const s = document.createElement('script'); s.src = src; s.async = true; s.onload = resolve; s.onerror = reject; document.head.appendChild(s);
-    });
-  }
-  async function parseCustomerFile(file){
-    const name = String(file?.name || '').toLowerCase();
-    if (name.endsWith('.xlsx') || name.endsWith('.xls')) {
-      if (!window.XLSX) await loadScript('https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js');
-      const data = await file.arrayBuffer();
-      const workbook = window.XLSX.read(data, {type:'array'});
-      const sheet = workbook.Sheets[workbook.SheetNames[0]];
-      const json = window.XLSX.utils.sheet_to_json(sheet, {defval:''});
-      return json.map(normalizeCustomerRecord).filter(r => r.name || r.phone || r.email);
-    }
-    const text = await file.text();
-    return rowsFromDelimited(text).map(normalizeCustomerRecord);
-  }
-  function showImportResult(msg, good=true){
-    const box = document.querySelector('[data-v127-import-result]');
-    if (!box) return;
-    box.hidden = false; box.classList.toggle('is-error', !good); box.textContent = msg;
-  }
-  function refreshCustomersPanel(){
+  function currentEmail(){
     try {
-      const list = document.getElementById('customerList');
-      if (list && typeof renderCustomerManagement === 'function') list.innerHTML = renderCustomerManagement(typeof getDashboardOrders === 'function' ? getDashboardOrders() : []);
-    } catch { try { renderDashboard(currentDashboardRole); } catch {} }
+      return String(
+        window.supabaseSession?.user?.email ||
+        window.supabaseProfile?.email ||
+        getMeta().email ||
+        localStorage.getItem('phoenix_portal_email') ||
+        ''
+      ).trim();
+    } catch { return ''; }
   }
-  function downloadTemplate(){
-    const csv = 'name,phone,email,address,zip,birthday,notes\nJane Customer,347-000-0000,jane@email.com,"1078 70th St, Brooklyn, NY",11228,07/15,VIP or coupon note\n';
-    const blob = new Blob([csv], {type:'text/csv'});
-    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'phoenix-customer-import-template.csv'; document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(a.href); a.remove();}, 500);
-  }
-
-  const previousFeedbackCard = typeof feedbackCard === 'function' ? feedbackCard : null;
-  window.feedbackCard = feedbackCard = function patchedFeedbackCardV127(item){
-    if (String(item?.status || '').toLowerCase().includes('resolved')) return '';
-    const html = previousFeedbackCard ? previousFeedbackCard(item) : `<article class="feedback-card"><header><div><strong>${esc(item.id)}</strong><p>${esc(item.feedbackType || 'Feedback')} · ${esc(item.name || '')}</p></div><span class="tag">${esc(item.status || 'New')}</span></header><p>${esc(item.message || '')}</p><div class="order-actions"></div></article>`;
-    const assigned = item.assignedChef ? `<span class="tag">Assigned: ${esc(item.assignedChef)}</span>` : '';
-    return html.replace('</header>', `${assigned}</header>`).replace('</div></article>', `<button type="button" data-v127-resolve-ticket="${esc(item.id)}">Resolve / 已解决</button></div></article>`);
-  };
-  const rawGetStoredFeedback = typeof getStoredFeedback === 'function' ? getStoredFeedback : null;
-  if (rawGetStoredFeedback && !window.__PHX_V127_FEEDBACK_FILTER__) {
-    window.__PHX_V127_FEEDBACK_FILTER__ = true;
-    window.getStoredFeedback = getStoredFeedback = function getActiveFeedbackV127(){
-      return rawGetStoredFeedback().filter(item => !String(item?.status || '').toLowerCase().includes('resolved'));
-    };
-  }
-  function resolveTicket(ticketId){
-    let list = [];
-    try { list = JSON.parse(localStorage.getItem(FEEDBACK_STORAGE_KEY) || '[]') || []; } catch {}
-    let found = false;
-    list = list.map(item => String(item.id) === String(ticketId) ? (found = true, {...item, status:'Resolved', resolvedAt:new Date().toISOString()}) : item);
-    if (found) localStorage.setItem(FEEDBACK_STORAGE_KEY, JSON.stringify(list));
-    try { renderDashboard(currentDashboardRole); } catch { document.querySelector(`[data-v127-resolve-ticket="${CSS.escape(ticketId)}"]`)?.closest('article')?.remove(); }
-  }
-
-  document.addEventListener('submit', function(event){
-    const form = event.target.closest?.('[data-v127-add-customer-form]');
-    if (!form) return;
-    event.preventDefault();
-    const fd = new FormData(form);
-    const item = Object.fromEntries(fd.entries());
-    if (!clean(item.name) && !clean(item.phone) && !clean(item.email)) { showImportResult('Please enter at least name, phone, or email.', false); return; }
-    const result = upsertManualCustomers([item]);
-    form.reset();
-    refreshCustomersPanel();
-    setTimeout(()=>showImportResult(`Customer saved. Added ${result.added}, updated ${result.updated}. Total manual contacts: ${loadManualCustomers().length}.`), 0);
-  }, true);
-
-  document.addEventListener('change', async function(event){
-    const input = event.target.closest?.('[data-v127-customer-file]');
-    if (!input || !input.files?.[0]) return;
-    const file = input.files[0];
-    showImportResult('Importing customer file…');
-    try {
-      const rows = await parseCustomerFile(file);
-      if (!rows.length) { showImportResult('No valid customer rows found. Check columns: name, phone, email, address, zip, birthday, notes.', false); input.value=''; return; }
-      const result = upsertManualCustomers(rows);
-      refreshCustomersPanel();
-      setTimeout(()=>showImportResult(`Imported ${rows.length} rows. Added ${result.added}, updated ${result.updated}. Total manual contacts: ${loadManualCustomers().length}.`), 0);
-    } catch (err) {
-      console.error('Customer import failed', err);
-      showImportResult('Import failed. For Excel, try saving as CSV, or check that the file has name/phone/email columns.', false);
-    } finally { input.value=''; }
-  }, true);
-
-  document.addEventListener('click', function(event){
-    const dl = event.target.closest?.('[data-v127-download-template]');
-    if (dl) { event.preventDefault(); downloadTemplate(); return; }
-    const del = event.target.closest?.('[data-v127-delete-customer]');
-    if (del) {
-      const id = del.getAttribute('data-v127-delete-customer');
-      if (!confirm('Delete this manually added customer contact? Booking history will not be deleted.')) return;
-      saveManualCustomers(loadManualCustomers().filter(c => String(c.id) !== String(id)));
-      refreshCustomersPanel();
-      return;
-    }
-    const res = event.target.closest?.('[data-v127-resolve-ticket]');
-    if (res) {
-      const id = res.getAttribute('data-v127-resolve-ticket');
-      if (!confirm('Mark this support ticket as resolved and hide it from active tickets?')) return;
-      resolveTicket(id);
-    }
-  }, true);
-
-  const prevRender = typeof renderDashboard === 'function' ? renderDashboard : null;
-  if (prevRender && !window.__PHX_V127_RENDER_WRAP__) {
-    window.__PHX_V127_RENDER_WRAP__ = true;
-    renderDashboard = function renderDashboardV127(role){
-      const out = prevRender.apply(this, arguments);
-      setTimeout(()=>{
-        try {
-          if (['Admin','Manager','Customer Service'].includes(String(role || currentDashboardRole))) {
-            const list = document.getElementById('customerList');
-            if (list) list.innerHTML = renderCustomerManagement(typeof getDashboardOrders === 'function' ? getDashboardOrders() : []);
-          }
-        } catch {}
-      }, 80);
-      return out;
-    };
-  }
-})();
-
-/* V128 PATCH — Customer Service ticket history stays visible, active count decreases
-   - Resolved tickets are kept in Complaints & Suggestions as history.
-   - Dashboard support ticket stat counts only unresolved/active tickets.
-   - Resolve button marks ticket resolved but does not remove the record.
-*/
-(function(){
-  if (window.__PHX_V128_TICKET_HISTORY__) return;
-  window.__PHX_V128_TICKET_HISTORY__ = true;
-
-  const phxEsc = (value) => {
-    try { return typeof esc === 'function' ? esc(value) : (typeof escapeHtml === 'function' ? escapeHtml(value) : String(value ?? '').replace(/[&<>'"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]))); }
-    catch { return String(value ?? ''); }
-  };
-  const ticketStoreKey = (() => {
-    try { return typeof FEEDBACK_STORAGE_KEY !== 'undefined' ? FEEDBACK_STORAGE_KEY : 'phoenix_feedback'; }
-    catch { return 'phoenix_feedback'; }
-  })();
-  function allStoredTicketsV128(){
-    try { return JSON.parse(localStorage.getItem(ticketStoreKey) || '[]') || []; }
+  function loadFeedback(){
+    try { return typeof getStoredFeedback === 'function' ? getStoredFeedback() : JSON.parse(localStorage.getItem(FEEDBACK_STORAGE_KEY_V134) || '[]'); }
     catch { return []; }
   }
-  function saveStoredTicketsV128(list){
-    try { localStorage.setItem(ticketStoreKey, JSON.stringify(Array.isArray(list) ? list : [])); } catch {}
+  function saveFeedback(list){
+    try { localStorage.setItem(FEEDBACK_STORAGE_KEY_V134, JSON.stringify(list || [])); } catch {}
   }
-  function isResolvedTicketV128(item){
-    const status = String(item?.status || '').toLowerCase();
-    return status.includes('resolved') || Boolean(item?.resolvedAt || item?.resolved_at);
+  function loadResolvedIds(){
+    try { return new Set(JSON.parse(localStorage.getItem(RESOLVED_TICKETS_KEY_V134) || '[]').map(String)); }
+    catch { return new Set(); }
   }
-  function activeTicketsV128(){
-    return allStoredTicketsV128().filter(item => !isResolvedTicketV128(item));
+  function saveResolvedIds(set){
+    try { localStorage.setItem(RESOLVED_TICKETS_KEY_V134, JSON.stringify([...set].map(String))); } catch {}
   }
-  function syncSupportStatV128(){
-    const box = document.getElementById('statFeedback');
-    if (!box) return;
-    box.textContent = String(activeTicketsV128().length);
-    const card = box.closest('.stat-card, .dashboard-stat, article, div');
-    if (card) card.title = 'Active unresolved support tickets. Resolved records remain in Complaints & Suggestions history.';
+  function isTicketResolved(item){
+    const status = String(item?.status || item?.ticketStatus || '').toLowerCase();
+    if (status.includes('resolved') || status.includes('closed') || status.includes('done') || status.includes('processed') || status.includes('已处理') || status.includes('已解决')) return true;
+    const ids = loadResolvedIds();
+    return ids.has(String(item?.id || item?.ticket_id || ''));
+  }
+  function activeFeedbackCount(){
+    return loadFeedback().filter(item => !isTicketResolved(item)).length;
+  }
+  function supportCounterLabel(role){
+    const clean = cleanRole(role);
+    if (clean === 'Chef') return 'My support tickets / 我的投诉';
+    return 'Support tickets';
+  }
+  function updateSupportTicketCounter(){
+    const stat = document.getElementById('statFeedback');
+    if (!stat) return;
+    const role = cleanRole();
+    if (role === 'Customer Service' || role === 'Admin' || role === 'Manager') {
+      stat.textContent = String(activeFeedbackCount());
+      const box = stat.closest('.dashboard-stat, .stat-card, .summary-card, article, div');
+      const label = box?.querySelector('span, small, p');
+      if (label && /support/i.test(label.textContent || '')) label.textContent = supportCounterLabel(role);
+    }
   }
 
-  // Restore getStoredFeedback to return ALL records, not only unresolved records.
-  // Resolved ticket history must remain visible in Customer Service / Admin records.
+  function ticketStatusHtml(item){
+    if (isTicketResolved(item)) {
+      const when = item?.resolvedAt || item?.processedAt || '';
+      return `<span class="tag resolved-ticket-v134">Resolved / 已处理</span>${when ? `<small class="ticket-resolved-time-v134">${esc(new Date(when).toLocaleString?.() || when)}</small>` : ''}`;
+    }
+    return `<span class="tag new-ticket-v134">New / 未处理</span>`;
+  }
+  function makeReply(item){
+    try { return typeof makeFeedbackReply === 'function' ? makeFeedbackReply(item) : `Hi ${item?.name || 'there'}, thank you for contacting Phoenix Hibachi. Our customer service team will follow up shortly.`; }
+    catch { return `Hi ${item?.name || 'there'}, thank you for contacting Phoenix Hibachi. Our customer service team will follow up shortly.`; }
+  }
+
+  // Replace the card renderer with a history-safe version. Resolved tickets stay visible.
   try {
-    window.getStoredFeedback = getStoredFeedback = function getStoredFeedbackV128AllRecords(){
-      return allStoredTicketsV128();
+    feedbackCard = function feedbackCardV134(item){
+      const id = String(item?.id || item?.ticket_id || 'Ticket');
+      const resolved = isTicketResolved(item);
+      const aiDraft = makeReply(item || {});
+      return `<article class="feedback-card support-ticket-card-v134 ${resolved ? 'is-resolved' : 'is-active'}" data-ticket-id-v134="${esc(id)}">
+        <header>
+          <div>
+            <strong>${esc(id)}</strong>
+            <p>${esc(item?.feedbackType || 'Feedback')} · ${esc(item?.name || '')} · ${esc(item?.phone || '')}</p>
+          </div>
+          <div class="ticket-status-wrap-v134">${ticketStatusHtml(item || {})}</div>
+        </header>
+        <p>${esc(item?.message || '')}</p>
+        ${resolved ? '<div class="ticket-resolved-note-v134">客服已处理这条记录。它会保留在历史里，但不再计入 Support tickets 数字。</div>' : '<div class="ticket-active-note-v134">待客服处理。处理完成后点 Resolve / 已处理，顶部 Support tickets 会自动减少。</div>'}
+        <div class="reply-draft" id="reply-${esc(id)}" hidden>${esc(aiDraft)}</div>
+        <div class="order-actions">
+          <button type="button" data-ai-feedback="${esc(id)}">AI reply draft</button>
+          <button type="button" data-thank-feedback="${esc(id)}">Thank-you reply</button>
+          <a href="sms:${encodeURIComponent(item?.phone || '')}?&body=${encodeURIComponent(aiDraft)}">Text reply</a>
+          <a href="mailto:${encodeURIComponent(item?.email || '')}?subject=${encodeURIComponent('Phoenix Hibachi support')}&body=${encodeURIComponent(aiDraft)}">Email reply</a>
+          ${resolved ? '' : `<button type="button" class="outline-btn resolve-ticket-v134" data-resolve-ticket-v134="${esc(id)}">Resolve / 已处理</button>`}
+        </div>
+      </article>`;
     };
-  } catch {}
+  } catch (error) { console.warn('V134 feedbackCard override skipped:', error); }
 
-  const baseFeedbackCardV128 = typeof feedbackCard === 'function' ? feedbackCard : null;
-  window.feedbackCard = feedbackCard = function feedbackCardV128TicketHistory(item){
-    const resolved = isResolvedTicketV128(item);
-    const id = item?.id || item?.ticket_id || 'Ticket';
-    const type = item?.feedbackType || item?.type || 'Support';
-    const name = item?.name || item?.customerName || '';
-    const contact = item?.phone || item?.email || '';
-    const msg = item?.message || item?.notes || item?.note || '';
-    let html = '';
-    try { html = baseFeedbackCardV128 ? baseFeedbackCardV128(item) : ''; } catch { html = ''; }
-    if (!html || !String(html).trim()) {
-      html = `<article class="feedback-card"><header><div><strong>${phxEsc(id)}</strong><p>${phxEsc(type)} · ${phxEsc(name)} · ${phxEsc(contact)}</p></div><span class="tag">${resolved ? 'Resolved / 已解决' : phxEsc(item?.status || 'New')}</span></header><p>${phxEsc(msg)}</p><div class="order-actions"></div></article>`;
-    }
-    // Remove any old V127 resolve button duplication.
-    html = String(html).replace(/<button[^>]*data-v127-resolve-ticket="[^"]*"[^>]*>[\s\S]*?<\/button>/g, '');
-    html = html.replace(/<button[^>]*data-v128-resolve-ticket="[^"]*"[^>]*>[\s\S]*?<\/button>/g, '');
-    html = html.replace(/<span class="tag">\s*Resolved\s*\/\s*已解决\s*<\/span>/g, '');
-    if (resolved) {
-      const stamp = item?.resolvedAt || item?.resolved_at || '';
-      const resolvedBadge = `<span class="tag ticket-resolved-v128">Resolved / 已解决${stamp ? ' · ' + phxEsc(new Date(stamp).toLocaleDateString()) : ''}</span>`;
-      html = html.replace('</header>', `${resolvedBadge}</header>`);
-      html = html.replace(/<article class="([^"]*)"/, '<article class="$1 ticket-history-resolved-v128"');
-      const historyNote = '<p class="ticket-history-note-v128">This ticket is closed and kept for customer service history. It no longer counts as an active support ticket.</p>';
-      html = html.replace('</article>', `${historyNote}</article>`);
-    } else {
-      const actions = `<button type="button" data-v128-resolve-ticket="${phxEsc(id)}">Resolve / 标记已解决</button>`;
-      if (html.includes('class="order-actions"')) html = html.replace(/<div class="order-actions">/, `<div class="order-actions">${actions}`);
-      else html = html.replace('</article>', `<div class="order-actions">${actions}</div></article>`);
-    }
-    return html;
-  };
-
-  function resolveTicketV128(ticketId){
-    let list = allStoredTicketsV128();
-    let found = false;
-    list = list.map(item => {
-      const id = String(item?.id || item?.ticket_id || '');
-      if (id === String(ticketId)) {
-        found = true;
-        return {...item, status:'Resolved', resolvedAt:new Date().toISOString()};
-      }
-      return item;
-    });
-    if (found) saveStoredTicketsV128(list);
-    try { renderDashboard(currentDashboardRole); } catch {}
-    setTimeout(syncSupportStatV128, 80);
+  function refreshFeedbackPanel(){
+    const list = document.getElementById('feedbackList');
+    const role = cleanRole();
+    if (!list || !['Admin','Manager','Customer Service'].includes(role)) return;
+    const feedback = loadFeedback();
+    list.innerHTML = feedback.length ? feedback.map(item => feedbackCard(item)).join('') : '<div class="empty-state">No complaints or suggestions yet.</div>';
+    updateSupportTicketCounter();
+    try { if (typeof renderChefTicketsPanel === 'function') renderChefTicketsPanel(); } catch {}
+  }
+  function resolveTicket(ticketId){
+    const id = String(ticketId || '');
+    if (!id) return;
+    const now = new Date().toISOString();
+    const resolved = loadResolvedIds();
+    resolved.add(id);
+    saveResolvedIds(resolved);
+    const list = loadFeedback();
+    const next = list.map(item => String(item?.id || item?.ticket_id || '') === id ? {...item, status:'Resolved / 已处理', resolvedAt: now, processedAt: now} : item);
+    saveFeedback(next);
+    refreshFeedbackPanel();
+    try { if (typeof renderDashboard === 'function') setTimeout(() => renderDashboard(currentDashboardRole || 'Customer Service'), 60); } catch {}
   }
 
   document.addEventListener('click', function(event){
-    const btn = event.target.closest?.('[data-v128-resolve-ticket], [data-v127-resolve-ticket]');
-    if (!btn) return;
-    event.preventDefault();
-    event.stopPropagation();
-    const id = btn.getAttribute('data-v128-resolve-ticket') || btn.getAttribute('data-v127-resolve-ticket');
-    if (!id) return;
-    if (!confirm('Mark this support ticket as resolved? The record will stay in history, but the active support ticket count will go down.')) return;
-    resolveTicketV128(id);
+    const resolve = event.target?.closest?.('[data-resolve-ticket-v134]');
+    if (resolve) {
+      event.preventDefault();
+      event.stopPropagation();
+      event.stopImmediatePropagation?.();
+      resolveTicket(resolve.getAttribute('data-resolve-ticket-v134'));
+      return false;
+    }
   }, true);
 
-  const previousRenderV128 = typeof renderDashboard === 'function' ? renderDashboard : null;
-  if (previousRenderV128) {
-    renderDashboard = function renderDashboardV128TicketHistory(role){
-      const out = previousRenderV128.apply(this, arguments);
-      setTimeout(() => {
-        try {
-          // Keep Customer Service / Admin statistic cards visible. Only the active ticket count changes.
-          const stats = document.querySelector('.dashboard-stats');
-          if (stats && ['Admin','Manager','Customer Service'].includes(String(role || currentDashboardRole))) {
-            stats.hidden = false;
-            stats.style.display = '';
-          }
-          syncSupportStatV128();
-          const list = document.getElementById('feedbackList');
-          if (list && ['Admin','Manager','Customer Service'].includes(String(role || currentDashboardRole))) {
-            const tickets = allStoredTicketsV128();
-            if (tickets.length) list.innerHTML = tickets.map(feedbackCardV128TicketHistory).join('');
-          }
-        } catch {}
-      }, 120);
+  function openGeneralProfile(){
+    const role = cleanRole();
+    const modal = document.getElementById('changePasswordModal');
+    const form = document.getElementById('changePasswordForm');
+    if (!modal || !form) return;
+    const info = document.getElementById('profileInfoText');
+    if (info) info.textContent = `Email: ${currentEmail() || '-'} · Role: ${role || '-'} — update your profile information or password below.`;
+    try { if (typeof modal.showModal === 'function' && !modal.open) modal.showModal(); }
+    catch { modal.setAttribute('open',''); }
+  }
+  function clickExistingChefProfile(){
+    const auto = document.getElementById('autoDispatchBtn');
+    if (auto && /profile/i.test(auto.textContent || '') && cleanRole() === 'Chef') {
+      auto.click();
+      return true;
+    }
+    return false;
+  }
+  function openDashboardProfile(){
+    const role = cleanRole();
+    if (role === 'Chef' && clickExistingChefProfile()) return;
+    const accountProfile = document.querySelector('[data-account-action="profile"]');
+    if (accountProfile && role === 'Member') {
+      try { accountProfile.dispatchEvent(new MouseEvent('click', {bubbles:true, cancelable:true})); } catch {}
+      setTimeout(openGeneralProfile, 120);
+      return;
+    }
+    openGeneralProfile();
+  }
+  function profileButtonHtml(role){
+    const label = role === 'Customer Service' ? 'Profile' : 'Profile';
+    return `<button type="button" class="outline-btn dashboard-profile-btn-v134" id="dashProfileBtnV134" data-dashboard-profile-v134>${label}</button>`;
+  }
+  function ensureDashboardProfileButton(){
+    const role = cleanRole();
+    const shouldShow = ['Member','Chef','Customer Service'].includes(role);
+    const actions = document.querySelector('#dashboardModal .dashboard-actions');
+    if (!actions) return;
+    let btn = document.getElementById('dashProfileBtnV134');
+    if (!shouldShow) { if (btn) btn.remove(); return; }
+    if (!btn) {
+      const assistant = document.getElementById('dashAssistantBtn');
+      const wrap = document.createElement('span');
+      wrap.innerHTML = profileButtonHtml(role);
+      btn = wrap.firstElementChild;
+      actions.insertBefore(btn, assistant || actions.querySelector('[data-portal-logout]') || null);
+      btn.addEventListener('click', function(event){
+        event.preventDefault();
+        event.stopPropagation();
+        openDashboardProfile();
+      }, true);
+    } else {
+      btn.textContent = 'Profile';
+      btn.hidden = false;
+      btn.style.display = '';
+    }
+  }
+
+  const prevRenderV134 = typeof renderDashboard === 'function' ? renderDashboard : null;
+  if (prevRenderV134 && !window.__PHX_V134_RENDER_WRAP__) {
+    window.__PHX_V134_RENDER_WRAP__ = true;
+    renderDashboard = function(role){
+      const out = prevRenderV134.apply(this, arguments);
+      setTimeout(ensureDashboardProfileButton, 0);
+      setTimeout(updateSupportTicketCounter, 30);
+      setTimeout(refreshFeedbackPanel, 180);
+      setTimeout(ensureDashboardProfileButton, 260);
       return out;
     };
   }
 
-  setTimeout(syncSupportStatV128, 250);
-})();
-
-/* ======================================================================
-   V129 PORTAL PROFILE / SCROLL / STABILITY CLEANUP
-   Baseline: V128.  This patch intentionally avoids changing order, payment,
-   dispatch, customer import, and ticket history logic.  It fixes the member
-   profile access/scroll problem and reduces dashboard re-render flicker.
-   ====================================================================== */
-(function initPHXV129PortalProfileAndStability(){
-  if (window.__PHX_V129_PORTAL_PROFILE_STABILITY__) return;
-  window.__PHX_V129_PORTAL_PROFILE_STABILITY__ = true;
-
-  function roleText(){
-    try { return String(window.currentDashboardRole || currentDashboardRole || '').trim(); }
-    catch { return ''; }
-  }
-  function isPortalOpen(){
-    const modal = document.getElementById('dashboardModal');
-    return !!(modal && modal.open);
-  }
-  function ensureDashboardProfileButtonV129(){
-    const actions = document.querySelector('#dashboardModal .dashboard-actions');
-    if (!actions) return;
-    let btn = document.getElementById('dashProfileBtn');
-    if (!btn) {
-      btn = document.createElement('button');
-      btn.type = 'button';
-      btn.id = 'dashProfileBtn';
-      btn.className = 'outline-btn dashboard-profile-btn';
-      btn.dataset.accountAction = 'profile';
-      btn.textContent = 'Profile';
-      const assistant = document.getElementById('dashAssistantBtn');
-      actions.insertBefore(btn, assistant || actions.firstChild);
-    }
-    btn.hidden = false;
-    btn.style.display = '';
-    btn.dataset.accountAction = 'profile';
-    btn.textContent = 'Profile';
-  }
-
-  function lockProfileDialogScrollV129(){
-    const profileModal = document.getElementById('changePasswordModal');
-    if (!profileModal) return;
-    const sync = () => {
-      const anyOpen = !!document.querySelector('dialog[open]');
-      document.body.classList.toggle('phx-v129-modal-lock', anyOpen);
-      if (profileModal.open) {
-        const card = profileModal.querySelector('.modal-card, form');
-        if (card) {
-          card.style.overflowY = 'auto';
-          card.style.maxHeight = 'calc(100dvh - 32px)';
-          card.style.overscrollBehavior = 'contain';
-        }
-      }
-    };
-    sync();
-    if (!profileModal.dataset.phxV129Observed) {
-      profileModal.dataset.phxV129Observed = '1';
-      try { new MutationObserver(sync).observe(profileModal, { attributes:true, attributeFilter:['open'] }); } catch {}
-      profileModal.addEventListener('close', () => setTimeout(sync, 0));
-      profileModal.addEventListener('cancel', () => setTimeout(sync, 0));
-    }
-  }
-
-  function applyV129PortalPolish(){
-    ensureDashboardProfileButtonV129();
-    lockProfileDialogScrollV129();
-    const dash = document.getElementById('dashboardModal');
-    if (dash?.open) document.body.classList.add('portal-dashboard-active-v129');
-    else document.body.classList.remove('portal-dashboard-active-v129');
-  }
-
-  // Open profile using the existing V96 profile handler.  The old handler listens
-  // for data-account-action="profile"; this fallback keeps it working even if a
-  // later wrapper stops propagation.
   document.addEventListener('click', function(event){
-    const btn = event.target.closest?.('#dashProfileBtn');
-    if (!btn) return;
-    btn.dataset.accountAction = 'profile';
-    setTimeout(() => {
-      const modal = document.getElementById('changePasswordModal');
-      if (modal && !modal.open) {
-        const accountProfile = document.querySelector('[data-account-action="profile"]:not(#dashProfileBtn)');
-        if (accountProfile) accountProfile.dispatchEvent(new MouseEvent('click', { bubbles:true, cancelable:true }));
-      }
-      lockProfileDialogScrollV129();
-    }, 30);
-  }, false);
-
-  // De-bounce only repeated same-role renders in the same instant.  This reduces
-  // the visible dashboard flicker without blocking real updates from buttons.
-  const prevRender = typeof renderDashboard === 'function' ? renderDashboard : null;
-  if (prevRender && !window.__PHX_V129_RENDER_WRAPPED__) {
-    window.__PHX_V129_RENDER_WRAPPED__ = true;
-    let lastRole = '';
-    let lastAt = 0;
-    let running = false;
-    renderDashboard = function renderDashboardV129Stable(role){
-      const cleanRole = role || (typeof currentDashboardRole !== 'undefined' ? currentDashboardRole : '') || roleText() || 'Admin';
-      const now = Date.now();
-      if (running && isPortalOpen() && String(cleanRole) === String(lastRole) && now - lastAt < 90) {
-        return null;
-      }
-      running = true;
-      document.body.classList.add('dashboard-rendering-v129');
-      let result = null;
-      try { result = prevRender.apply(this, arguments); }
-      finally {
-        lastRole = cleanRole;
-        lastAt = Date.now();
-        setTimeout(() => {
-          running = false;
-          document.body.classList.remove('dashboard-rendering-v129');
-          applyV129PortalPolish();
-        }, 80);
-        setTimeout(applyV129PortalPolish, 240);
-      }
-      return result;
-    };
-  }
-
-  // Keep polish after common portal state changes without repeatedly rebuilding data.
-  ['DOMContentLoaded','visibilitychange'].forEach(name => document.addEventListener(name, () => setTimeout(applyV129PortalPolish, 60)));
-  document.addEventListener('click', (event) => {
-    if (event.target.closest?.('[data-dashboard-tab], [data-open-login], [data-portal-logout], [data-account-action], #dashProfileBtn')) {
-      setTimeout(applyV129PortalPolish, 90);
-      setTimeout(applyV129PortalPolish, 260);
+    if (event.target?.closest?.('[data-dashboard-tab]')) {
+      setTimeout(ensureDashboardProfileButton, 80);
+      setTimeout(updateSupportTicketCounter, 120);
+      setTimeout(refreshFeedbackPanel, 200);
     }
   }, true);
-  try { new MutationObserver(() => setTimeout(applyV129PortalPolish, 40)).observe(document.body, { childList:true, subtree:true }); } catch {}
-  setTimeout(applyV129PortalPolish, 150);
+
+  function boot(){
+    ensureDashboardProfileButton();
+    updateSupportTicketCounter();
+    refreshFeedbackPanel();
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else setTimeout(boot, 0);
+  setInterval(() => { ensureDashboardProfileButton(); updateSupportTicketCounter(); }, 2000);
+})();
+
+
+/* V136 — Feedback order number / complaint order reference */
+(function phoenixV136FeedbackOrderRef(){
+  const esc = (value) => {
+    try { return typeof escapeHtml === 'function' ? escapeHtml(value ?? '') : String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch])); }
+    catch { return String(value ?? ''); }
+  };
+  const getOrderRef = (item) => String(item?.orderNumber || item?.orderRef || item?.bookingNumber || item?.bookingId || item?.order_id || '').trim();
+
+  try {
+    if (typeof makeFeedbackReply === 'function') {
+      const originalReplyV136 = makeFeedbackReply;
+      makeFeedbackReply = function makeFeedbackReplyV136(item){
+        const base = originalReplyV136(item || {});
+        const ref = getOrderRef(item || {});
+        return ref ? `${base}\n\nOrder number on file: ${ref}` : base;
+      };
+    }
+  } catch (error) { console.warn('V136 feedback reply patch skipped:', error); }
+
+  try {
+    feedbackCard = function feedbackCardV136(item){
+      const id = String(item?.id || item?.ticket_id || 'Ticket');
+      const resolved = (typeof isTicketResolved === 'function') ? isTicketResolved(item) : String(item?.status || '').toLowerCase().includes('resolved');
+      const aiDraft = (typeof makeFeedbackReply === 'function') ? makeFeedbackReply(item || {}) : `Hi ${item?.name || 'there'}, thank you for contacting Phoenix Hibachi. Our team will follow up shortly.`;
+      const ref = getOrderRef(item || {});
+      const statusHtml = (typeof ticketStatusHtml === 'function')
+        ? ticketStatusHtml(item || {})
+        : `<span class="tag ${resolved ? 'resolved-ticket-v134' : 'new-ticket-v134'}">${resolved ? 'Resolved / 已处理' : 'New / 未处理'}</span>`;
+      return `<article class="feedback-card support-ticket-card-v134 support-ticket-card-v136 ${resolved ? 'is-resolved' : 'is-active'}" data-ticket-id-v134="${esc(id)}">
+        <header>
+          <div>
+            <strong>${esc(id)}</strong>
+            <p>${esc(item?.feedbackType || 'Feedback')} · ${esc(item?.name || '')} · ${esc(item?.phone || '')}</p>
+            ${ref ? `<p class="feedback-order-ref-v136"><b>Order #:</b> ${esc(ref)}</p>` : '<p class="feedback-order-ref-v136 muted"><b>Order #:</b> Not provided / 未填写</p>'}
+          </div>
+          <div class="ticket-status-wrap-v134">${statusHtml}</div>
+        </header>
+        <p>${esc(item?.message || '')}</p>
+        ${resolved ? '<div class="ticket-resolved-note-v134">客服已处理这条记录。它会保留在历史里，但不再计入 Support tickets 数字。</div>' : '<div class="ticket-active-note-v134">待客服处理。处理完成后点 Resolve / 已处理，顶部 Support tickets 会自动减少。</div>'}
+        <div class="reply-draft" id="reply-${esc(id)}" hidden>${esc(aiDraft)}</div>
+        <div class="order-actions">
+          <button type="button" data-ai-feedback="${esc(id)}">AI reply draft</button>
+          <button type="button" data-thank-feedback="${esc(id)}">Thank-you reply</button>
+          ${ref ? `<button type="button" data-copy-text="${esc(ref)}">Copy order #</button>` : ''}
+          <a href="sms:${encodeURIComponent(item?.phone || '')}?&body=${encodeURIComponent(aiDraft)}">Text reply</a>
+          <a href="mailto:${encodeURIComponent(item?.email || '')}?subject=${encodeURIComponent('Phoenix Hibachi support')}&body=${encodeURIComponent(aiDraft)}">Email reply</a>
+          ${resolved ? '' : `<button type="button" class="outline-btn resolve-ticket-v134" data-resolve-ticket-v134="${esc(id)}">Resolve / 已处理</button>`}
+        </div>
+      </article>`;
+    };
+  } catch (error) { console.warn('V136 feedback card patch skipped:', error); }
+
+  document.addEventListener('click', function(event){
+    const copy = event.target?.closest?.('[data-copy-text]');
+    if (!copy) return;
+    const text = copy.getAttribute('data-copy-text') || '';
+    if (!text) return;
+    try { navigator.clipboard?.writeText(text); } catch {}
+    copy.textContent = 'Copied';
+    setTimeout(() => { copy.textContent = copy.textContent === 'Copied' ? 'Copy order #' : copy.textContent; }, 1200);
+  }, true);
+})();
+
+/* =====================================================================
+   V139 — Real availability status fix
+   - Public calendar no longer uses demo/random full dates.
+   - Dates turn red/full only when every booking window is manually Full/Closed.
+   - If only one time window is Full/Closed, the date remains selectable and shows Limited.
+   ===================================================================== */
+(function PHXV139RealAvailabilityStatus(){
+  if (window.__PHX_V139_REAL_AVAILABILITY_STATUS__) return;
+  window.__PHX_V139_REAL_AVAILABILITY_STATUS__ = true;
+
+  const SLOT_LABELS = ['11:00 AM - 1:00 PM','2:00 PM - 4:00 PM','4:00 PM - 6:00 PM','7:00 PM - 9:00 PM'];
+  const STORE_PREFIX = 'phx_v120_dispatch_';
+  const pad = n => String(n).padStart(2, '0');
+
+  function parseDate(value){
+    if (!value) return null;
+    if (value instanceof Date && !Number.isNaN(value.getTime())) return value;
+    const raw = String(value || '').trim();
+    const m = raw.match(/^(20\d{2})[-\/](\d{1,2})[-\/](\d{1,2})/);
+    if (m) return new Date(Number(m[1]), Number(m[2])-1, Number(m[3]));
+    const d = new Date(raw.replace(/上午|下午/g, ''));
+    return Number.isNaN(d.getTime()) ? null : d;
+  }
+  function dateKey(value){
+    const d = parseDate(value);
+    if (!d) return '';
+    return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+  }
+  function canonicalSlot(slot){
+    const raw = String(slot || '').toLowerCase();
+    if (raw.includes('11')) return '11:00 AM - 1:00 PM';
+    if (raw.match(/\b2(:00)?\b/) || raw.includes('2:00 pm')) return '2:00 PM - 4:00 PM';
+    if (raw.match(/\b4(:00)?\b/) || raw.includes('4:00 pm')) return '4:00 PM - 6:00 PM';
+    if (raw.match(/\b6(:00)?\b/) || raw.match(/\b7(:00)?\b/) || raw.match(/\b8(:00)?\b/) || raw.includes('dinner')) return '7:00 PM - 9:00 PM';
+    return String(slot || '').trim();
+  }
+  function legacySlotLabels(slot){
+    const c = canonicalSlot(slot);
+    if (c === '11:00 AM - 1:00 PM') return ['11:00 AM - 1:00 PM','11:00 AM'];
+    if (c === '2:00 PM - 4:00 PM') return ['2:00 PM - 4:00 PM','2:00 PM'];
+    if (c === '4:00 PM - 6:00 PM') return ['4:00 PM - 6:00 PM','4:00 PM'];
+    if (c === '7:00 PM - 9:00 PM') return ['7:00 PM - 9:00 PM','7:00 PM','6:00 PM','8:00 PM'];
+    return [c];
+  }
+  function slotStatus(key, slot){
+    for (const label of legacySlotLabels(slot)) {
+      const value = localStorage.getItem(`${STORE_PREFIX}slot_${key}_${label}`);
+      if (value) return value;
+    }
+    return 'Available';
+  }
+  function slotState(key){
+    const statuses = SLOT_LABELS.map(slot => slotStatus(key, slot));
+    const blocked = statuses.filter(v => v === 'Full' || v === 'Closed').length;
+    return { statuses, blocked, anyBlocked: blocked > 0, allBlocked: blocked >= SLOT_LABELS.length };
+  }
+  function isPaused(value){
+    try {
+      const key = dateKey(value);
+      if (!key) return false;
+      if (typeof getPausedBookingDates === 'function') return Boolean(getPausedBookingDates()[key]);
+    } catch {}
+    return false;
+  }
+
+  function realGetStatus(date){
+    try { if (typeof isPastDate === 'function' && isPastDate(date)) return 'past'; } catch {}
+    if (isPaused(date)) return 'paused';
+    const key = dateKey(date);
+    if (!key) return 'open';
+    const s = slotState(key);
+    if (s.allBlocked) return 'full';
+    if (s.anyBlocked) return 'limited';
+    return 'open';
+  }
+
+  function realGetSlotsForStatus(status){
+    let key = '';
+    try { key = dateKey(selectedDateState); } catch {}
+    if (status === 'past') return [{time:'Date passed', note:'Please choose today or a future event date', booked:'Unavailable', status:'Past date', disabled:true}];
+    if (status === 'paused') return [{time:'Date paused', note:'Phoenix Hibachi is not accepting bookings for this date.', booked:'Unavailable', status:'Paused', disabled:true}];
+    if (!key) return [];
+    return SLOT_LABELS.map(slot => {
+      const value = slotStatus(key, slot);
+      if (value === 'Full') return { time: slot, note:'Marked full by Phoenix Hibachi', booked:'Not accepting this time', status:'Full', disabled:true };
+      if (value === 'Closed') return { time: slot, note:'Closed by Phoenix Hibachi', booked:'Not accepting this time', status:'Closed', disabled:true };
+      return { time: slot, note:'Available booking window', booked:'Available', status:'Open', disabled:false };
+    });
+  }
+
+  window.PHX_GET_BOOKING_SLOT_STATE = function(key){ return slotState(key); };
+  try { window.getStatus = realGetStatus; getStatus = realGetStatus; } catch { window.getStatus = realGetStatus; }
+  try { window.getSlotsForStatus = realGetSlotsForStatus; getSlotsForStatus = realGetSlotsForStatus; } catch { window.getSlotsForStatus = realGetSlotsForStatus; }
+
+  window.PHX_REFRESH_PUBLIC_BOOKING_CALENDARS = function(){
+    try { selectedStatusState = realGetStatus(selectedDateState); } catch {}
+    try { renderMainCalendar(); } catch {}
+    try { renderMiniCalendar(); } catch {}
+    try { renderSlots(); } catch {}
+    try { updateSummary(); } catch {}
+    try { updateBookingReadyState(); } catch {}
+  };
+  setTimeout(() => { try { window.PHX_REFRESH_PUBLIC_BOOKING_CALENDARS(); } catch {} }, 100);
+  window.addEventListener('phoenix:availability-sync', () => { try { window.PHX_REFRESH_PUBLIC_BOOKING_CALENDARS(); } catch {} });
 })();

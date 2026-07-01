@@ -1,41 +1,57 @@
-# Phoenix Hibachi V128 — Customer Service Ticket History Fix
+# Phoenix Hibachi 2.0 Final V135 — Dispatch weekday route + availability sync
 
-Builds on V127.
+Built on V134 / 2.0 final line.
 
 ## Changes
-- Customer Service statistic cards remain visible.
-- Support ticket count now means **active unresolved tickets only**.
-- Clicking Resolve / 已解决 marks the ticket as resolved, but does **not** delete or hide the record.
-- Resolved tickets remain in Complaints & Suggestions as history with a Resolved badge.
-- Resolved tickets no longer count in the top Support tickets number.
-- Chef assigned support tickets should only show active unresolved tickets in future Supabase-backed ticket table; current version is local/test mode.
 
-## Test
-1. Login as Customer Service.
-2. Open Complaints & Suggestions.
-3. Click Resolve on a ticket.
-4. Confirm the ticket remains visible as Resolved history.
-5. Confirm the top Support tickets stat decreases.
+- Calendar grid date click is now for availability management only.
+  - Clicking a calendar date opens/updates the Availability / 接单时段 panel.
+  - It no longer forces the route map to appear.
+- Monday–Sunday day cards now control routing.
+  - Clicking Wednesday 7/1, Thursday 7/2, etc. selects that exact day for routing.
+  - Route map only appears when the selected weekday/date has orders.
+- Admin availability slots now match the public booking time windows:
+  - 11:00 AM - 1:00 PM
+  - 2:00 PM - 4:00 PM
+  - 4:00 PM - 6:00 PM
+  - 7:00 PM - 9:00 PM
+- Marking a slot Full / Closed in Admin immediately syncs to the public booking calendar in the same browser.
+  - The public slot becomes disabled.
+  - The date becomes limited/full depending on blocked slots.
+- Backward compatibility for older saved slot labels such as 11:00 AM, 2:00 PM, 4:00 PM, 6:00 PM, and 8:00 PM.
 
+## Notes
 
-## V129 — Member profile scroll + portal stability cleanup
-
-This version is based on V128 and keeps the existing order, payment, dispatch, customer import, chef dashboard, and ticket history features.
-
-Changes:
-
-- Added a visible **Profile** action inside every portal dashboard toolbar so customers/members can edit their profile without relying on the homepage account menu.
-- Fixed the Profile & Member Wallet dialog so it can scroll all the way to the bottom on desktop and mobile.
-- Cleaned modal clipping/scroll behavior to reduce corner shadows, ghost edges, and double-scroll issues.
-- Added a light dashboard render debounce to reduce the repeated flash/flicker when logging into a portal role.
-- Kept Customer Service ticket history behavior from V128: resolving a ticket reduces the active count but keeps the record.
-
-Upload to GitHub after local testing: `script.js`, `style.css`, and `README.md`.
+This version still uses local browser storage for availability status. For all visitors and all devices to see the same Full / Closed status, the next production step is a Supabase `availability` table and RLS policy.
 
 
-## V130 dashboard logout overlap hotfix
+## V136 — Feedback order number field
 
-- Hide the floating dashboard `×` close button in portal/dashboard mode.
-- Keep `Logout` as the only dashboard exit action.
-- Does not affect Login, Booking, Profile, Invoice, Notice, or other modal close buttons.
-- Preserves V129 member profile stability cleanup.
+- Guest Feedback form now includes an optional Order number / 订单号 field.
+- Customer Service complaint cards show the submitted order number clearly.
+- AI reply draft includes the order number when provided.
+- Added Copy order # action for staff follow-up.
+- No Supabase SQL required.
+
+
+## V137 homepage arrival notice cleanup
+
+- Removed the visible preferred arrival time from the homepage selected-date notice block.
+- Replaced it with a professional bilingual arrival-timing notice explaining weather, traffic, parking, road conditions, and real-time route changes.
+- Booking time selection and submitted event time remain unchanged.
+
+
+## V138 — Admin blessing title and English dispatch copy
+
+- Changed the Orders Dispatch Board heading to a gold calligraphy blessing: 风生水起.
+- Removed the bilingual Month/Week/Weekday heading in the admin dispatch board and replaced it with clean English copy.
+- Cleaned the homepage arrival notice to English-only text.
+- No Supabase SQL changes required.
+
+
+## V139 availability truth fix
+
+- Public booking calendar no longer uses demo/random full dates.
+- Dates become red/full only when every booking window is manually Full/Closed.
+- If only one time window is Full or Closed, the date remains selectable and shows limited/partial instead of full.
+- Admin calendar now labels partial availability as slot-level full, not whole-day full.

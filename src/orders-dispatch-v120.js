@@ -6,9 +6,18 @@
 
   const STORE_PREFIX = 'phx_v120_dispatch_';
   const STAFF_ROLES = new Set(['admin','manager','customer service']);
-  const SLOT_LABELS = ['11:00 AM','2:00 PM','4:00 PM','6:00 PM','8:00 PM'];
+  function normalizedRole(raw){
+    const r = String(raw || '').trim().toLowerCase().replace(/[_-]+/g, ' ');
+    if (r.includes('admin')) return 'admin';
+    if (r.includes('manager')) return 'manager';
+    if (r.includes('customer service') || r.includes('客服')) return 'customer service';
+    if (r.includes('chef') || r.includes('师傅')) return 'chef';
+    if (r.includes('member') || r.includes('customer') || r.includes('顾客')) return 'member';
+    return r;
+  }
+  const SLOT_LABELS = ['11:00 AM - 1:00 PM','2:00 PM - 4:00 PM','4:00 PM - 6:00 PM','7:00 PM - 9:00 PM'];
   const CHEF_COLORS = ['#ffc342','#4ade80','#60a5fa','#fb7185','#c084fc','#f97316'];
-  const state = { monthKey: '', weekKey: '', dateKey: '', weekdayFilter: '' };
+  const state = { monthKey: '', weekKey: '', dateKey: '', availabilityDateKey: '', weekdayFilter: '' };
   let renderTimer = null;
   let observerLock = false;
   let lastRenderedSig = '';
@@ -59,14 +68,46 @@
     const txt = String(order?.eventTime || order?.event_time || 'Time pending');
     return txt.replace(/\s*-\s*\d{1,2}:\d{2}\s*(AM|PM)?/i,'').trim();
   }
-  function getOrders(){
+  function arrayFromStorage(key){
     try {
-      if(typeof window.getDashboardOrders === 'function') return (window.getDashboardOrders() || []).slice();
+      const value = JSON.parse(localStorage.getItem(key) || '[]');
+      return Array.isArray(value) ? value : [];
+    } catch { return []; }
+  }
+  function dedupeOrders(rows){
+    const seen = new Set();
+    const out = [];
+    (rows || []).forEach((order, index) => {
+      if (!order || typeof order !== 'object') return;
+      const id = String(order.id || order.booking_number || order.bookingNumber || order.ref || '').trim();
+      const fallback = [order.name || '', order.phone || '', order.email || '', order.address || order.event_address || '', orderDateKey(order), timeText(order)].join('|').toLowerCase();
+      const key = id || fallback || `row-${index}`;
+      if (seen.has(key)) return;
+      seen.add(key);
+      if (!order.id && id) order.id = id;
+      out.push(order);
+    });
+    return out;
+  }
+  function getOrders(){
+    const rows = [];
+    try {
+      if(typeof window.getDashboardOrders === 'function') rows.push(...((window.getDashboardOrders() || []).slice()));
     } catch {}
-    try { return JSON.parse(localStorage.getItem('phoenixBookings') || '[]'); } catch { return []; }
+    try { if(Array.isArray(window.dashboardOrders)) rows.push(...window.dashboardOrders); } catch {}
+    try { if(Array.isArray(window.currentDashboardOrders)) rows.push(...window.currentDashboardOrders); } catch {}
+    [
+      'phoenixHibachiOrdersV12',
+      'phoenixBookings',
+      'phoenix_orders',
+      'phoenix_orders_cache',
+      'phoenix_dashboard_orders',
+      'bookings'
+    ].forEach(key => rows.push(...arrayFromStorage(key)));
+    return dedupeOrders(rows);
   }
   function roleAllowed(){
-    const role = String(window.currentDashboardRole || localStorage.getItem('phoenix_portal_role') || 'Admin').toLowerCase();
+    const role = normalizedRole(window.currentDashboardRole || localStorage.getItem('phoenix_portal_role') || localStorage.getItem('phoenix_dashboard_role') || 'Admin');
     return STAFF_ROLES.has(role);
   }
   function selectedMonthOrders(orders){ return orders.filter(o => orderDateKey(o).startsWith(state.monthKey)); }
@@ -100,7 +141,31 @@
     return d >= s && d <= e;
   }
   function sequenceKey(dateKey){ return `${STORE_PREFIX}sequence_${dateKey}`; }
-  function slotKey(dateKey, slot){ return `${STORE_PREFIX}slot_${dateKey}_${slot}`; }
+  function canonicalSlot(slot){
+    const raw = String(slot || '').toLowerCase();
+    if(raw.includes('11')) return '11:00 AM - 1:00 PM';
+    if(raw.match(/2(:00)?/) || raw.includes('2:00 pm')) return '2:00 PM - 4:00 PM';
+    if(raw.match(/4(:00)?/) || raw.includes('4:00 pm')) return '4:00 PM - 6:00 PM';
+    if(raw.match(/6(:00)?/) || raw.match(/7(:00)?/) || raw.match(/8(:00)?/) || raw.includes('dinner')) return '7:00 PM - 9:00 PM';
+    return String(slot || '').trim();
+  }
+  function legacySlotLabels(slot){
+    const c = canonicalSlot(slot);
+    if(c === '11:00 AM - 1:00 PM') return ['11:00 AM - 1:00 PM','11:00 AM'];
+    if(c === '2:00 PM - 4:00 PM') return ['2:00 PM - 4:00 PM','2:00 PM'];
+    if(c === '4:00 PM - 6:00 PM') return ['4:00 PM - 6:00 PM','4:00 PM'];
+    if(c === '7:00 PM - 9:00 PM') return ['7:00 PM - 9:00 PM','7:00 PM','6:00 PM','8:00 PM'];
+    return [c];
+  }
+  function slotKey(dateKey, slot){ return `${STORE_PREFIX}slot_${dateKey}_${canonicalSlot(slot)}`; }
+  function getSlotStatus(dateKey, slot){
+    const labels = legacySlotLabels(slot);
+    for(const label of labels){
+      const value = localStorage.getItem(`${STORE_PREFIX}slot_${dateKey}_${label}`);
+      if(value) return value;
+    }
+    return 'Available';
+  }
   function getSeq(dateKey, orders){
     let saved=[];
     try { saved = JSON.parse(localStorage.getItem(sequenceKey(dateKey)) || '[]'); } catch {}
@@ -263,11 +328,16 @@
       const key = `${state.monthKey}-${pad(day)}`;
       const d = parseDate(key);
       const count = countByDate.get(key)||0;
-      const slotValues = SLOT_LABELS.map(s => localStorage.getItem(slotKey(key,s)) || 'Available');
-      const isBlocked = slotValues.some(v => v === 'Full' || v === 'Closed');
+      const slotValues = SLOT_LABELS.map(s => getSlotStatus(key, s));
+      const blockedCount = slotValues.filter(v => v === 'Full' || v === 'Closed').length;
+      const isFullyBlocked = blockedCount >= SLOT_LABELS.length;
+      const isPartiallyBlocked = blockedCount > 0 && !isFullyBlocked;
+      const availabilityNote = isFullyBlocked
+        ? '<em class="phx-v120-day-note full">Full</em>'
+        : (isPartiallyBlocked ? `<em class="phx-v120-day-note partial">${blockedCount} slot${blockedCount>1?'s':''} full</em>` : '');
       const inSelectedWeek = selectedWeekStart && selectedWeekEnd && d >= selectedWeekStart && d <= selectedWeekEnd;
       const weekdayActive = state.weekdayFilter !== '' && Number(state.weekdayFilter) === d.getDay();
-      cells.push(`<button type="button" class="phx-v120-cal-cell ${count?'has-orders':''} ${isBlocked?'has-blocked':''} ${state.dateKey===key?'active':''} ${inSelectedWeek?'in-selected-week':''} ${weekdayActive?'weekday-active':''}" data-v120-date="${esc(key)}"><b>${day}</b>${count?`<span>${count} order${count>1?'s':''}</span>`:''}${count?'<i></i>':''}</button>`);
+      cells.push(`<button type="button" class="phx-v120-cal-cell ${count?'has-orders':''} ${isFullyBlocked?'has-blocked':''} ${isPartiallyBlocked?'has-limited':''} ${state.dateKey===key?'active route-active':''} ${state.availabilityDateKey===key?'availability-active':''} ${inSelectedWeek?'in-selected-week':''} ${weekdayActive?'weekday-active':''}" data-v120-date="${esc(key)}"><b>${day}</b>${count?`<span>${count} order${count>1?'s':''}</span>`:''}${count?'<i></i>':''}${availabilityNote}</button>`);
     }
     return `<div class="phx-v120-calendar"><div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>${cells.join('')}</div>`;
   }
@@ -301,8 +371,8 @@
       const dayValue = d.getDay();
       const c = orders.filter(o => orderDateKey(o) === key).length;
       const shortDate = d.toLocaleDateString('en-US',{month:'numeric', day:'numeric'});
-      const active = !state.dateKey && String(state.weekdayFilter) === String(dayValue);
-      dayButtons.push(`<button type="button" class="${active?'active':''}" data-v121-weekday="${dayValue}"><b>${esc(dayNames[dayValue])}</b><span>${esc(shortDate)} · ${c} order${c!==1?'s':''}</span></button>`);
+      const active = state.dateKey === key || (!state.dateKey && String(state.weekdayFilter) === String(dayValue));
+      dayButtons.push(`<button type="button" class="${active?'active':''} ${c?'has-orders':''}" data-v121-weekday="${dayValue}" data-v121-weekday-date="${esc(key)}"><b>${esc(dayNames[dayValue])}</b><span>${esc(shortDate)} · ${c} order${c!==1?'s':''}</span></button>`);
     }
     return `<div class="phx-v121-weekday-wrap phx-v122-week-wheel-wrap">
       <div class="phx-v122-week-wheel-card">
@@ -326,11 +396,12 @@
     return rows.sort((a,b)=> orderDateKey(a).localeCompare(orderDateKey(b)) || parseTimeMinutes(timeText(a))-parseTimeMinutes(timeText(b)));
   }
   function renderSlots(){
-    if(!state.dateKey) return `<div class="phx-v120-slot-box empty"><strong>Availability / 接单时段</strong><p>Select one date to set Full or Closed slots.</p></div>`;
-    return `<div class="phx-v120-slot-box"><strong>${esc(dayTitle(state.dateKey))} availability</strong><div class="phx-v120-slots">${SLOT_LABELS.map(slot=>{
-      const v = localStorage.getItem(slotKey(state.dateKey, slot)) || 'Available';
+    const slotDateKey = state.availabilityDateKey || state.dateKey;
+    if(!slotDateKey) return `<div class="phx-v120-slot-box empty"><strong>Availability</strong><p>Click a calendar date to manage Full or Closed booking windows.</p></div>`;
+    return `<div class="phx-v120-slot-box"><strong>${esc(dayTitle(slotDateKey))} availability</strong><div class="phx-v120-slots">${SLOT_LABELS.map(slot=>{
+      const v = getSlotStatus(slotDateKey, slot);
       return `<button type="button" class="${v.toLowerCase()}" data-v120-slot="${esc(slot)}"><b>${esc(slot)}</b><span>${esc(v)}</span></button>`;
-    }).join('')}</div><small>Full/Closed is local in this version. Supabase sync can be connected after the board is approved.</small></div>`;
+    }).join('')}</div><small>Full/Closed syncs to the public booking calendar in this browser. Supabase sync can make it global for all visitors.</small></div>`;
   }
   function moneyMetrics(order){
     try { if(typeof window.calculateOrderMoney === 'function') return window.calculateOrderMoney(order); } catch {}
@@ -423,7 +494,7 @@
     const guide = document.getElementById('routePlannerGuideV70'); if(guide) { guide.hidden=true; guide.style.display='none'; }
     const oldList = document.getElementById('orderList'); if(oldList) oldList.classList.add('phx-v120-original-hidden');
     const autoBtn = document.getElementById('autoDispatchBtn'); if(autoBtn) autoBtn.style.display = 'none';
-    const h = document.getElementById('primaryDashboardHeading'); if(h) h.textContent = 'Orders dispatch calendar / 订单派单日历';
+    const h = document.getElementById('primaryDashboardHeading'); if(h) h.textContent = 'Orders Dispatch Calendar';
     return board;
   }
   function renderBoard(reason=''){
@@ -447,7 +518,7 @@
     observerLock = true;
     board.innerHTML = `
       <div class="phx-v120-head">
-        <div><p class="eyebrow">V122 Dispatch Board</p><h3>Month calendar → Week wheel → Weekday / 月历 → 周选择 → 星期派单</h3><p class="small-muted">Choose a month, use the week wheel to highlight one week, then use Monday–Sunday cards to review that day’s orders.</p></div>
+        <div><p class="eyebrow">Phoenix Admin Blessing</p><h3 class="phx-feng-sheng-title">风生水起</h3><p class="small-muted">Golden dispatch board for a growing Phoenix Hibachi business. Choose a month, week, and weekday to review orders and routes.</p></div>
         <label>Month wheel<select data-v120-month>${months.map(k=>`<option value="${esc(k)}" ${k===state.monthKey?'selected':''}>${esc(monthTitle(k))}</option>`).join('')}</select></label>
       </div>
       ${monthStatsHtml(monthRows)}
@@ -458,7 +529,7 @@
         </div>
         ${renderSlots()}
       </div>
-      ${state.dateKey ? routeMap(dateRows) : '<div class="phx-v120-info"><b>Select a date to route that day only.</b><span>Use the Week wheel and Monday–Sunday cards to review lists; the route map appears only after a date is selected.</span></div>'}
+      ${state.dateKey && dateRows.length ? routeMap(dateRows) : '<div class="phx-v120-info"><b>Route map appears when you click a Monday–Sunday day card with orders.</b><span>Click the calendar grid only to manage that date&rsquo;s booking availability.</span></div>'}
       ${revenueAnalyticsHtml(rows)}
       <section class="phx-v120-order-results"><header><h4>${state.dateKey ? `${dayTitle(state.dateKey)} orders` : state.weekKey ? (state.weekdayFilter==='' ? 'Selected week orders' : 'Selected weekday orders') : `${monthTitle(state.monthKey)} orders`}</h4><span>${rows.length} order${rows.length!==1?'s':''}</span></header><div class="calendar-order-list phx-v120-order-list">${rows.length ? rows.map(orderHtml).join('') : '<div class="empty-state">No orders found for this selection.</div>'}</div></section>
     `;
@@ -642,24 +713,28 @@
       return false;
     }
     const dateBtn = e.target.closest('[data-v120-date]');
-    if(dateBtn){ state.dateKey = dateBtn.dataset.v120Date || ''; state.weekKey = weekKeyForDate(parseDate(state.dateKey)); state.weekdayFilter=''; scheduleRender('date'); return; }
+    if(dateBtn){ const key = dateBtn.dataset.v120Date || ''; state.availabilityDateKey = key; state.dateKey = ''; state.weekKey = weekKeyForDate(parseDate(key)); state.weekdayFilter=''; scheduleRender('availability-date'); return; }
     const weekBtn = e.target.closest('[data-v120-week]');
     if(weekBtn){ state.weekKey = weekBtn.dataset.v120Week || ''; state.dateKey = ''; state.weekdayFilter=''; scheduleRender('week'); return; }
     const weekdayBtn = e.target.closest('[data-v121-weekday]');
     if(weekdayBtn){
       ensureWeekKey(getOrders());
-      state.dateKey = '';
       const v = weekdayBtn.dataset.v121Weekday;
+      const dayKey = weekdayBtn.dataset.v121WeekdayDate || '';
       state.weekdayFilter = v === 'week' ? '' : String(v);
-      scheduleRender('weekday'); return;
+      state.dateKey = dayKey;
+      state.availabilityDateKey = dayKey;
+      scheduleRender('weekday-route'); return;
     }
     if(e.target.closest('[data-v121-build-route]')){ scheduleRender('build-route'); return; }
     const slotBtn = e.target.closest('[data-v120-slot]');
-    if(slotBtn && state.dateKey){
-      const key = slotKey(state.dateKey, slotBtn.dataset.v120Slot);
-      const current = localStorage.getItem(key) || 'Available';
+    if(slotBtn && (state.availabilityDateKey || state.dateKey)){
+      const selectedSlotDate = state.availabilityDateKey || state.dateKey;
+      const key = slotKey(selectedSlotDate, slotBtn.dataset.v120Slot);
+      const current = getSlotStatus(selectedSlotDate, slotBtn.dataset.v120Slot);
       const next = current === 'Available' ? 'Full' : current === 'Full' ? 'Closed' : 'Available';
       localStorage.setItem(key, next);
+      try { window.PHX_REFRESH_PUBLIC_BOOKING_CALENDARS && window.PHX_REFRESH_PUBLIC_BOOKING_CALENDARS(); } catch {}
       scheduleRender('slot'); return;
     }
     const move = e.target.closest('[data-v120-move]');
@@ -771,7 +846,7 @@
   window.__PHX_V123_AVAILABILITY_SYNC__ = true;
 
   const STORE_PREFIX_V123 = 'phx_v120_dispatch_';
-  const SLOT_LABELS_V123 = ['11:00 AM','2:00 PM','4:00 PM','6:00 PM','8:00 PM'];
+  const SLOT_LABELS_V123 = ['11:00 AM - 1:00 PM','2:00 PM - 4:00 PM','4:00 PM - 6:00 PM','7:00 PM - 9:00 PM'];
 
   function padV123(n){ return String(n).padStart(2, '0'); }
   function parseDateV123(value){
@@ -788,9 +863,29 @@
     if (!d) return '';
     return `${d.getFullYear()}-${padV123(d.getMonth()+1)}-${padV123(d.getDate())}`;
   }
-  function slotKeyV123(dateKey, slot){ return `${STORE_PREFIX_V123}slot_${dateKey}_${slot}`; }
+  function canonicalSlotV123(slot){
+    const raw = String(slot || '').toLowerCase();
+    if(raw.includes('11')) return '11:00 AM - 1:00 PM';
+    if(raw.match(/\b2(:00)?\b/) || raw.includes('2:00 pm')) return '2:00 PM - 4:00 PM';
+    if(raw.match(/\b4(:00)?\b/) || raw.includes('4:00 pm')) return '4:00 PM - 6:00 PM';
+    if(raw.match(/\b6(:00)?\b/) || raw.match(/\b7(:00)?\b/) || raw.match(/\b8(:00)?\b/) || raw.includes('dinner')) return '7:00 PM - 9:00 PM';
+    return String(slot || '').trim();
+  }
+  function legacySlotLabelsV123(slot){
+    const c = canonicalSlotV123(slot);
+    if(c === '11:00 AM - 1:00 PM') return ['11:00 AM - 1:00 PM','11:00 AM'];
+    if(c === '2:00 PM - 4:00 PM') return ['2:00 PM - 4:00 PM','2:00 PM'];
+    if(c === '4:00 PM - 6:00 PM') return ['4:00 PM - 6:00 PM','4:00 PM'];
+    if(c === '7:00 PM - 9:00 PM') return ['7:00 PM - 9:00 PM','7:00 PM','6:00 PM','8:00 PM'];
+    return [c];
+  }
+  function slotKeyV123(dateKey, slot){ return `${STORE_PREFIX_V123}slot_${dateKey}_${canonicalSlotV123(slot)}`; }
   function slotStatusV123(dateKey, slot){
-    return localStorage.getItem(slotKeyV123(dateKey, slot)) || 'Available';
+    for(const label of legacySlotLabelsV123(slot)){
+      const value = localStorage.getItem(`${STORE_PREFIX_V123}slot_${dateKey}_${label}`);
+      if(value) return value;
+    }
+    return 'Available';
   }
   function daySlotStateV123(dateKey){
     const statuses = SLOT_LABELS_V123.map(slot => slotStatusV123(dateKey, slot));

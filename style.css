@@ -4087,185 +4087,166 @@ body.light-theme .chef-dashboard-v126 .chef-dispatch {
   .chef-orders-controls-v126 { grid-template-columns: 1fr; }
 }
 
-/* V127 Customer Service import + support ticket cleanup */
-.customer-import-panel-v127 {
-  border: 1px solid rgba(214, 155, 50, .35);
-  border-radius: 24px;
-  padding: 18px;
-  margin: 0 0 18px;
-  background: rgba(15, 9, 5, .38);
-}
-body.light-mode .customer-import-panel-v127,
-body.theme-light .customer-import-panel-v127,
-.light-mode .customer-import-panel-v127 {
-  background: rgba(255, 249, 238, .86);
-  border-color: rgba(166, 104, 20, .24);
-}
-.customer-import-head-v127 { align-items: center; gap: 16px; }
-.customer-add-form-v127 {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(160px, 1fr));
-  gap: 12px;
-  margin-top: 14px;
-}
-.customer-add-form-v127 label,
-.customer-import-row-v127 label {
-  display: flex;
-  flex-direction: column;
-  gap: 7px;
-  font-weight: 800;
-  color: var(--gold, #f4bd3f);
-}
-.customer-add-form-v127 input,
-.customer-add-form-v127 textarea,
-.customer-import-row-v127 input[type="file"] {
-  width: 100%;
-  border: 1px solid rgba(214, 155, 50, .38);
-  background: rgba(0,0,0,.42);
-  color: inherit;
-  border-radius: 16px;
-  padding: 12px 14px;
-}
-body.light-mode .customer-add-form-v127 input,
-body.light-mode .customer-add-form-v127 textarea,
-body.light-mode .customer-import-row-v127 input[type="file"],
-.light-mode .customer-add-form-v127 input,
-.light-mode .customer-add-form-v127 textarea,
-.light-mode .customer-import-row-v127 input[type="file"] {
-  background: #fffaf1;
-  color: #2c1608;
-}
-.customer-add-form-v127 .wide { grid-column: 1 / -1; }
-.customer-form-actions-v127 { display:flex; gap:10px; align-items:end; grid-column:1 / -1; }
-.customer-form-actions-v127 button,
-.customer-import-panel-v127 button,
-.file-import-v127 {
-  border: 1px solid rgba(214, 155, 50, .55);
-  border-radius: 999px;
-  padding: 10px 16px;
-  background: rgba(214, 155, 50, .12);
-  color: var(--gold, #f4bd3f);
-  font-weight: 900;
-  letter-spacing: .02em;
-  cursor: pointer;
-}
-.customer-form-actions-v127 button[type="submit"] { background: linear-gradient(135deg,#f6c14b,#c98711); color:#160b02; }
-.customer-import-row-v127 { display:flex; gap:16px; align-items:center; margin-top:14px; flex-wrap:wrap; }
-.file-import-v127 input { margin-top:8px; max-width: 360px; }
-.customer-import-result-v127 {
-  margin-top: 12px;
-  border-radius: 16px;
-  padding: 12px 14px;
-  border: 1px solid rgba(80, 190, 120, .45);
-  background: rgba(29, 93, 50, .18);
-  color: #a8ffc2;
-  font-weight: 800;
-}
-.customer-import-result-v127.is-error { border-color: rgba(255, 107, 91, .55); background: rgba(120, 25, 15, .2); color:#ffb8ad; }
-.manual-customer-v127 { background: rgba(214, 155, 50, .06); }
-.v126-ticket-assign, .feedback-card .tag + .tag { margin-top: 8px; }
-.feedback-card [data-v127-resolve-ticket] { border-color: rgba(80, 190, 120, .5); color: #9cffb9; }
-body.light-mode .feedback-card [data-v127-resolve-ticket], .light-mode .feedback-card [data-v127-resolve-ticket] { color:#175c2b; }
-@media (max-width: 860px) {
-  .customer-add-form-v127 { grid-template-columns: 1fr; }
-  .customer-form-actions-v127 { flex-direction: column; align-items: stretch; }
-}
-
-/* V128 support ticket history */
-.ticket-history-resolved-v128 {
-  opacity: 0.72;
-  border-style: dashed !important;
-}
-.ticket-history-resolved-v128 .order-actions button,
-.ticket-history-resolved-v128 [data-v127-resolve-ticket],
-.ticket-history-resolved-v128 [data-v128-resolve-ticket] {
+/* 2.0 hotfix: hide legacy V70/V119 Route Planner blocks.
+   The active Orders dispatch board is the V122 calendar board above.
+   Keep the old DOM hidden so older functions do not break, but do not show duplicate route UI. */
+#routePlannerGuideV70,
+#routePlannerPanel {
   display: none !important;
-}
-.ticket-resolved-v128 {
-  background: rgba(92, 160, 92, 0.14) !important;
-  border-color: rgba(92, 160, 92, 0.45) !important;
-  color: #3f8d4b !important;
-}
-.ticket-history-note-v128 {
-  margin-top: 8px;
-  font-size: 0.82rem;
-  opacity: 0.72;
-}
-
-/* ======================================================================
-   V129 PORTAL PROFILE + MODAL SMOOTHNESS CLEANUP
-   - Member/customer profile modal can scroll to the bottom on desktop/mobile.
-   - Dialogs use one clean internal scroll instead of clipped corners/ghost edges.
-   - Dashboard rendering is visually stabilized to reduce login flicker.
-   ====================================================================== */
-body.phx-v129-modal-lock{overflow:hidden!important;}
-#changePasswordModal[open],
-.login-modal[open],
-.booking-modal[open],
-.print-modal[open]{
-  box-sizing:border-box!important;
-  padding:16px!important;
-  overflow:hidden!important;
-  align-items:center!important;
-  justify-content:center!important;
-}
-#changePasswordModal[open]{display:grid!important;place-items:center!important;}
-#changePasswordModal .modal-card,
-#changePasswordModal #changePasswordForm,
-#changePasswordModal form.modal-card{
-  width:min(560px,calc(100vw - 32px))!important;
-  max-height:calc(100dvh - 32px)!important;
-  overflow-y:auto!important;
-  overflow-x:hidden!important;
-  overscroll-behavior:contain!important;
-  -webkit-overflow-scrolling:touch!important;
-  border-radius:28px!important;
-  clip-path:inset(0 round 28px)!important;
-  box-shadow:0 22px 80px rgba(0,0,0,.28)!important;
-  padding-bottom:42px!important;
-}
-#changePasswordModal .modal-card::-webkit-scrollbar,
-#changePasswordModal #changePasswordForm::-webkit-scrollbar{width:8px;}
-#changePasswordModal .modal-card::-webkit-scrollbar-thumb,
-#changePasswordModal #changePasswordForm::-webkit-scrollbar-thumb{background:rgba(227,167,45,.55);border-radius:999px;}
-#changePasswordModal .modal-actions{position:sticky;bottom:0;z-index:4;padding-top:12px;background:linear-gradient(180deg,rgba(11,7,5,0),#0b0705 38%);}
-body.light-theme #changePasswordModal .modal-actions{background:linear-gradient(180deg,rgba(255,248,235,0),#fff8eb 38%);}
-body.light-theme #changePasswordModal .modal-card,
-body.light-theme #changePasswordModal #changePasswordForm,
-body.light-theme #changePasswordModal form.modal-card{
-  background:#fff8eb!important;
-  color:#2b1708!important;
-  box-shadow:0 22px 70px rgba(90,50,10,.18)!important;
-}
-.dashboard-actions .dashboard-profile-btn{display:inline-flex;align-items:center;justify-content:center;}
-.member-dashboard-clean-v125 .dashboard-actions .dashboard-profile-btn{display:inline-flex!important;}
-.dashboard-modal .dashboard-card{contain:layout paint;}
-body.dashboard-rendering-v129 .dashboard-card{transition:opacity .16s ease, transform .16s ease;}
-@media(max-width:700px){
-  #changePasswordModal[open]{padding:8px!important;align-items:stretch!important;}
-  #changePasswordModal .modal-card,
-  #changePasswordModal #changePasswordForm,
-  #changePasswordModal form.modal-card{width:calc(100vw - 16px)!important;max-height:calc(100dvh - 16px)!important;padding:22px 18px 42px!important;}
-  #changePasswordModal .member-wallet-v96{grid-template-columns:1fr!important;}
-}
-
-/* v130: Portal dashboard close button cleanup
-   In dedicated dashboard view, Logout is the only exit. Hide the floating X so it does not overlap Logout. */
-body.portal-mode .dashboard-modal[open] .modal-close,
-body.portal-mode .dashboard-card > .modal-close,
-body.portal-mode .dashboard-modal .modal-close[data-close-modal] {
-  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  min-height: 0 !important;
+  max-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  overflow: hidden !important;
   pointer-events: none !important;
 }
 
-/* Keep other modal close buttons visible, but make dashboard header actions breathe on desktop/mobile. */
-body.portal-mode .dashboard-actions {
-  padding-right: 0 !important;
-  margin-right: 0 !important;
+/* V131 People/Chef de-duplication polish */
+.people-table .status-ok {
+  display: inline-block;
+  margin-top: 4px;
+  color: #63e29a;
+  font-size: 11px;
+  letter-spacing: .02em;
 }
-@media (max-width: 760px) {
-  body.portal-mode .dashboard-actions {
-    width: 100%;
-    justify-content: flex-start !important;
-  }
+.light-theme .people-table .status-ok {
+  color: #16804f;
 }
+
+/* Phoenix Hibachi V133 — Member profile button and avatar upload */
+.member-profile-btn-v133{display:inline-flex!important;align-items:center;gap:8px;}
+.member-profile-avatar-mini-v133{width:24px;height:24px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;overflow:hidden;background:rgba(255,199,89,.18);border:1px solid rgba(255,199,89,.55);color:var(--gold, #ffc759);font-weight:900;line-height:1;}
+.member-profile-avatar-mini-v133 img{width:100%;height:100%;object-fit:cover;display:block;}
+.member-avatar-v133{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center;margin:14px 0 18px;padding:14px;border:1px solid rgba(181,125,35,.25);border-radius:22px;background:rgba(255,199,89,.06);}
+.member-avatar-preview-v133{width:92px;height:92px;border-radius:999px;overflow:hidden;border:1px solid rgba(181,125,35,.35);background:rgba(0,0,0,.16);display:flex;align-items:center;justify-content:center;color:var(--gold, #ffc759);font-size:38px;font-weight:900;box-shadow:0 14px 35px rgba(0,0,0,.18);}
+.member-avatar-preview-v133 img{width:100%;height:100%;object-fit:cover;display:block;}
+.member-avatar-copy-v133 strong{display:block;font-size:1rem;margin-bottom:4px;}
+.member-avatar-copy-v133 small{display:block;color:var(--muted, rgba(255,255,255,.68));line-height:1.45;}
+.member-avatar-actions-v133{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px;}
+.member-avatar-upload-v133{cursor:pointer;}
+#changePasswordModal .modal-card,#changePasswordModal form{max-height:min(86vh, 860px);overflow:auto;scrollbar-gutter:stable;}
+body.light .member-avatar-v133{background:rgba(255,247,232,.75);border-color:rgba(181,125,35,.25);}
+body.light .member-avatar-preview-v133{background:#fffaf2;color:#9b5b00;box-shadow:0 12px 32px rgba(95,53,0,.12);}
+body.light .member-avatar-copy-v133 small{color:#6b5b46;}
+@media (max-width:640px){.member-avatar-v133{grid-template-columns:1fr;text-align:left}.member-avatar-preview-v133{width:78px;height:78px}.member-avatar-actions-v133 .outline-btn{width:auto}.dashboard-actions .member-profile-btn-v133 span:last-child{display:inline}}
+
+/* Phoenix Hibachi V134 — Profile buttons and support ticket history */
+.dashboard-profile-btn-v134{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  white-space:nowrap;
+}
+.support-ticket-card-v134.is-resolved{
+  opacity:.82;
+}
+.support-ticket-card-v134.is-resolved .tag,
+.resolved-ticket-v134{
+  background:rgba(80,180,120,.16)!important;
+  border-color:rgba(80,180,120,.45)!important;
+  color:#80e0a1!important;
+}
+body.light-mode .support-ticket-card-v134.is-resolved .tag,
+body.light-mode .resolved-ticket-v134{
+  background:rgba(35,140,80,.10)!important;
+  border-color:rgba(35,140,80,.28)!important;
+  color:#1f7a45!important;
+}
+.new-ticket-v134{
+  background:rgba(255,196,70,.16)!important;
+  color:var(--gold)!important;
+}
+.ticket-status-wrap-v134{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-end;
+  gap:4px;
+}
+.ticket-resolved-time-v134{
+  color:var(--muted);
+  font-size:.78rem;
+}
+.ticket-resolved-note-v134,
+.ticket-active-note-v134{
+  margin:12px 0;
+  padding:10px 12px;
+  border-radius:14px;
+  border:1px dashed rgba(255,199,89,.30);
+  color:var(--muted);
+  background:rgba(255,199,89,.06);
+}
+.ticket-resolved-note-v134{
+  border-color:rgba(80,180,120,.35);
+  background:rgba(80,180,120,.08);
+}
+body.light-mode .ticket-resolved-note-v134{
+  border-color:rgba(35,140,80,.25);
+  background:rgba(35,140,80,.06);
+}
+@media(max-width:720px){
+  .ticket-status-wrap-v134{align-items:flex-start;}
+  .dashboard-actions .dashboard-profile-btn-v134{width:auto;}
+}
+
+
+/* V136 feedback order number field */
+.feedback-order-ref-v136{margin:.3rem 0 0;color:var(--gold);font-size:.95rem;}
+.feedback-order-ref-v136.muted{color:var(--muted);}
+.feedback-form input[name="orderNumber"]{letter-spacing:.02em;}
+body.light .feedback-order-ref-v136{color:#8b4f00;}
+body.light .feedback-order-ref-v136.muted{color:#806d5c;}
+
+/* V137 homepage arrival notice cleanup */
+.selected-time.arrival-notice{line-height:1.48;}
+.selected-time.arrival-notice span{color:var(--gold2);font-weight:900;letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px;}
+.selected-time.arrival-notice p{margin:0 0 8px;color:var(--text);font-size:.94rem;}
+.selected-time.arrival-notice small{font-size:.82rem;line-height:1.45;color:var(--muted);}
+body.light-theme .selected-time.arrival-notice p{color:#2a160b;}
+body.light-theme .selected-time.arrival-notice small{color:#6d5d50;}
+
+/* V138: Phoenix Admin blessing title */
+.phx-feng-sheng-title{
+  margin:4px 0 8px!important;
+  font-family:"KaiTi","STKaiti","Songti SC","Noto Serif CJK SC","Times New Roman",serif;
+  font-size:clamp(2.8rem,6vw,5.8rem);
+  line-height:.95;
+  letter-spacing:.10em;
+  font-weight:900;
+  color:#ffd66b!important;
+  text-shadow:0 2px 0 #7a3f00, 0 0 16px rgba(255,190,55,.55), 0 0 34px rgba(255,126,0,.28);
+  background:linear-gradient(180deg,#fff5bd 0%,#ffd15f 38%,#b56b05 76%,#fff0a0 100%);
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+body.light-theme .phx-feng-sheng-title{
+  text-shadow:0 1px 0 rgba(120,62,0,.35),0 0 18px rgba(204,128,0,.22)!important;
+}
+
+/* V139 availability truth table:
+   partial slot block = limited/yellow note; only all slots blocked = full/red date. */
+.phx-v120-cal-cell.has-limited{
+  border-color:rgba(255,199,89,.55)!important;
+  box-shadow:inset 0 0 0 1px rgba(255,199,89,.15);
+}
+.phx-v120-cal-cell.has-limited::after{display:none!important;content:none!important;}
+.phx-v120-cal-cell .phx-v120-day-note{
+  position:absolute;
+  right:7px;
+  bottom:7px;
+  font-size:.58rem;
+  line-height:1;
+  font-weight:950;
+  letter-spacing:.02em;
+  max-width:72%;
+  text-align:right;
+}
+.phx-v120-cal-cell .phx-v120-day-note.partial{color:#ffd779;}
+.phx-v120-cal-cell .phx-v120-day-note.full{color:#ffb4a8;}
+.phx-v120-cal-cell.has-blocked::after{display:none!important;content:none!important;}
+body.light-theme .phx-v120-cal-cell .phx-v120-day-note.partial{color:#9a6500;}
+body.light-theme .phx-v120-cal-cell .phx-v120-day-note.full{color:#b43a28;}

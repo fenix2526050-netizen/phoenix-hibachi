@@ -132,7 +132,7 @@
             <h3>Selected Date</h3>
             <p id="selectedDate">Choose a date</p>
             <div class="slot-list" id="slotList"></div>
-            <div class="selected-time"><span>Preferred arrival window</span><strong id="selectedTime">No window selected</strong><small>Final chef arrival time will be confirmed within 24 hours before the event.</small></div>
+            <div class="selected-time arrival-notice"><span>Arrival notice</span><strong id="selectedTime" hidden>No window selected</strong><p>Because of weather, traffic, parking, road conditions, and same-day event schedules, chef arrival may be slightly earlier or later than expected. Thank you for your understanding. For the latest arrival update, please call or text Phoenix Hibachi.</p></div>
           </aside>
         </div>
       </div>
@@ -241,13 +241,14 @@
 
     <section class="section booking feedback" id="booking">
       <div class="container booking-card reveal">
-        <div><p class="eyebrow">Guest Feedback</p><h2>Suggestions, compliments or complaints.</h2><p>Use this form for customer messages after an event or before booking. Serious allergy, safety, rain, timing, refund or chef-service issues should be reviewed by a manager quickly.</p></div>
+        <div><p class="eyebrow">Guest Feedback</p><h2>Suggestions, compliments or complaints.</h2><p>Use this form for customer messages after an event or before booking. If you already have an order, please enter the order number so our team can confirm the exact booking quickly. Serious allergy, safety, rain, timing, refund or chef-service issues should be reviewed by a manager quickly.</p></div>
         <form class="quote-form feedback-form" id="quoteForm">
           <input name="name" placeholder="Your name" required>
           <input name="phone" placeholder="Phone or email" required>
+          <input name="orderNumber" placeholder="Order number / 订单号，例如 PHX-260630-YCLM">
           <input name="eventDate" placeholder="Event date / city / zip code">
           <select name="feedbackType"><option>General suggestion</option><option>Compliment for chef</option><option>Complaint / service issue</option><option>Allergy or food safety concern</option><option>Rain / delay / schedule issue</option><option>Refund or billing question</option></select>
-          <textarea name="message" class="wide" placeholder="Tell us what happened or what we can improve. Add order name, chef name, photos link, allergy concern, rain issue, late arrival details, or anything important." required></textarea>
+          <textarea name="message" class="wide" placeholder="Tell us what happened or what we can improve. Add chef name, photos link, allergy concern, rain issue, late arrival details, or anything important." required></textarea>
           <button class="gold-btn" type="submit">Submit Feedback</button>
         </form>
       </div>
