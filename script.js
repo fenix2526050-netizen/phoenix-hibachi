@@ -1114,30 +1114,78 @@ const bookingState = {
   proteins: {},
   proteinUpcharge: 0
 };
-const packagePrices = { Classic:55, Premium:65, Signature:110 };
-const PACKAGE_PROTEIN_PORTIONS = { Classic:2, Premium:3, Signature:4 };
-const PROTEIN_UPCHARGE_PER_PORTION = 5;
-const PREMIUM_PROTEINS = ['Scallop','Lobster','Filet Mignon'];
-const ADDON_PRICE_MAP = {
-  'Sushi Roll Tray':85,
-  'Premium Sushi Tray':130,
-  'Sushi & Sashimi Combo':160,
-  'Extra Gyoza Tray':45,
-  'Extra Edamame Tray':35,
-  'Noodle / Yakisoba Tray':50
+const PHX_PRICING_STORAGE_KEY_V140 = 'phoenixPricingSettingsV140';
+const PHX_DEFAULT_PRICING_V140 = {
+  packages: { Classic:55, Premium:65, Signature:110 },
+  packageProteinPortions: { Classic:2, Premium:3, Signature:4 },
+  proteinUpcharge: 5,
+  premiumProteins: ['Scallop','Lobster','Filet Mignon'],
+  addons: {
+    'Sushi Roll Tray':85,
+    'Premium Sushi Tray':130,
+    'Sushi & Sashimi Combo':160,
+    'Extra Gyoza Tray':45,
+    'Extra Edamame Tray':35,
+    'Noodle / Yakisoba Tray':50
+  },
+  moneyRules: {
+    depositRequired: 200,
+    memberCreditBuy: 1000,
+    memberCreditBonus: 100,
+    firstPartyCoupon: 50,
+    birthdayCoupon: 50,
+    socialCoupon: 50,
+    couponMinimumParty: 600,
+    chefAdultRate: 15,
+    chefKidRate: 7.5,
+    chefMinimumPayout: 150,
+    minimumBillableGuests: 10,
+    estimatedFoodCostRate: 35,
+    defaultTravelFee: 50,
+    salesTaxRate: 8.875
+  }
 };
-const MONEY_RULES = {
-  depositRequired: 200,
-  memberCreditBuy: 1000,
-  memberCreditBonus: 100,
-  firstPartyCoupon: 50,
-  birthdayCoupon: 50,
-  socialCoupon: 50,
-  couponMinimumParty: 600,
-  chefAdultRate: 15,
-  chefKidRate: 7.5,
-  chefMinimumPayout: 150,
-  minimumBillableGuests: 10
+function phxMergePricingV140(saved = {}) {
+  const base = JSON.parse(JSON.stringify(PHX_DEFAULT_PRICING_V140));
+  return {
+    ...base,
+    ...saved,
+    packages: {...base.packages, ...(saved.packages || {})},
+    packageProteinPortions: {...base.packageProteinPortions, ...(saved.packageProteinPortions || {})},
+    addons: {...base.addons, ...(saved.addons || {})},
+    moneyRules: {...base.moneyRules, ...(saved.moneyRules || {})},
+    premiumProteins: Array.isArray(saved.premiumProteins) ? saved.premiumProteins : base.premiumProteins
+  };
+}
+function phxLoadPricingV140() {
+  try { return phxMergePricingV140(JSON.parse(localStorage.getItem(PHX_PRICING_STORAGE_KEY_V140) || '{}')); }
+  catch { return phxMergePricingV140({}); }
+}
+function phxReplaceObjectV140(target, source) {
+  Object.keys(target).forEach(k => delete target[k]);
+  Object.entries(source || {}).forEach(([k,v]) => { target[k] = Number(v) || 0; });
+}
+const PHX_ACTIVE_PRICING_V140 = phxLoadPricingV140();
+const packagePrices = {...PHX_ACTIVE_PRICING_V140.packages};
+const PACKAGE_PROTEIN_PORTIONS = {...PHX_ACTIVE_PRICING_V140.packageProteinPortions};
+let PROTEIN_UPCHARGE_PER_PORTION = Number(PHX_ACTIVE_PRICING_V140.proteinUpcharge || 5);
+const PREMIUM_PROTEINS = [...PHX_ACTIVE_PRICING_V140.premiumProteins];
+const ADDON_PRICE_MAP = {...PHX_ACTIVE_PRICING_V140.addons};
+const MONEY_RULES = {...PHX_ACTIVE_PRICING_V140.moneyRules};
+window.PHX_GET_PRICING_V140 = function(){ return phxMergePricingV140({packages: packagePrices, packageProteinPortions: PACKAGE_PROTEIN_PORTIONS, proteinUpcharge: PROTEIN_UPCHARGE_PER_PORTION, premiumProteins: PREMIUM_PROTEINS, addons: ADDON_PRICE_MAP, moneyRules: MONEY_RULES}); };
+window.PHX_SET_PRICING_V140 = function(next = {}) {
+  const merged = phxMergePricingV140(next);
+  phxReplaceObjectV140(packagePrices, merged.packages);
+  phxReplaceObjectV140(PACKAGE_PROTEIN_PORTIONS, merged.packageProteinPortions);
+  PROTEIN_UPCHARGE_PER_PORTION = Number(merged.proteinUpcharge || 0);
+  PREMIUM_PROTEINS.splice(0, PREMIUM_PROTEINS.length, ...merged.premiumProteins);
+  phxReplaceObjectV140(ADDON_PRICE_MAP, merged.addons);
+  Object.keys(MONEY_RULES).forEach(k => delete MONEY_RULES[k]);
+  Object.entries(merged.moneyRules || {}).forEach(([k,v]) => { MONEY_RULES[k] = Number(v) || 0; });
+  try { localStorage.setItem(PHX_PRICING_STORAGE_KEY_V140, JSON.stringify(merged)); } catch {}
+  try { document.dispatchEvent(new CustomEvent('phoenix:pricing-updated', {detail: merged})); } catch {}
+  try { if (typeof updateSummary === 'function') updateSummary(); } catch {}
+  return merged;
 };
 const adultsInput = document.getElementById('adultsValue');
 const kidsInput = document.getElementById('kidsValue');
@@ -10275,51 +10323,15 @@ setTimeout(() => {
     if (reset) { event.preventDefault(); event.stopPropagation(); if(confirm('Reset this team to party-start-time order?')) resetRoute(reset.getAttribute('data-v117-route-reset')); return false; }
   }, true);
 
-  // Customer-facing chef count request in booking form.
+  // V141: Booking form no longer shows customer-facing chef request controls.
+  // Chef assignment remains a staff/admin decision in the dashboard.
   function ensureChefCountBookingControl(){
-    if (document.getElementById('chefTeamRequestV117')) return;
-    const guestStep = document.getElementById('billableGuestCard')?.closest('.booking-step');
-    if (!guestStep) return;
-    const box = document.createElement('div');
-    box.id = 'chefTeamRequestV117';
-    box.className = 'chef-team-request-v117';
-    box.innerHTML = `<h4>Chef team</h4><p class="helper-line">More than 25 billable guests normally requires 2 chefs. Extra chef pricing is confirmed by Phoenix before final acceptance.</p><div class="chef-team-grid-v117"><label>Requested chef count<select id="chefCountRequestedInput" name="chefCountRequested"><option value="auto">Auto / Phoenix recommends</option><option value="1">1 chef</option><option value="2">2 chefs</option><option value="3">3 chefs</option><option value="4">4 chefs</option></select></label><div><b class="chef-team-recommend-v117" id="chefTeamRecommendV117">Recommended: 1 chef</b><p class="helper-line" id="chefTeamWarnV117">Final chef team and extra chef fee are confirmed manually.</p></div></div><input type="hidden" id="chefTeamRequestNoteInput" name="chefTeamRequestNote" value="">`;
-    guestStep.appendChild(box);
-    updateChefCountRecommendation();
+    const old = document.getElementById('chefTeamRequestV117');
+    if (old) old.remove();
   }
-  function updateChefCountRecommendation(){
-    const recEl=document.getElementById('chefTeamRecommendV117'), warn=document.getElementById('chefTeamWarnV117'), note=document.getElementById('chefTeamRequestNoteInput'), sel=document.getElementById('chefCountRequestedInput');
-    if (!recEl || !sel) return;
-    const b = (()=>{ try { return Number(actualBillableGuestCount(bookingState)); } catch { return 10; } })();
-    const req = b > 75 ? 4 : b > 50 ? 3 : b > 25 ? 2 : 1;
-    const chosen = sel.value === 'auto' ? req : Number(sel.value || req);
-    recEl.textContent = `Recommended: ${req} chef${req>1?'s':''} for ${b} billable guests`;
-    if (warn) { warn.textContent = chosen < req ? `This party should use at least ${req} chefs. Phoenix may require a manager adjustment.` : `Selected/requested: ${chosen} chef${chosen>1?'s':''}. Extra chef fee is manager-confirmed.`; warn.className = chosen < req ? 'helper-line chef-team-warning-input-v117' : 'helper-line'; }
-    if (note) note.value = `Customer requested ${sel.value === 'auto' ? 'Auto / Phoenix recommends' : chosen + ' chef(s)'}; recommended ${req} chef(s) for ${b} billable guests.`;
-  }
-  ['input','change','click'].forEach(type => document.addEventListener(type, (event)=>{ if (event.target?.closest?.('#bookingModal, #chefTeamRequestV117, [data-counter]')) setTimeout(updateChefCountRecommendation, 0); }, true));
-  setTimeout(ensureChefCountBookingControl, 600);
-  setTimeout(ensureChefCountBookingControl, 1600);
-
-  if (typeof buildOrderFromForm === 'function' && !window.__PHX_V117_BUILD_ORDER_WRAP__) {
-    window.__PHX_V117_BUILD_ORDER_WRAP__ = true;
-    const previousBuildOrderFromForm = buildOrderFromForm;
-    buildOrderFromForm = function(form){
-      const order = previousBuildOrderFromForm(form);
-      try {
-        const fd = new FormData(form);
-        const raw = String(fd.get('chefCountRequested') || 'auto');
-        const rec = recommendedChefCountForOrder(order);
-        const count = raw === 'auto' ? rec : Math.min(4, Math.max(1, Number(raw || rec)));
-        order.chefCountRequested = count;
-        let notes = String(order.specialNotes || '');
-        notes = upsertLine(notes, TEAM_COUNT_LABEL, String(count));
-        notes = upsertLine(notes, TEAM_NOTE_LABEL, String(fd.get('chefTeamRequestNote') || `Customer requested ${count} chef(s).`));
-        order.specialNotes = notes;
-      } catch(error) { console.warn('V117 chef count order patch skipped:', error); }
-      return order;
-    };
-  }
+  function updateChefCountRecommendation(){}
+  setTimeout(ensureChefCountBookingControl, 200);
+  setTimeout(ensureChefCountBookingControl, 1200);
 
   // Admin/manager chef team controls inside order details panel.
   function allOrders(){ const map=new Map(); const add=o=>{ if(o&&idOf(o)) map.set(idOf(o),o); }; try{(getStoredOrders?.()||[]).forEach(add);}catch{} try{(Array.isArray(remoteOrdersCache)?remoteOrdersCache:[]).forEach(add);}catch{} try{(getDashboardOrders?.()||[]).forEach(add);}catch{} return [...map.values()]; }

@@ -28,6 +28,9 @@
       <a href="#performance">Show</a>
       <a href="#packages">Packages</a>
       <a href="#addons">Add-ons</a>
+      <a href="#recipes">Recipes</a>
+      <a href="#stories">Stories</a>
+      <a href="#shop">Shop</a>
       <a href="#platform">Hiring</a>
       <a href="#faq">FAQ</a>
     </nav>
@@ -58,6 +61,9 @@
     <a href="#performance">Show</a>
     <a href="#packages">Packages</a>
     <a href="#addons">Add-ons</a>
+    <a href="#recipes">Recipes</a>
+    <a href="#stories">Stories</a>
+    <a href="#shop">Shop</a>
     <a href="#platform">Hiring</a>
     <a href="#faq">FAQ</a>
     <button type="button" data-open-order-lookup>Search Order</button>
@@ -89,7 +95,7 @@
             <source src="assets/hero-live-show-video.mp4" type="video/mp4">
             Your browser does not support the video tag.
           </video>
-          <div class="card-note"><strong>Hibachi Live Show</strong><span>Fire · Food · Performance · Backyard setup</span></div>
+          <div class="card-note"><strong>Hibachi Live Show</strong><span>Fire · Food · Performance</span></div>
         </div>
       </div>
       <a class="scroll-cue" href="#calendar">Choose Date</a>
@@ -132,7 +138,7 @@
             <h3>Selected Date</h3>
             <p id="selectedDate">Choose a date</p>
             <div class="slot-list" id="slotList"></div>
-            <div class="selected-time arrival-notice"><span>Arrival notice</span><strong id="selectedTime" hidden>No window selected</strong><p>Because of weather, traffic, parking, road conditions, and same-day event schedules, chef arrival may be slightly earlier or later than expected. Thank you for your understanding. For the latest arrival update, please call or text Phoenix Hibachi.</p></div>
+            <div class="selected-time arrival-notice" style="display:none"><strong id="selectedTime" hidden>No window selected</strong></div>
           </aside>
         </div>
       </div>
@@ -207,6 +213,27 @@
           <article><img class="addon-photo" src="assets/addon-edamame.webp" alt="Edamame tray"><h3>Extra Edamame Tray</h3><p>Steamed edamame tray. Serves approx. 8–10 people. Garlic-style option can be requested.</p></article>
           <article><b>Kids Fav</b><img class="addon-photo" src="assets/addon-noodle.webp" alt="Noodle yakisoba tray"><h3>Noodle / Yakisoba Tray</h3><p>Stir-fried noodles with vegetables. Serves approx. 6–8 people as a side.</p></article>
         </div>
+      </div>
+    </section>
+
+    <section class="section recipes-section content-hub-section" id="recipes">
+      <div class="container">
+        <div class="split-head reveal"><div><p class="eyebrow">Hibachi Recipes</p><h2>Cook the flavor <span>at home.</span></h2></div><p>Quick guides for sauces, fried rice, steak doneness, garlic butter, marinades, and party prep. Admin can update these posts in the dashboard.</p></div>
+        <div class="content-card-grid" id="recipesGrid"></div>
+      </div>
+    </section>
+
+    <section class="section stories-section content-hub-section" id="stories">
+      <div class="container">
+        <div class="split-head reveal"><div><p class="eyebrow">Phoenix Stories</p><h2>Behind the fire.</h2></div><p>Stories about chef training, prep work, route days, rain plans, and the work behind every backyard hibachi show.</p></div>
+        <div class="content-card-grid" id="storiesGrid"></div>
+      </div>
+    </section>
+
+    <section class="section shop-section content-hub-section" id="shop">
+      <div class="container">
+        <div class="split-head reveal"><div><p class="eyebrow">Phoenix Shop</p><h2>Party-ready extras.</h2></div><p>Feature sauces, gift cards, party kits, merch, and external ecommerce products. Product buttons can link to your shop platform.</p></div>
+        <div class="shop-product-grid" id="shopProductsGrid"></div>
       </div>
     </section>
 
@@ -939,6 +966,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="script.js"></script>
   <script src="src/orders-dispatch-v120.js"></script>
+  <script src="src/phoenix-v140-admin-content.js"></script>
   <script type="module" src="src/app/main.js"></script>
   <!-- v7 uses Geoapify Autocomplete directly in script.js.
        Before launch, restrict the API key to your Replit preview domain and final website domain in Geoapify settings. -->
