@@ -12401,3 +12401,132 @@ setTimeout(() => {
   setTimeout(() => { try { window.PHX_REFRESH_PUBLIC_BOOKING_CALENDARS(); } catch {} }, 100);
   window.addEventListener('phoenix:availability-sync', () => { try { window.PHX_REFRESH_PUBLIC_BOOKING_CALENDARS(); } catch {} });
 })();
+
+/* ======================================================================
+   Phoenix Hibachi V142 — Profile Close + Header Avatar + Booking Live Copy
+   - Fixes dynamically rebuilt Profile modal close buttons.
+   - Shows uploaded profile photo in the top account chip.
+   - Removes lingering demo-only booking behavior/copy.
+   ====================================================================== */
+(function initPhoenixV142ProfileBookingHotfix(){
+  if (window.__PHX_V142_PROFILE_BOOKING_HOTFIX__) return;
+  window.__PHX_V142_PROFILE_BOOKING_HOTFIX__ = true;
+
+  const AVATAR_PREFIX = 'phoenix_member_avatar_v133_';
+
+  function getSessionEmailV142(){
+    try {
+      const meta = typeof getPortalSessionMeta === 'function' ? getPortalSessionMeta() : null;
+      return String(
+        window.supabaseSession?.user?.email ||
+        window.supabaseProfile?.email ||
+        meta?.email ||
+        localStorage.getItem('phoenix_portal_email') ||
+        ''
+      ).trim().toLowerCase();
+    } catch { return ''; }
+  }
+
+  function getSessionRoleV142(){
+    try {
+      const meta = typeof getPortalSessionMeta === 'function' ? getPortalSessionMeta() : null;
+      return String(meta?.role || window.currentDashboardRole || window.supabaseProfile?.role || '').trim();
+    } catch { return ''; }
+  }
+
+  function avatarKeyV142(){
+    const email = getSessionEmailV142();
+    return AVATAR_PREFIX + (email || 'local-member');
+  }
+
+  function loadAvatarV142(){
+    try { return localStorage.getItem(avatarKeyV142()) || ''; } catch { return ''; }
+  }
+
+  function fallbackInitialV142(){
+    const role = getSessionRoleV142();
+    if (/admin/i.test(role)) return 'A';
+    if (/chef/i.test(role)) return 'C';
+    if (/customer\s*service|service/i.test(role)) return 'S';
+    if (/member|customer/i.test(role)) return 'M';
+    const email = getSessionEmailV142();
+    return (email || 'P').charAt(0).toUpperCase();
+  }
+
+  function refreshHeaderAvatarV142(){
+    const avatarEl = document.getElementById('accountAvatar');
+    if (!avatarEl) return;
+    const image = loadAvatarV142();
+    if (image) {
+      avatarEl.classList.add('has-photo-v142');
+      avatarEl.innerHTML = `<img src="${image}" alt="Profile photo">`;
+    } else {
+      avatarEl.classList.remove('has-photo-v142');
+      avatarEl.textContent = fallbackInitialV142();
+    }
+  }
+
+  function cleanBookingDemoCopyV142(){
+    const booking = document.getElementById('bookingModal');
+    if (!booking) return;
+    booking.querySelectorAll('.modal-status').forEach(el => {
+      if (/demo/i.test(el.textContent || '')) el.remove();
+    });
+    const help = booking.querySelector('.modal-help');
+    if (help && /prototype|demo dashboard|Real launch/i.test(help.textContent || '')) {
+      help.textContent = 'Complete the details below to send your Phoenix Hibachi booking request. A manager will review availability, route timing, weather, parking, and special requests before final confirmation.';
+    }
+  }
+
+  // Delegated close handler for dynamic profile/modal content.
+  document.addEventListener('click', function(event){
+    const closeBtn = event.target?.closest?.('[data-close-modal], .modal-close');
+    if (!closeBtn) return;
+    const dialog = closeBtn.closest('dialog');
+    if (!dialog) return;
+    // Keep dashboard shell controlled by Logout; this hotfix is for real popups.
+    if (dialog.id === 'dashboardModal') return;
+    event.preventDefault();
+    event.stopPropagation();
+    try {
+      if (typeof dialog.close === 'function') dialog.close();
+      else dialog.removeAttribute('open');
+    } catch {
+      dialog.removeAttribute('open');
+    }
+    document.body.classList.remove('modal-open', 'booking-open', 'profile-open');
+  }, true);
+
+  // Wrap existing account menu state so role label still works, then apply photo.
+  if (typeof window.updateAccountMenuState === 'function' && !window.__PHX_V142_ACCOUNT_WRAP__) {
+    window.__PHX_V142_ACCOUNT_WRAP__ = true;
+    const original = window.updateAccountMenuState;
+    window.updateAccountMenuState = function(){
+      const out = original.apply(this, arguments);
+      setTimeout(refreshHeaderAvatarV142, 0);
+      return out;
+    };
+  }
+
+  document.addEventListener('change', function(event){
+    if (event.target?.closest?.('[data-member-avatar-input-v133]')) {
+      setTimeout(refreshHeaderAvatarV142, 150);
+      setTimeout(refreshHeaderAvatarV142, 600);
+    }
+  }, true);
+
+  document.addEventListener('click', function(event){
+    if (event.target?.closest?.('[data-member-avatar-remove-v133], [data-account-action="profile"], #memberProfileBtnV133, #dashProfileBtn, [data-open-booking]')) {
+      setTimeout(refreshHeaderAvatarV142, 120);
+      setTimeout(cleanBookingDemoCopyV142, 80);
+    }
+  }, true);
+
+  const run = () => {
+    cleanBookingDemoCopyV142();
+    refreshHeaderAvatarV142();
+  };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run);
+  else run();
+  setTimeout(run, 300);
+})();

@@ -82,3 +82,10 @@ https://fenix2526050-netizen.github.io/phoenix-hibachi/?v=141
 - Removed the public Arrival Notice card from the booking calendar side panel while preserving hidden selected-time logic for order calculation.
 - Removed the customer-facing Request Chef / Chef team selector from the booking form. Chef count and chef assignment remain staff-controlled in admin tools.
 - No Supabase SQL changes required.
+
+## V142 profile and booking hotfix
+
+- Fixed dynamically rebuilt Profile & Member Wallet close button.
+- Profile photo now refreshes the top account chip avatar after upload/remove.
+- Removed Demo Only badge and prototype warning from the Book Your Event modal.
+- No Supabase SQL required.
