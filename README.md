@@ -1,39 +1,41 @@
-# Phoenix Hibachi V97 — Chef Profile & History
+# Phoenix Hibachi V128 — Customer Service Ticket History Fix
 
-This version builds on V96 and keeps the single-entry `index.html` portal flow.
+Builds on V127.
 
-## V97 changes
+## Changes
+- Customer Service statistic cards remain visible.
+- Support ticket count now means **active unresolved tickets only**.
+- Clicking Resolve / 已解决 marks the ticket as resolved, but does **not** delete or hide the record.
+- Resolved tickets remain in Complaints & Suggestions as history with a Resolved badge.
+- Resolved tickets no longer count in the top Support tickets number.
+- Chef assigned support tickets should only show active unresolved tickets in future Supabase-backed ticket table; current version is local/test mode.
 
-- Chef dashboard now has a **Profile** action.
-- Chef can update:
-  - full name
-  - phone
-  - display name used on orders
-  - base / service area
-  - payout preference
-  - payout note
-  - password
-- Chef dashboard now includes **My orders & earnings**.
-- Chef can filter assigned order history by:
-  - day
-  - week
-  - month
-- Chef dashboard shows estimated earnings before tips, including weekly total.
-- Member dashboard cleanup from V96 remains unchanged.
-- Admin / Manager / Customer Service dashboards remain unchanged.
+## Test
+1. Login as Customer Service.
+2. Open Complaints & Suggestions.
+3. Click Resolve on a ticket.
+4. Confirm the ticket remains visible as Resolved history.
+5. Confirm the top Support tickets stat decreases.
 
-## Important launch note
 
-For strict production privacy, bind `profiles.chef_id` to `bookings.assigned_chef_id` in Supabase RLS/policies. V97 attempts to match chef orders by chef ID, display name, full name, or email; if the account is not linked yet, it falls back to assigned chef orders so the dashboard remains usable during testing.
+## V129 — Member profile scroll + portal stability cleanup
 
-## Test checklist
+This version is based on V128 and keeps the existing order, payment, dispatch, customer import, chef dashboard, and ticket history features.
 
-1. Open `index.html` in an incognito window.
-2. Login as Chef.
-3. Confirm the top action says **Profile**.
-4. Click Profile and update chef information.
-5. Change password only after Supabase Auth is connected.
-6. Confirm the dispatch page shows **My orders & earnings**.
-7. Test day/week/month filters.
-8. Login as Admin and confirm Build Route Plan still appears.
-9. Login as Member and confirm Route Planner/Route Map remain hidden.
+Changes:
+
+- Added a visible **Profile** action inside every portal dashboard toolbar so customers/members can edit their profile without relying on the homepage account menu.
+- Fixed the Profile & Member Wallet dialog so it can scroll all the way to the bottom on desktop and mobile.
+- Cleaned modal clipping/scroll behavior to reduce corner shadows, ghost edges, and double-scroll issues.
+- Added a light dashboard render debounce to reduce the repeated flash/flicker when logging into a portal role.
+- Kept Customer Service ticket history behavior from V128: resolving a ticket reduces the active count but keeps the record.
+
+Upload to GitHub after local testing: `script.js`, `style.css`, and `README.md`.
+
+
+## V130 dashboard logout overlap hotfix
+
+- Hide the floating dashboard `×` close button in portal/dashboard mode.
+- Keep `Logout` as the only dashboard exit action.
+- Does not affect Login, Booking, Profile, Invoice, Notice, or other modal close buttons.
+- Preserves V129 member profile stability cleanup.

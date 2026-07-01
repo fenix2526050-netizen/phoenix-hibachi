@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Phoenix Hibachi V60 | Private Backyard Hibachi Catering</title>
+  <title>Phoenix Hibachi | Private Backyard Hibachi Catering</title>
   <meta name="description" content="Phoenix Hibachi private backyard hibachi catering for NY, NJ, CT and Long Island. Live chef show, packages, add-ons, and booking flow." />
   <meta property="og:title" content="Phoenix Hibachi" />
   <meta property="og:description" content="Private backyard hibachi catering with fire, food, and showmanship." />
@@ -85,7 +85,7 @@
           </div>
         </div>
         <div class="hero-card reveal delay-1 hero-photo-card" aria-label="Private hibachi chef live fire show video">
-          <video class="hero-live-video" autoplay muted loop playsinline preload="metadata" poster="assets/hero-live-show-poster.webp" aria-label="Hibachi live show video">
+          <video class="hero-live-video" autoplay muted loop playsinline webkit-playsinline preload="auto" poster="assets/hero-live-show-poster.webp" aria-label="Hibachi live show video">
             <source src="assets/hero-live-show-video.mp4" type="video/mp4">
             Your browser does not support the video tag.
           </video>
@@ -790,8 +790,20 @@
           <p class="modal-help" id="dashboardHelp">Demo dashboard powered by browser storage.</p>
         </div>
         <div class="dashboard-actions">
-          <button type="button" class="outline-btn" id="autoDispatchBtn">Build Route Plan</button>
+          <button type="button" class="outline-btn dashboard-theme-btn" id="dashThemeToggleBtn">Light / Dark</button>
+          <button type="button" class="outline-btn dashboard-assistant-btn" id="dashAssistantBtn">Assistant</button>
           <button type="button" class="outline-btn" data-portal-logout>Logout</button>
+        </div>
+      </div>
+      <div class="dashboard-assistant-panel" id="dashboardAssistantPanel" hidden>
+        <div class="dashboard-assistant-head">
+          <strong>Phoenix Assistant</strong>
+          <button type="button" class="outline-btn" id="dashAssistantCloseBtn">Close</button>
+        </div>
+        <p>I can help staff review bookings, payment status, schedule changes, customer notes, route planning, and guest follow-up. For detailed booking help, use Order details or Payment / price on the order card.</p>
+        <div class="dashboard-assistant-actions">
+          <button type="button" class="outline-btn" id="dashAssistantOpenPublicBtn">Open full assistant</button>
+          <button type="button" class="outline-btn" data-open-contact>Contact tools</button>
         </div>
       </div>
       <div class="dashboard-stats">
@@ -915,7 +927,6 @@
 
   <dialog class="print-modal" id="printModal">
     <div class="modal-card print-card">
-      <button type="button" class="modal-close" data-close-modal aria-label="Close">×</button>
       <div class="print-modal-actions">
         <button type="button" class="gold-btn" id="runPrintBtn">Print / Save PDF</button>
         <button type="button" class="outline-btn" data-close-modal>Close</button>
@@ -926,6 +937,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="script.js"></script>
+  <script src="src/orders-dispatch-v120.js"></script>
   <script type="module" src="src/app/main.js"></script>
   <!-- v7 uses Geoapify Autocomplete directly in script.js.
        Before launch, restrict the API key to your Replit preview domain and final website domain in Geoapify settings. -->
